@@ -280,3 +280,10 @@ def test_local_model_labels():
         raise OSError("no model")
     labels, status = local_model.label_posts(posts, CFG["watchlist"], classify=broken)
     assert labels is None and status.startswith("failed")
+
+
+def test_teasers_brags_and_empty_posts_are_noise():
+    assert sentiment.is_noise("ETH/USDT SHORT 🚫 Entry Zone - Target 👇 ⚡️ https://t.me/+UoPySxz3ic42ZDNk Join Fast | Targets ☝️")
+    assert sentiment.is_noise("#WINUSDT 130% 10X")
+    assert sentiment.is_noise("#KASUSDT 1H")
+    assert not sentiment.is_noise("🔴 SHORT $ZEC/USDT | Cross 30X ✅ Entry: 1340 🎯 TP: 1310 - 1280 - 1240 🛑 SL: 1410")

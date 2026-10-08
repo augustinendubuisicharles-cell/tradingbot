@@ -46,8 +46,19 @@ def is_trade_call(text: str) -> bool:
     return bool(_LEVELS.search(text) and (_LONG.search(text) or _SHORT.search(text)))
 
 
+# "Join fast" with an invite link is a teaser for a paid group, even when it
+# looks like a call; "130% 10X" with nothing else is a brag.
+_INVITE = re.compile(r"t\.me/\+|\bjoin (fast|now|here|us)\b", re.IGNORECASE)
+_BRAG = re.compile(r"\d+\s?%\s*(\(?\d+\s?x\)?)", re.IGNORECASE)
+
+
 def is_noise(text: str) -> bool:
-    """Adverts and result recaps, unless the post also carries a trade call."""
+    """Adverts, result recaps and posts too short to hold a view."""
+    words = re.findall(r"[A-Za-z]{2,}", text)
+    if len(words) < 3 or _INVITE.search(text):
+        return True
+    if _BRAG.search(text) and len(words) < 8:
+        return True
     if is_trade_call(text) and not _RECAP.search(text):
         return False
     return bool(_PROMO.search(text) or _RECAP.search(text))
