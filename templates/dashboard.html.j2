@@ -160,13 +160,48 @@ table.data tr:last-child td { border-bottom: 0; }
     <div class="stat"><div class="k">Exit signals</div>
       <div class="v {{ 'down' if exits else '' }}">{{ exits|length }}</div>
       <div class="n">on safe gems{% if held %} · {{ held|length }} picks running{% endif %}</div></div>
-    <div class="stat"><div class="k">Backtest, last 90 days</div>
+    <div class="stat"><div class="k">Gem rules, last 90 days</div>
       {% if bt and bt.trades %}<div class="v {{ 'up' if bt.avg_r > 0 else 'down' }}">{{ '%+.2f'|format(bt.avg_r) }}R</div>
       <div class="n">per trade · {{ bt.win_rate }}% won · {{ 'edge found' if bt.avg_r > 0 else 'no edge yet' }}</div>
       {% else %}<div class="v">–</div><div class="n">runs every Sunday</div>{% endif %}</div>
   </div>
 
-  <h2>Do this now</h2>
+  {% if trend %}{% set tt = trend.tested %}
+  <h2>Core signal: Bitcoin &amp; Ethereum trend <span class="pill go" style="vertical-align:2px">✓ Tested</span></h2>
+  <div class="cards">
+    {% for coin, d in trend.coins.items() %}
+    <article class="card">
+      <div class="top">
+        <div><div class="sym">{{ coin }}</div><div class="meta">{{ d.votes_on }} of {{ d.votes }} trend checks up · close {{ fp(d.close) }} on {{ d.as_of }}</div></div>
+        {% if d.target > 0 %}<span class="pill go">● Hold {{ '%.0f'|format(d.target * 100) }}%</span>{% else %}<span class="pill idle">○ Out</span>{% endif %}
+      </div>
+      {{ spark(d.spark, {'add': d.next_add, 'trim': d.next_trim, 'exit': d.full_exit}, '90 days') }}
+      <table class="trade">
+        <tr><td>Position</td><td>{{ '%.0f'|format(d.target * 100) }}% · {{ '{:,.0f}'.format(d.target * trend.account) }} USDT</td><td></td></tr>
+        {% if d.next_add %}<tr><td>Add more above</td><td class="up">{{ fp(d.next_add) }}</td><td>{{ pct(d.next_add, d.close) }}</td></tr>{% endif %}
+        {% if d.next_trim %}<tr><td>Sell some below</td><td>{{ fp(d.next_trim) }}</td><td>{{ pct(d.next_trim, d.close) }}</td></tr>{% endif %}
+        {% if d.full_exit %}<tr><td>Sell all below</td><td class="down">{{ fp(d.full_exit) }}</td><td>{{ pct(d.full_exit, d.close) }}</td></tr>{% endif %}
+      </table>
+    </article>
+    {% endfor %}
+    {% if tt %}<article class="card">
+      <div class="sym" style="font-size:15px">How it tested</div>
+      <div class="meta">{{ tt.data }}</div>
+      <table class="trade">
+        <tr><td class="muted small">gain · worst drop</td><td>Trend rule</td><td style="width:auto">Hold BTC</td></tr>
+        {% for p in tt.periods %}<tr><td>{{ p.name }}</td><td><span class="{{ 'up' if p.trend.total > 0 else 'down' }}">{{ '%+.0f'|format(p.trend.total) }}%</span> · {{ '%.0f'|format(p.trend.max_dd) }}%</td><td style="width:auto"><span class="{{ 'up' if p.btc.total > 0 else 'down' }}">{{ '%+.0f'|format(p.btc.total) }}%</span> · {{ '%.0f'|format(p.btc.max_dd) }}%</td></tr>{% endfor %}
+        <tr><td>Live since {{ trend.live.start }}</td><td>{{ '%+.1f'|format(trend.live.total) }}%</td><td style="width:auto">{{ trend.live.days }} days</td></tr>
+      </table>
+      <details><summary>How the rule works</summary><div class="body">
+        <p style="margin:4px 0">Eight checks per coin look at whether price is making new highs over 10 to 360 days. Each check that's "up" adds to the position, and each has a trailing stop that only rises. Positions shrink when a coin is very jumpy, so a crash costs less. Decided on the daily close, traded at the next open, fees included.</p>
+        <p style="margin:4px 0">It makes less than holding in strong bull markets (2023-24) and avoids most of the big crashes (2018, 2022). From published research (Zarattini et al. 2025), with their settings, not tuned to our data.</p>
+        <h4>Year by year</h4><ul>{% for y in tt.by_year %}<li>{{ y.year }}: trend {{ '%+.0f'|format(y.trend or 0) }}%, Bitcoin {{ '%+.0f'|format(y.btc or 0) }}%</li>{% endfor %}</ul>
+      </div></details>
+    </article>{% endif %}
+  </div>
+  {% endif %}
+
+  <h2>Watchlist ideas <span class="small muted" style="font-weight:400">not proven by testing, so check before acting</span></h2>
   <div class="actions">
     {% for a in suggestions %}{% set s = a.suggestion %}
     <div class="act"><span class="pill go">● Buy</span>
@@ -194,7 +229,7 @@ table.data tr:last-child td { border-bottom: 0; }
     <input type="radio" name="tab" id="t-news">
     <input type="radio" name="tab" id="t-src">
     <div class="tabbar" role="tablist">
-      <label for="t-gems">Hidden gems<span class="c">{{ safe|length }}</span></label>
+      <label for="t-gems">Hidden gems (watchlist)<span class="c">{{ safe|length }}</span></label>
       <label for="t-coins">Main coins<span class="c">{{ coins|length }}</span></label>
       <label for="t-acc">Accuracy</label>
       <label for="t-news">News &amp; traders<span class="c">{{ top_posts|length }}</span></label>

@@ -1,0 +1,100 @@
+{
+  "generated_at": "2026-10-08T19:34:59.184984+00:00",
+  "data": "Binance daily prices Aug 2017 to Oct 2026, 0.15% cost per side",
+  "periods": [
+    {
+      "name": "Designed on (2018-2022)",
+      "trend": {
+        "cagr": 31.3,
+        "sharpe": 1.25,
+        "max_dd": -28.2,
+        "total": 290.4
+      },
+      "btc": {
+        "cagr": 4.3,
+        "sharpe": 0.44,
+        "max_dd": -81.2,
+        "total": 23.6
+      }
+    },
+    {
+      "name": "Never seen (2023-now)",
+      "trend": {
+        "cagr": 19.5,
+        "sharpe": 0.88,
+        "max_dd": -22.7,
+        "total": 95.8
+      },
+      "btc": {
+        "cagr": 53.4,
+        "sharpe": 1.15,
+        "max_dd": -53.0,
+        "total": 401.4
+      }
+    },
+    {
+      "name": "Last 12 months",
+      "trend": {
+        "cagr": -10.9,
+        "sharpe": -0.79,
+        "max_dd": -18.8,
+        "total": -10.9
+      },
+      "btc": {
+        "cagr": -31.3,
+        "sharpe": -0.62,
+        "max_dd": -52.5,
+        "total": -31.3
+      }
+    }
+  ],
+  "by_year": [
+    {
+      "year": 2018,
+      "trend": -2.2,
+      "btc": -72.3
+    },
+    {
+      "year": 2019,
+      "trend": 38.3,
+      "btc": 89.5
+    },
+    {
+      "year": 2020,
+      "trend": 115.2,
+      "btc": 301.7
+    },
+    {
+      "year": 2021,
+      "trend": 48.5,
+      "btc": 57.6
+    },
+    {
+      "year": 2022,
+      "trend": -10.5,
+      "btc": -65.3
+    },
+    {
+      "year": 2023,
+      "trend": 27.8,
+      "btc": 154.5
+    },
+    {
+      "year": 2024,
+      "trend": 45.8,
+      "btc": 111.8
+    },
+    {
+      "year": 2025,
+      "trend": 0.4,
+      "btc": -7.3
+    },
+    {
+      "year": 2026,
+      "trend": 1.2,
+      "btc": -6.2
+    }
+  ],
+  "trades_per_year": 9.8,
+  "exposure_pct": 28.0
+}

@@ -11,7 +11,7 @@ import os
 import uuid
 from datetime import datetime, timezone
 
-from . import ai, alerts, analysis, dashboard, emerging, market, social
+from . import ai, alerts, analysis, dashboard, emerging, market, social, trend
 from .config import DATA_DIR, ROOT, load_config
 from .sentiment import aggregate
 from .storage import load_json, load_jsonl, save_json, save_jsonl
@@ -132,6 +132,45 @@ def run_emerging(cfg: dict, mkt, posts, report: dict, state: dict, morning: bool
     return msgs + emerging.status_alerts(tokens, state)
 
 
+def run_trend(cfg: dict, mkt, report: dict, now: datetime) -> list[str]:
+    """BTC/ETH trend signals: refresh daily prices, work out target positions,
+    paper-trade them from the go-live day, and message any change."""
+    health = report["source_health"]
+    hist_path, state_path = DATA_DIR / "trend_daily.json", DATA_DIR / "trend_state.json"
+    hist, state = load_json(hist_path, {}), load_json(state_path, {})
+    try:
+        hist = trend.update_history(hist, mkt, now)
+        save_json(hist_path, hist)
+    except Exception as e:  # noqa: BLE001
+        log.error("trend prices failed: %s", e)
+        health["trend signals"] = f"prices failed: {type(e).__name__}; using saved prices"
+    w = trend.weights(hist)
+    if not w:
+        return []
+    account = float(cfg["risk"]["account_size"])
+    first = "start" not in state
+    state.setdefault("start", max(d["as_of"] for d in w.values()))
+    msgs = trend.signals(w, state, account)
+    if first:
+        msgs.append(trend.intro_text(w, account))
+    live = trend.simulate(hist, w, start=state["start"])
+    save_json(state_path, state)
+    health.setdefault("trend signals", f"ok (prices to {max(d['as_of'] for d in w.values())})")
+    report["trend"] = trend_view(hist, w, live, state["start"], account)
+    return msgs
+
+
+def trend_view(hist: dict, w: dict, live: dict, start: str, account: float) -> dict:
+    return {
+        "account": account,
+        "coins": {c: {k: v for k, v in d.items() if k not in ("dates", "series")} |
+                  {"spark": [r[2] for r in hist[c][-90:]]} for c, d in w.items()},
+        "total": sum(d["target"] for d in w.values()),
+        "live": trend.stats(live["dates"], live["equity"]) | {"start": start},
+        "tested": load_json(DATA_DIR / "trend_backtest.json", None),
+    }
+
+
 def track_picks(cfg: dict, mkt, tokens: list[dict], report: dict) -> None:
     """Settles earlier gem picks against real prices and logs today's new ones."""
     path = DATA_DIR / "gem_history.jsonl"
@@ -186,8 +225,10 @@ def cmd_run(args) -> None:
 
     if args.publish:
         token_msgs = []
+        if cfg.get("trend", {}).get("enabled", True):
+            token_msgs += run_trend(cfg, mkt, report, now)
         if cfg.get("emerging", {}).get("enabled"):
-            token_msgs = run_emerging(cfg, mkt, posts, report, state, morning=args.morning)
+            token_msgs += run_emerging(cfg, mkt, posts, report, state, morning=args.morning)
         publish(report, candles, state, now)
         if args.digest:
             alerts.send_telegram(alerts.digest_text(report, os.environ.get("DASHBOARD_URL")))
@@ -218,6 +259,12 @@ def cmd_demo(_args) -> None:
     report["emerging"] = {"tokens": tokens, "hot": scan["hot_narratives"], "as_of": scan["as_of"]}
     print("\n\n".join(emerging.morning_messages(tokens, scan["hot_narratives"], 5, None)) + "\n")
     report["backtest"] = load_json(DATA_DIR / "backtest.json", None)
+    hist = load_json(DATA_DIR / "trend_daily.json", {})
+    w = trend.weights(hist)
+    if w:
+        start = sorted(hist["BTC"])[-30][0]
+        report["trend"] = trend_view(hist, w, trend.simulate(hist, w, start=start), start, 1000.0)
+        print(trend.intro_text(w, 1000) + "\n")
     publish(report, candles, {}, now, site_dir=ROOT / "demo", persist=False)
     print(alerts.digest_text(report, "https://example.pages.dev"))
     print(f"\nDemo dashboard written to {ROOT / 'demo' / 'index.html'}")

@@ -548,3 +548,49 @@ def test_extended_month_wide_stop_chart_targets_and_meme_holder_checks():
         {"market_cap": 7e7, "total_volume": 2e7, "circulating_supply": 1e9, "total_supply": 1e9,
          "fully_diluted_valuation": 7e7}, base, 5e6, 4.0, CFG["emerging"])}
     assert checks["Real product"] is False and checks["Spread across many holders"] is False
+
+
+# ---------- trend signals ----------
+
+def _trend_hist(closes):
+    from datetime import date, timedelta
+    d0 = date(2024, 1, 1)
+    return [[(d0 + timedelta(days=i)).isoformat(), c, c] for i, c in enumerate(closes)]
+
+
+def test_trend_long_in_uptrend_and_out_in_downtrend():
+    import math
+    from bot import trend
+    up = [100 * math.exp(0.004 * i + 0.02 * math.sin(i)) for i in range(400)]
+    down = up + [up[-1] * math.exp(-0.01 * i) for i in range(1, 200)]
+    w_up = trend.weights({"BTC": _trend_hist(up), "ETH": _trend_hist(up)})
+    w_dn = trend.weights({"BTC": _trend_hist(down), "ETH": _trend_hist(down)})
+    assert w_up["BTC"]["target"] > 0.2 and w_up["BTC"]["full_exit"] < up[-1]
+    assert w_dn["BTC"]["target"] == 0 and w_dn["BTC"]["next_add"] > down[-1]
+    total = sum(d["target"] for d in w_up.values())
+    assert total <= 1.0
+
+
+def test_trend_signals_only_on_real_change():
+    from bot import trend
+    d = {"target": 0.30, "votes_on": 6, "votes": 8, "close": 100.0, "next_trim": 95.0,
+         "full_exit": 80.0, "next_add": None}
+    state = {}
+    assert trend.signals({"BTC": d}, state, 1000) == []          # first run is silent
+    assert trend.signals({"BTC": dict(d, target=0.32)}, state, 1000) == []   # small move
+    msgs = trend.signals({"BTC": dict(d, target=0.0, full_exit=None, next_trim=None)}, state, 1000)
+    assert len(msgs) == 1 and "SELL all BTC" in msgs[0]
+    msgs = trend.signals({"BTC": dict(d, target=0.25)}, state, 1000)
+    assert "BUY BTC" in msgs[0] and "250 USDT" in msgs[0]
+
+
+def test_trend_paper_trading_charges_fees_and_follows_targets():
+    from bot import trend
+    closes = [100.0] * 50 + [100.0 + i for i in range(1, 100)]
+    hist = {"BTC": _trend_hist(closes), "ETH": _trend_hist(closes)}
+    w = trend.weights(hist)
+    sim = trend.simulate(hist, w)
+    assert sim["trades"] >= 1 and sim["equity"][-1] > 1.0
+    flat = {"BTC": _trend_hist([100.0] * 120), "ETH": _trend_hist([100.0] * 120)}
+    s2 = trend.simulate(flat, trend.weights(flat))
+    assert s2["equity"][-1] <= 1.0

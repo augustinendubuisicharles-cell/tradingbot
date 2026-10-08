@@ -15,14 +15,15 @@ def safe_url(url: str) -> str:
     return url if isinstance(url, str) and url.startswith(("https://", "http://")) else ""
 
 
-def spark_svg(closes: list[float] | None, plan: dict | None = None) -> Markup:
-    """A 7-day price line with the plan's buy, stop and target levels as labelled dashed lines."""
+def spark_svg(closes: list[float] | None, plan: dict | None = None, span: str = "7 days") -> Markup:
+    """A price line with the plan's buy, stop and target levels as labelled dashed lines."""
     if not closes or len(closes) < 2:
         return Markup("")
     plan = plan or {}
-    levels = [(k, plan[k]) for k in ("tp2", "tp1", "entry", "stop") if isinstance(plan.get(k), (int, float))]
-    names = {"tp2": "T2", "tp1": "T1", "entry": "Buy", "stop": "Stop"}
-    colors = {"tp2": "var(--up)", "tp1": "var(--up)", "entry": "var(--ink-2)", "stop": "var(--down)"}
+    levels = [(k, plan[k]) for k in ("add", "tp2", "tp1", "entry", "trim", "stop", "exit") if isinstance(plan.get(k), (int, float))]
+    names = {"tp2": "T2", "tp1": "T1", "entry": "Buy", "stop": "Stop", "add": "Add", "trim": "Trim", "exit": "Exit"}
+    colors = {"tp2": "var(--up)", "tp1": "var(--up)", "entry": "var(--ink-2)", "stop": "var(--down)",
+              "add": "var(--up)", "trim": "var(--ink-2)", "exit": "var(--down)"}
     vals = list(closes) + [v for _, v in levels]
     lo, hi = min(vals), max(vals)
     pad = (hi - lo) * 0.08 or hi * 0.01 or 1
@@ -32,8 +33,8 @@ def spark_svg(closes: list[float] | None, plan: dict | None = None) -> Markup:
     y = lambda v: h - 4 - (v - lo) * (h - 8) / (hi - lo)  # noqa: E731
     pts = " ".join(f"{x(i):.1f},{y(v):.1f}" for i, v in enumerate(closes))
     parts = [f'<svg class="spark" viewBox="0 0 {w:.0f} {h:.0f}" role="img" '
-             f'aria-label="Price over the last 7 days with plan levels">',
-             f"<title>7 days: low {fmt_price(min(closes))}, high {fmt_price(max(closes))}, "
+             f'aria-label="Price over the last {escape(span)} with plan levels">',
+             f"<title>{escape(span)}: low {fmt_price(min(closes))}, high {fmt_price(max(closes))}, "
              f"now {fmt_price(closes[-1])}</title>"]
     last_label_y = -99.0
     for k, v in levels:
@@ -74,6 +75,7 @@ def render(report: dict, history: list[dict], record: dict, out_dir=SITE_DIR) ->
         fp=fmt_price,
         demo=report.get("demo", False),
         emerging=report.get("emerging"),
+        trend=report.get("trend"),
         backtest=report.get("backtest"),
     )
     out_dir.mkdir(parents=True, exist_ok=True)

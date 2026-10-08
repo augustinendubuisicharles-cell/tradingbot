@@ -55,6 +55,40 @@ A coin only becomes a trade idea when it scores 65 or more, its trend is up, it 
 
 The dashboard keeps a **track record** of every idea (target hit, stopped, or expired after 14 days), so you can judge the signals before trusting them with real money.
 
+## Trend signals: the tested part
+
+`bot/trend.py` sends Bitcoin and Ethereum buy and sell signals on Bitget spot. It is the only
+rule set that passed an honest test. The rule comes from Zarattini, Pagani & Barbon (2025),
+"Catching Crypto Trends", and uses their settings rather than ones tuned to our data.
+
+How it works:
+- Eight trend checks per coin (10 to 360 days) each vote "up" when the price makes a new high.
+  Each vote stays up until the price falls below its own trailing stop.
+- The position size is the share of votes that are up, scaled down when the coin is jumpy.
+- The rule is decided on the daily close. A Telegram message goes out only when a position
+  should change by 5% of the account or more.
+
+How it was tested (`research/lab.py`):
+- Data: Binance daily prices from 2017 to 2026, delisted coins included.
+- Costs: 0.15% per side.
+- The rule was designed on 2018–2022 data. It was then judged on 2023 to now, which it had
+  never seen.
+
+Results on that unseen period:
+
+| | Gain | Worst drop |
+|---|---|---|
+| Trend rule | +96% (+19.5% a year) | −23% |
+| Holding Bitcoin | +401% | −53% |
+
+So the rule earns less than holding Bitcoin in strong bull runs. Its value is avoiding most of
+crashes like 2018 and 2022. Other rules were tested and rejected: altcoin rotation, top-20
+trend baskets, and the hidden-gem timing rules.
+
+The price history is refreshed weekly on the `research-data` branch by
+`research-data.yml`. To re-run the tests:
+`python research/lab.py <data dir>`, then `python research/trend_report.py <data dir>`.
+
 ## Morning hidden gems (every narrative)
 
 Every morning at 07:00 UK time (06:00 in winter) the bot scans the 1,000 most-traded coins on CoinGecko, across every narrative (AI, DePIN, gaming, RWA, memes, layer 2s and the rest). It keeps small ones ($10M–$300M market cap) that Bitget lists, then checks the best 20 in depth and sends the top 5 to Telegram.

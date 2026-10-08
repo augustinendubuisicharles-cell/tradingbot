@@ -74,6 +74,12 @@ risk:
   min_score_to_suggest: 65
   max_suggestions: 5
 
+# Trend signals for Bitcoin and Ethereum: the rule set that passed testing on
+# 2023-2026 prices it was never designed on (see bot/trend.py). Sends a Telegram
+# message when a position should change by 5% of the account or more.
+trend:
+  enabled: true
+
 # Hidden-gem scanner. Every morning it scans the 1,000 most-traded coins across
 # every narrative, keeps small Bitget-listed ones, runs safety checks, and
 # sends the best to Telegram. The 4-hourly runs re-check their timing.
