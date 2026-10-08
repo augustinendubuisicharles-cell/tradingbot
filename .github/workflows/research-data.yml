@@ -30,3 +30,13 @@ jobs:
           git add -A
           git commit -qm "Price history $(date -u +'%Y-%m-%d')"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" research-data
+      - name: Re-test the trend rule on fresh prices (weekly health check)
+        run: |
+          pip install pandas numpy
+          python research/trend_report.py "$RUNNER_TEMP/research"
+          git config user.name "tradingbot"
+          git config user.email "tradingbot@users.noreply.github.com"
+          git add data/trend_backtest.json
+          git diff --cached --quiet || git commit -m "Weekly trend re-test $(date -u +'%Y-%m-%d')"
+          git pull --rebase origin main
+          git push origin HEAD:main
