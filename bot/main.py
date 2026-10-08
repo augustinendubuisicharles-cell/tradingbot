@@ -95,6 +95,41 @@ def publish(report: dict, candles: dict, state: dict, now: datetime,
     return record
 
 
+def run_emerging(cfg: dict, mkt, posts, report: dict, state: dict, morning: bool) -> list[str]:
+    """Morning: full hidden-gem scan and the morning report. Other runs: re-time this
+    morning's picks with fresh prices. A failure never blocks the main report."""
+    texts, trending = [p.text for p in posts], report.get("trending", [])
+    path = DATA_DIR / "emerging.json"
+    scan = load_json(path, {})
+    health = report["source_health"]
+    msgs = []
+    try:
+        if morning:
+            tokens, scan = emerging.morning_scan(cfg, mkt, texts, trending)
+            save_json(path, scan)
+            msgs.append(emerging.morning_text(tokens, scan["hot_narratives"], cfg["emerging"]["report_size"],
+                                              os.environ.get("DASHBOARD_URL")))
+        elif scan:
+            tokens = emerging.rerate(scan, mkt, cfg, texts, trending)
+        else:
+            health["hidden gems"] = "waiting for the first morning scan"
+            return []
+    except Exception as e:  # noqa: BLE001
+        log.error("hidden-gem scan failed: %s", e)
+        health["hidden gems"] = f"failed: {type(e).__name__}" + ("; showing the last scan" if scan else "")
+        if not scan:
+            return []
+        try:
+            tokens = emerging.rerate(scan, mkt, cfg, texts, trending)
+        except Exception:  # noqa: BLE001
+            return []
+    else:
+        health["hidden gems"] = (f"ok ({len(tokens)} checked, {sum(t['safe'] for t in tokens)} passed safety; "
+                                 f"scan from {scan['as_of'][:16].replace('T', ' ')} UTC)")
+    report["emerging"] = {"tokens": tokens, "hot": scan.get("hot_narratives", []), "as_of": scan.get("as_of")}
+    return msgs + emerging.status_alerts(tokens, state)
+
+
 def cmd_run(args) -> None:
     cfg = load_config()
     now = datetime.now(timezone.utc)
@@ -123,27 +158,14 @@ def cmd_run(args) -> None:
         raise SystemExit("no market data from the exchange; nothing published")
 
     if args.publish:
-        new_token_alerts = []
+        token_msgs = []
         if cfg.get("emerging", {}).get("enabled"):
-            # A failed scan is reported on the dashboard but never blocks the main report.
-            try:
-                tokens, narratives, report["source_health"]["emerging scanner"] = emerging.scan(
-                    cfg, mkt, [p.text for p in posts], report.get("trending", []))
-                report["emerging"] = {"tokens": tokens, "narratives": narratives, "as_of": now.isoformat()}
-                new_token_alerts = emerging.status_alerts(tokens, state)
-            except Exception as e:  # noqa: BLE001
-                log.error("emerging scan failed: %s", e)
-                # Keep showing the last good scan (CoinGecko's free tier sometimes rate-limits).
-                prev = load_json(DATA_DIR / "latest.json", {}).get("emerging")
-                if prev:
-                    report["emerging"] = {**prev, "stale_since": prev.get("as_of", "earlier")}
-                report["source_health"]["emerging scanner"] = (
-                    f"failed: {type(e).__name__}" + ("; showing the last good scan" if prev else ""))
+            token_msgs = run_emerging(cfg, mkt, posts, report, state, morning=args.morning)
         publish(report, candles, state, now)
         if args.digest:
             alerts.send_telegram(alerts.digest_text(report, os.environ.get("DASHBOARD_URL")))
-            for msg in new_token_alerts:
-                alerts.send_telegram(msg)
+        for msg in token_msgs:
+            alerts.send_telegram(msg)
 
     if args.alerts:
         astate = load_json(DATA_DIR / "alert_state.json", {})
@@ -164,10 +186,10 @@ def cmd_demo(_args) -> None:
                                    ["SUI", "SOL", "PEPE"], {}, now)
     report["demo"] = True
     from .demo import fake_emerging
-    picks, narratives = fake_emerging()
-    report["emerging"] = {"tokens": emerging.rate(picks, narratives, FakeMarket(now), cfg,
-                                                  [p.text for p in posts], ["FET"]),
-                          "narratives": narratives}
+    scan = fake_emerging()
+    tokens = emerging.rerate(scan, FakeMarket(now), cfg, [p.text for p in posts], ["FET"])
+    report["emerging"] = {"tokens": tokens, "hot": scan["hot_narratives"], "as_of": scan["as_of"]}
+    print(emerging.morning_text(tokens, scan["hot_narratives"], 5, None) + "\n")
     publish(report, candles, {}, now, site_dir=ROOT / "demo", persist=False)
     print(alerts.digest_text(report, "https://example.pages.dev"))
     print(f"\nDemo dashboard written to {ROOT / 'demo' / 'index.html'}")
@@ -189,6 +211,7 @@ def main() -> None:
     run.add_argument("--publish", action="store_true", help="update dashboard and track record")
     run.add_argument("--digest", action="store_true", help="send the 4h Telegram summary")
     run.add_argument("--alerts", action="store_true", help="send real-time Telegram alerts")
+    run.add_argument("--morning", action="store_true", help="full hidden-gem scan and morning report")
     run.set_defaults(fn=cmd_run)
     sub.add_parser("demo").set_defaults(fn=cmd_demo)
     sub.add_parser("telegram-chat-id").set_defaults(fn=cmd_chat_id)

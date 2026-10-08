@@ -116,41 +116,39 @@ tr:last-child td { border-bottom: 0; }
   {% endif %}
 
   {% if emerging %}
-  <h2>Emerging tokens: AI and real-world assets</h2>
-  {% if emerging.stale_since %}<p class="muted" style="font-size:13px">The token data source was busy this round, so this is the scan from {{ emerging.stale_since[:16]|replace('T', ' ') }} UTC.</p>{% endif %}
-  <div class="nar">{% for name, n in emerging.narratives.items() %}<span><b>{{ name }}</b> narrative
-    {% if n.change_24h is not none %}<span class="{{ 'up' if n.change_24h > 0 else 'down' }}">{{ '%+.1f'|format(n.change_24h) }}%</span> today{% else %}–{% endif %}</span>{% endfor %}</div>
-  {% set live = emerging.tokens|rejectattr('plan.status', 'in', ['Avoid', 'Not enough history'])|list %}
-  {% if live %}
+  <h2>Hidden gems: small, newer tokens from every narrative</h2>
+  <p class="muted" style="font-size:13px;margin-top:-6px">Picked in the morning scan ({{ (emerging.as_of or '')[:16]|replace('T', ' ') }} UTC); prices and timing refreshed every 4 hours.</p>
+  {% if emerging.hot %}<div class="nar"><span>Hot narratives today:</span>{% for h in emerging.hot %}<span><b>{{ h.name }}</b> <span class="{{ 'up' if h.change_24h > 0 else 'down' }}">{{ '%+.1f'|format(h.change_24h) }}%</span></span>{% endfor %}</div>{% endif %}
+  {% set safe = emerging.tokens|selectattr('safe')|list %}
+  {% if safe %}
   <div class="cards">
-    {% for t in live %}{% set p = t.plan %}
+    {% for t in safe %}{% set p = t.plan %}
     <div class="card">
-      <h3><span>{{ t.symbol }} <span class="muted" style="font-weight:400;font-size:14px">{{ t.narrative }} · {{ t.name }}</span></span>
-        <span class="pill {{ 'st-go' if p.status == 'Enter zone' else ('st-out' if p.status in ['Exit signal', 'Take profit'] else '') }}">{{ p.status }}</span></h3>
-      <div class="muted" style="font-size:13px">Risk <b>{{ t.risk_rating }}</b> ({{ t.risk_score }}/100) · potential {{ '%.0f'|format(t.potential) }}/100 ·
-        cap ${{ '{:,.0f}'.format((t.market_cap or 0) / 1e6) }}M · 7d <span class="{{ 'up' if (t.change_7d or 0) > 0 else 'down' }}">{{ '%+.0f'|format(t.change_7d or 0) }}%</span></div>
+      <h3><span>{{ t.symbol }} <span class="muted" style="font-weight:400;font-size:14px">{{ t.name }}</span></span>
+        <span class="pill {{ 'st-go' if p.status == 'Enter zone' else ('st-out' if p.status in ['Exit signal', 'Take profit', 'Avoid'] else '') }}">{{ p.status }}</span></h3>
+      <div class="muted" style="font-size:13px">{{ t.narrative }} · cap ${{ '{:,.0f}'.format((t.market_cap or 0) / 1e6) }}M{% if t.age_days is not none and t.age_days < 365 %} · on Bitget {{ t.age_days }} days{% endif %} ·
+        7d <span class="{{ 'up' if (t.change_7d or 0) > 0 else 'down' }}">{{ '%+.0f'|format(t.change_7d or 0) }}%</span></div>
+      <div style="margin-top:6px;font-size:14px">Potential <b>{{ '%.0f'|format(t.potential) }}/100</b> · risk <b>{{ t.risk_rating }}</b></div>
       <p class="act">{{ p.action }}</p>
-      {% if p.entry is defined %}
-      <dl>
-        <dt>Price now</dt><dd>{{ fp(p.price) }}</dd>
-        <dt>Entry</dt><dd>{{ fp(p.entry) }}</dd>
-        <dt>Stop-loss</dt><dd class="down">{{ fp(p.stop) }}</dd>
-        <dt>Target 1 / 2</dt><dd class="up">{{ fp(p.tp1) }} / {{ fp(p.tp2) }}</dd>
-        <dt>Size</dt><dd>{{ '{:,.0f}'.format(p.notional) }} USDT (risk {{ p.risk_pct }}%)</dd>
-      </dl>
-      <p class="why"><b>When to leave:</b> {{ p.exit_rule }}</p>
+      {% if t.scenarios %}
+      <table style="font-size:13px;margin-top:6px"><thead><tr><th>Prediction</th><th>Price</th><th>Change</th><th>Market cap</th></tr></thead><tbody>
+        {% for sc in t.scenarios %}<tr title="{{ sc.note }}"><td class="l">{{ sc.case }}</td><td>{{ fp(sc.price) }}</td>
+          <td class="{{ 'up' if sc.pct > 0 else 'down' }}">{{ '%+.0f'|format(sc.pct) }}%</td><td>${{ '{:,.0f}'.format((sc.mcap or 0) / 1e6) }}M</td></tr>{% endfor %}
+      </tbody></table>
+      <p class="why">Entry {{ fp(p.entry) }} · size {{ '{:,.0f}'.format(p.notional) }} USDT (risk {{ p.risk_pct }}% of account). <b>When to leave:</b> {{ p.exit_rule }}</p>
       {% endif %}
-      {% if t.potential_notes %}<p class="why"><b>Why it's interesting:</b> {{ t.potential_notes|join('; ') }}.</p>{% endif %}
+      <p class="why"><b>Safety:</b> {% for c in t.safety %}<span title="{{ c.detail }}">{{ '✅' if c.ok else ('❌' if c.ok is sameas false else '❔') }} {{ c.name }}</span>{{ ' · ' if not loop.last }}{% endfor %}</p>
+      {% if t.potential_notes %}<p class="why"><b>Why it could grow:</b> {{ t.potential_notes|join('; ') }}.</p>{% endif %}
       {% if t.risk_notes %}<p class="why"><b>Risks:</b> {{ t.risk_notes|join('; ') }}.</p>{% endif %}
     </div>
     {% endfor %}
   </div>
   {% else %}
-  <div class="panel empty">No emerging AI or RWA token has a usable setup right now.</div>
+  <div class="panel empty">No token passed every safety check in this morning's scan.</div>
   {% endif %}
-  {% set out = emerging.tokens|selectattr('plan.status', 'in', ['Avoid', 'Not enough history'])|list %}
-  {% if out %}<p class="muted" style="font-size:13px">Also checked and avoided for now (downtrend or too new): {{ out|map(attribute='symbol')|join(', ') }}.</p>{% endif %}
-  <p class="muted" style="font-size:13px">Small tokens move fast both ways. Timing uses 4h candle closes (00:00, 04:00, 08:00, 12:00, 16:00, 20:00 UTC), and size is cut for riskier tokens so a stop-out costs 0.25–1% of the account.</p>
+  {% set bad = emerging.tokens|rejectattr('safe')|list %}
+  {% if bad %}<p class="muted" style="font-size:13px">Failed safety checks: {% for t in bad %}{{ t.symbol }} ({{ t.failed_checks|join(', ')|lower }}){{ '; ' if not loop.last }}{% endfor %}.</p>{% endif %}
+  <p class="muted" style="font-size:13px">Hover a safety check or prediction row for details. ❔ means the check couldn't be verified. Timing uses 4h candle closes, and riskier tokens get smaller sizes so a stop-out costs 0.25–1% of the account.</p>
   {% endif %}
 
   <h2>All coins</h2>

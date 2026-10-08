@@ -300,19 +300,34 @@ def _series(closes, start_h=-800):
     return rows
 
 
-def test_emerging_category_match_and_shortlist():
+def test_gem_prefilter_skips_stables_big_pumped_and_unlisted():
     from bot import emerging
-    cats = [{"id": "ai", "name": "Artificial Intelligence (AI)", "market_cap": 5e10},
-            {"id": "rwa", "name": "Real World Assets (RWA)", "market_cap": 2e10},
-            {"id": "mail", "name": "Email", "market_cap": 1e9}]
-    m = emerging.match_categories(cats, CFG["emerging"]["narratives"])
-    assert [c["id"] for c in m["AI"]] == ["ai"] and [c["id"] for c in m["RWA"]] == ["rwa"]
-    cands = [{"symbol": "FET", "market_cap": 1e9, "total_volume": 5e7},
-             {"symbol": "TINY", "market_cap": 2e6, "total_volume": 5e7},     # too small
-             {"symbol": "NOTLISTED", "market_cap": 1e9, "total_volume": 5e7},
-             {"symbol": "LINK", "market_cap": 1e9, "total_volume": 5e7}]     # already on watchlist
-    picks = emerging.shortlist(cands, {"FET", "TINY", "LINK"}, set(CFG["watchlist"]), CFG["emerging"])
-    assert [p["symbol"] for p in picks] == ["FET"]
+    e = CFG["emerging"]
+    row = lambda sym, name="Token", mcap=5e7, vol=5e6, ch7=10: {  # noqa: E731
+        "symbol": sym.lower(), "name": name, "market_cap": mcap, "total_volume": vol,
+        "price_change_percentage_7d_in_currency": ch7, "ath_change_percentage": -50}
+    rows = [row("GEM"), row("USDX", "Some USD"), row("WBTC", "Wrapped Bitcoin"), row("BIG", mcap=5e9),
+            row("PUMP", ch7=400), row("OFF"), row("LINK")]
+    picks = emerging.prefilter(rows, {"GEM", "USDX", "WBTC", "BIG", "PUMP", "LINK"}, set(CFG["watchlist"]), e)
+    assert [p["symbol"] for p in picks] == ["GEM"]
+    assert emerging.narrative_of(["Ethereum Ecosystem", "Binance Alpha Spotlight", "DePIN"]) == "DePIN"
+
+
+def test_gem_contract_check(monkeypatch):
+    from bot import emerging
+    assert emerging.contract_check({})[0] is True                       # native coin
+    assert emerging.contract_check({"solana": "abc"})[0] is None        # not covered
+
+    class R:
+        def __init__(self, info): self.info = info
+        def raise_for_status(self): pass
+        def json(self): return {"result": {"0xabc": self.info}}
+    monkeypatch.setattr(emerging.time, "sleep", lambda s: None)
+    monkeypatch.setattr(emerging.requests, "get", lambda *a, **k: R({"is_open_source": "1", "sell_tax": "0"}))
+    assert emerging.contract_check({"ethereum": "0xABC"})[0] is True
+    monkeypatch.setattr(emerging.requests, "get", lambda *a, **k: R({"is_honeypot": "1", "sell_tax": "0.2"}))
+    ok, note, _ = emerging.contract_check({"ethereum": "0xABC"})
+    assert ok is False and "honeypot" in note and "tax" in note
 
 
 def test_emerging_risk_rating():
@@ -347,16 +362,24 @@ def test_emerging_timing_states():
     assert emerging.timing_plan(c4h, c1d, trend, "High", CFG["risk"], 10)["status"] == "Take profit"
 
 
-def test_emerging_alerts_only_on_change_and_skips_mismatched_ticker():
+def test_gem_rating_safety_predictions_and_alerts():
     from bot import emerging
     from bot.demo import FakeMarket, fake_emerging
-    picks, nar = fake_emerging()
-    picks[1] = {**picks[1], "current_price": picks[1]["current_price"] * 3}   # different coin, same ticker
-    tokens = emerging.rate(picks, nar, FakeMarket(NOW), CFG, ["$FET looks strong"], [])
-    assert picks[1]["symbol"] not in {t["symbol"] for t in tokens}
-    fet = next(t for t in tokens if t["symbol"] == "FET")
-    assert any("mentioned" in n for n in fet["potential_notes"])
+    scan = fake_emerging()
+    scan["bases"][1]["cg"]["fully_diluted_valuation"] = scan["bases"][1]["cg"]["market_cap"] * 10
+    tokens = emerging.rerate(scan, FakeMarket(NOW), CFG, ["$FET looks strong"], [])
+    by = {t["symbol"]: t for t in tokens}
+    assert by["PLUME"]["safe"] is False and "Most supply unlocked" in by["PLUME"]["failed_checks"]
+    assert "Fair valuation" in by["VIRTUAL"]["failed_checks"]
+    assert tokens[0]["safe"] and not tokens[-1]["safe"]
+    assert any("mentioned" in n for n in by["FET"]["potential_notes"])
+    for t in tokens:
+        if t["scenarios"]:
+            cases = {s["case"]: s for s in t["scenarios"]}
+            assert cases["Bear"]["pct"] < 0 < cases["Base"]["pct"] < cases["Stretch"]["pct"]
+    text = emerging.morning_text(tokens, scan["hot_narratives"], 5, None)
+    assert "Morning gems" in text and "PLUME" in text and len(text) < 4096
     state = {}
     first = emerging.status_alerts(tokens, state)
-    assert any("time to position" in m for m in first) == any(t["plan"]["status"] == "Enter zone" for t in tokens)
+    assert all("PLUME" not in m for m in first)                         # unsafe tokens never alert
     assert emerging.status_alerts(tokens, state) == []

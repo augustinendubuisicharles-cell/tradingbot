@@ -55,16 +55,25 @@ A coin only becomes a trade idea when it scores 65 or more, its trend is up, it 
 
 The dashboard keeps a **track record** of every idea (target hit, stopped, or expired after 14 days), so you can judge the signals before trusting them with real money.
 
-## Emerging tokens (AI and real-world assets)
+## Morning hidden gems (every narrative)
 
-Every 4 hours the bot also scans smaller tokens in CoinGecko's AI and real-world-asset (RWA) categories that Bitget lists, between $10M and $3B in market cap, and skips ones already on the watchlist. For each, it shows:
+Every morning at 07:00 UK time (06:00 in winter) the bot scans the 1,000 most-traded coins on CoinGecko, across every narrative (AI, DePIN, gaming, RWA, memes, layer 2s and the rest). It keeps small ones ($10M–$300M market cap) that Bitget lists, then checks the best 20 in depth and sends the top 5 to Telegram.
 
-- **Risk rating** (Low to Very high) from market size, Bitget trading volume, how wildly it moves, how much supply is still locked, and how far it sits below its peak.
-- **Potential score** from trend, recent gains, volume surges, whether the AI or RWA narrative is gaining, and mentions by your channels or CoinGecko trending.
-- **When to get in**: *Enter zone* (uptrend confirmed, not overstretched), *Wait for pullback* (a buy level near the 20-period average), *Watch for breakout* (a level a 4h candle must close above), or *Avoid* (downtrend).
-- **When to get out**: a stop-loss, two targets (sell half at the first, move the stop to breakeven), and an exit on a 4h close below the 20-period average, an overheated RSI, or after 10 days with no move. *Take profit* and *Exit signal* flag tokens to sell if you hold them.
+**Safety checks.** A token must pass all of these to be recommended:
+- Real trading volume, on Bitget and overall
+- At least 35% of supply already unlocked
+- Fully diluted value no more than 4× market cap
+- Contract scan (GoPlus): no honeypot, hidden owner, balance tricks or high taxes, and code that is public
+- Not mid-pump (under +150% in a week, +60% in a day)
+- At least 2 weeks of trading history on Bitget
+- Volatility under control
+- A real project website
 
-Riskier tokens get smaller sizes (a stop-out costs 1% of the account for Low risk, down to 0.25% for Very high), and no token takes more than 10% of the account. Telegram pings you when a token moves into *Enter zone*, or from a buy state into *Take profit* or *Exit signal*. Settings are under `emerging` in `config.yaml`.
+**Growth potential (0–100)** comes from trend, recent gains, volume surges, how hot its narrative is, how early it still is (few CoinGecko watchers, not trending, rarely mentioned), room to grow (smaller cap) and how new it is.
+
+**Prediction.** Each pick gets scenarios from the entry price: bear (stop-loss), base (target 1), stretch (target 2) and, where reachable, bull (back to its old high). Each shows the market cap it implies. These are scenarios, not promises.
+
+**When to get in and out.** Timing is one of *Enter zone*, *Wait for pullback*, *Watch for breakout*, *Take profit*, *Exit signal* or *Avoid*. The 4-hourly runs refresh the timing with live prices, and Telegram pings you when a safe pick moves into a buy or an exit. Riskier tokens get smaller sizes (a stop-out costs 1% of the account for Low risk, down to 0.25% for Very high). Settings are under `emerging` in `config.yaml`.
 
 ## Limits to know
 

@@ -120,9 +120,9 @@ def digest_text(report: dict, dashboard_url: str | None) -> str:
     top = sorted(report["coins"], key=lambda a: a["score"], reverse=True)[:5]
     lines.append("Top scores: " + ", ".join(f"{a['coin']} {a['score']:.0f}" for a in top))
     em = [t for t in report.get("emerging", {}).get("tokens", [])
-          if t["plan"]["status"] in ("Enter zone", "Wait for pullback", "Watch for breakout")][:4]
+          if t["safe"] and t["plan"]["status"] in ("Enter zone", "Wait for pullback")][:4]
     if em:
-        lines.append("\n<b>Emerging AI / RWA tokens</b>")
+        lines.append("\n<b>Hidden gems ready to buy</b>")
         for t in em:
             lines.append(f"{t['symbol']} ({t['narrative']}, {t['risk_rating'].lower()} risk): "
                          f"{t['plan']['status'].lower()}, entry {fmt_price(t['plan']['entry'])}, "

@@ -74,19 +74,21 @@ risk:
   min_score_to_suggest: 65
   max_suggestions: 5
 
-# Emerging-token scanner (every 4 hours). Finds smaller AI and real-world-asset
-# tokens that Bitget lists, rates their risk, and says when to get in and out.
-# Narratives are matched against CoinGecko's free category names.
+# Hidden-gem scanner. Every morning it scans the 1,000 most-traded coins across
+# every narrative, keeps small Bitget-listed ones, runs safety checks, and
+# sends the best to Telegram. The 4-hourly runs re-check their timing.
 emerging:
   enabled: true
-  narratives:
-    AI: [artificial intelligence, ai agents, ai framework, ai applications]
-    RWA: [real world assets, rwa, tokenized]
-  per_category: 60            # tokens fetched from each matching category
   min_market_cap: 10000000    # 10M USD: smaller is too easy to manipulate
-  max_market_cap: 3000000000  # 3B USD: bigger isn't "emerging" any more
-  min_volume: 1000000         # 1M USD traded a day, across all exchanges
-  max_tokens: 20              # how many to rate each run
+  max_market_cap: 300000000   # 300M USD: bigger is no longer "little-known"
+  min_volume: 500000          # USD traded a day across all exchanges
+  min_bitget_volume: 300000   # USDT traded a day on Bitget, so you can get in and out
+  max_7d_gain: 150            # skip anything up more than 150% in a week (likely a pump)
+  min_unlocked: 0.35          # at least 35% of supply already in circulation
+  min_age_days: 14            # at least 2 weeks of trading history on Bitget
+  universe_pages: 4           # x250 most-traded coins on CoinGecko
+  max_details: 20             # candidates checked in depth each morning
+  report_size: 5              # picks in the morning Telegram report
   max_position_pct: 10        # never more than 10% of the account in one small token
 
 alerts:

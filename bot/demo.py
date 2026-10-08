@@ -80,19 +80,26 @@ def fake_posts(now: datetime) -> list[Post]:
             for s, a, t, h, e in SAMPLE_POSTS]
 
 
-def fake_emerging() -> tuple[list[dict], dict]:
-    """CoinGecko-shaped rows for the emerging-token preview."""
-    rows = [
-        ("FET", "Artificial Superintelligence Alliance", "AI", 1.2e9, 9.0, 14.0, 0.75),
-        ("VIRTUAL", "Virtuals Protocol", "AI", 7.2e8, 22.0, 41.0, 0.65),
-        ("ONDO", "Ondo", "RWA", 1.4e9, 6.0, 11.0, 0.32),
-        ("PLUME", "Plume", "RWA", 3.1e8, -12.0, -25.0, 0.30),
+def fake_emerging() -> dict:
+    """A saved morning scan, shaped like data/emerging.json, for the preview."""
+    rows = [  # symbol, name, narrative, market cap, 7d %, 30d %, share unlocked, watchers, age days
+        ("FET", "Demo AI Agent", "AI Agents", 1.2e8, 9.0, 14.0, 0.75, 4200, 48),
+        ("VIRTUAL", "Demo Gaming", "Gaming (GameFi)", 7.2e7, 22.0, 41.0, 0.65, 2600, 120),
+        ("ONDO", "Demo RWA", "Real World Assets (RWA)", 2.4e8, 6.0, 11.0, 0.52, 15000, 365),
+        ("PLUME", "Demo DePIN", "DePIN", 3.1e7, -12.0, -25.0, 0.22, 900, 30),
     ]
-    picks = [{"symbol": s, "name": n, "narrative": nar, "market_cap": mc, "current_price": COINS[s][0],
-              "total_volume": COINS[s][3] * 3, "price_change_percentage_7d_in_currency": d7,
-              "price_change_percentage_30d_in_currency": d30, "circulating_supply": circ,
-              "total_supply": 1.0, "ath_change_percentage": -70.0}
-             for s, n, nar, mc, d7, d30, circ in rows]
-    narratives = {"AI": {"change_24h": 3.4, "categories": ["Artificial Intelligence (AI)"]},
-                  "RWA": {"change_24h": 1.1, "categories": ["Real World Assets (RWA)"]}}
-    return picks, narratives
+    bases = []
+    for s, n, nar, mc, d7, d30, circ, watchers, age in rows:
+        price = COINS[s][0]
+        cg = {"id": s.lower(), "symbol": s, "name": n, "market_cap": mc, "current_price": price,
+              "total_volume": mc * 0.12, "price_change_percentage_7d_in_currency": d7,
+              "price_change_percentage_30d_in_currency": d30, "price_change_percentage_24h": d7 / 5,
+              "circulating_supply": circ * 1e9, "total_supply": 1e9, "fully_diluted_valuation": mc / circ,
+              "ath": price * 3.2, "ath_change_percentage": -69.0}
+        bases.append({"symbol": s, "cg": cg, "narrative": nar, "narrative_change": 3.4 if s == "FET" else 0.8,
+                      "watchers": watchers, "homepage": "https://example.org", "commits_4w": 30,
+                      "age_days": age, "age_capped": age >= 365, "contract_ok": True,
+                      "contract_note": "contract scanned clean on ethereum", "contract_warnings": []})
+    return {"as_of": "2026-10-08T06:00:00+00:00", "bases": bases,
+            "hot_narratives": [{"name": "AI Agents", "change_24h": 3.4}, {"name": "DePIN", "change_24h": 2.1},
+                               {"name": "Gaming (GameFi)", "change_24h": 1.2}]}
