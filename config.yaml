@@ -51,11 +51,17 @@ sources:
     reddit: 1.0
     news: 1.2
 
-# AI reading of posts with Google's free Gemini API. Needs a GEMINI_API_KEY
-# repository secret; without it the bot uses word scoring.
+# AI reading of posts. Without a key the bot uses word scoring.
+# Option A (default): Google Gemini, free tier. Secret: GEMINI_API_KEY.
+# Option B: Zhipu (Z.ai) GLM-4.7-Flash, free. Secret: AI_API_KEY. Use:
+#   provider: openai_compatible
+#   base_url: https://api.z.ai/api/paas/v4
+#   model: glm-4.7-flash
 ai:
   enabled: true
+  provider: gemini
   model: gemini-flash-latest
+  base_url: ""
 
 risk:
   account_size: 1000          # in USDT; used only to size suggestions

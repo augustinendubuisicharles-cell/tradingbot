@@ -105,7 +105,10 @@ def cmd_run(args) -> None:
     # AI reading runs on the 4-hourly publish only, which keeps well inside the
     # free API quota; the 30-minute alert checks use word scoring.
     if args.publish and cfg.get("ai", {}).get("enabled", True):
-        labels, health["ai post reading"] = ai.label_posts(posts, cfg.get("ai", {}).get("model", "gemini-flash-latest"))
+        acfg = cfg.get("ai", {})
+        labels, health["ai post reading"] = ai.label_posts(
+            posts, acfg.get("model", "gemini-flash-latest"),
+            acfg.get("provider", "gemini"), acfg.get("base_url", ""))
     report, candles = build_report(cfg, mkt, posts, health, market.fear_greed(),
                                    market.trending_coins(), state, now, ai_labels=labels)
     log.info("scored %d coins, %d ideas, %d posts", len(report["coins"]),

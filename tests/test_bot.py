@@ -229,3 +229,28 @@ def test_ai_label_posts_parses_response(monkeypatch):
     labels, status = ai.label_posts([social.Post("news", "x", "BTC up", NOW, "")], "m")
     assert seen["key_in_header"] and status.startswith("ok")
     assert ai.stance_score(labels[0]) == 1.0
+
+
+def test_openai_compatible_provider(monkeypatch):
+    from bot import ai
+
+    monkeypatch.setenv("AI_API_KEY", "k")
+    seen = {}
+
+    class Resp:
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            content = '```json\n{"posts": [{"i": 0, "coins": ["ETH"], "stance": "bearish", "confidence": 0.5, "advert": false}]}\n```'
+            return {"choices": [{"message": {"content": content}}]}
+
+    def fake_post(url, headers, json, timeout):
+        seen["url"], seen["auth"], seen["model"] = url, headers["Authorization"], json["model"]
+        return Resp()
+    monkeypatch.setattr(ai.requests, "post", fake_post)
+    labels, status = ai.label_posts([social.Post("news", "x", "ETH weak", NOW, "")], "glm-4.7-flash",
+                                    "openai_compatible", "https://api.z.ai/api/paas/v4/")
+    assert seen == {"url": "https://api.z.ai/api/paas/v4/chat/completions", "auth": "Bearer k",
+                    "model": "glm-4.7-flash"}
+    assert status.startswith("ok") and labels[0]["stance"] == "bearish"
