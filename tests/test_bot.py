@@ -372,13 +372,14 @@ def test_gem_rating_safety_predictions_and_alerts():
     assert by["PLUME"]["safe"] is False and "Most supply unlocked" in by["PLUME"]["failed_checks"]
     assert "Fair valuation" in by["VIRTUAL"]["failed_checks"]
     assert tokens[0]["safe"] and not tokens[-1]["safe"]
-    assert any("mentioned" in n for n in by["FET"]["potential_notes"])
+    assert any("talk about it" in n for n in by["FET"]["potential_notes"])
     for t in tokens:
         if t["scenarios"]:
             cases = {s["case"]: s for s in t["scenarios"]}
             assert cases["Bear"]["pct"] < 0 < cases["Base"]["pct"] < cases["Stretch"]["pct"]
-    text = emerging.morning_text(tokens, scan["hot_narratives"], 5, None)
-    assert "Morning gems" in text and "PLUME" in text and len(text) < 4096
+    msgs = emerging.morning_messages(tokens, scan["hot_narratives"], 5, None)
+    text = "\n".join(msgs)
+    assert "Morning gems" in msgs[0] and "PLUME" in msgs[-1] and all(len(m) < 4096 for m in msgs)
     state = {}
     first = emerging.status_alerts(tokens, state)
     assert all("PLUME" not in m for m in first)                         # unsafe tokens never alert

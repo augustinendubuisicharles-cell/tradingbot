@@ -107,8 +107,8 @@ def run_emerging(cfg: dict, mkt, posts, report: dict, state: dict, morning: bool
         if morning:
             tokens, scan = emerging.morning_scan(cfg, mkt, texts, trending)
             save_json(path, scan)
-            msgs.append(emerging.morning_text(tokens, scan["hot_narratives"], cfg["emerging"]["report_size"],
-                                              os.environ.get("DASHBOARD_URL")))
+            msgs += emerging.morning_messages(tokens, scan["hot_narratives"], cfg["emerging"]["report_size"],
+                                              os.environ.get("DASHBOARD_URL"))
         elif scan:
             tokens = emerging.rerate(scan, mkt, cfg, texts, trending)
         else:
@@ -189,7 +189,7 @@ def cmd_demo(_args) -> None:
     scan = fake_emerging()
     tokens = emerging.rerate(scan, FakeMarket(now), cfg, [p.text for p in posts], ["FET"])
     report["emerging"] = {"tokens": tokens, "hot": scan["hot_narratives"], "as_of": scan["as_of"]}
-    print(emerging.morning_text(tokens, scan["hot_narratives"], 5, None) + "\n")
+    print("\n\n".join(emerging.morning_messages(tokens, scan["hot_narratives"], 5, None)) + "\n")
     publish(report, candles, {}, now, site_dir=ROOT / "demo", persist=False)
     print(alerts.digest_text(report, "https://example.pages.dev"))
     print(f"\nDemo dashboard written to {ROOT / 'demo' / 'index.html'}")

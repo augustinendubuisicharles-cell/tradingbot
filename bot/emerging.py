@@ -317,16 +317,16 @@ def potential_score(cg: dict, base: dict, trend: float, surge: float | None, men
     rel = max(-30.0, min(30.0, 0.6 * ch7 + 0.4 * ch30))
     score += 0.15 * (50 + rel * 50 / 30)
     if ch7 >= 5:
-        notes.append(f"up {ch7:.0f}% this week")
+        notes.append(f"Up {ch7:.0f}% this week")
     if surge is not None:
         score += 0.10 * max(0.0, min(100.0, (surge - 0.5) * 66))
         if surge >= 1.5:
-            notes.append(f"volume {surge:.1f}× normal")
+            notes.append(f"Trading volume is {surge:.1f}× its normal level, so buyers are arriving")
     nch = base.get("narrative_change")
     if nch is not None:
         score += 0.15 * max(0.0, min(100.0, 50 + nch * 5))
         if nch > 2:
-            notes.append(f"{base['narrative']} narrative gaining ({nch:+.1f}% today)")
+            notes.append(f"Its sector ({base['narrative']}) is rising today ({nch:+.1f}%)")
     # Early: few people watching it yet, not trending, rarely mentioned.
     watchers = base.get("watchers")
     early = 50.0 if watchers is None else max(0.0, 100 - watchers / 500)
@@ -336,9 +336,9 @@ def potential_score(cg: dict, base: dict, trend: float, surge: float | None, men
         early -= 20
     score += 0.20 * max(0.0, early)
     if watchers is not None and watchers < 20000:
-        notes.append(f"still under the radar ({watchers:,} watchers on CoinGecko)")
+        notes.append(f"Still under the radar: only {watchers:,} people watch it on CoinGecko")
     if mentions:
-        notes.append(f"starting to get mentioned ({mentions} posts)")
+        notes.append(f"Traders are starting to talk about it ({mentions} posts)")
     mcap = cg.get("market_cap") or ecfg["max_market_cap"]
     room = max(0.0, min(100.0, 100 * (ecfg["max_market_cap"] - mcap) / (ecfg["max_market_cap"] - 30e6)))
     score += 0.10 * room
@@ -346,7 +346,7 @@ def potential_score(cg: dict, base: dict, trend: float, surge: float | None, men
     if age is not None and not base.get("age_capped"):
         score += 0.05 * (100 if age <= 60 else 60 if age <= 180 else 20)
         if age <= 180:
-            notes.append(f"new: on Bitget for {age} days")
+            notes.append(f"New listing: on Bitget for only {age} days")
     else:
         score += 0.05 * 20
     return round(score, 1), notes
@@ -501,43 +501,93 @@ def _mcap(v: float | None) -> str:
     return f"${v / 1e9:.1f}B" if v >= 1e9 else f"${v / 1e6:.0f}M"
 
 
-def morning_text(tokens: list[dict], hot: list[dict], n: int, dashboard_url: str | None) -> str:
+RISK_WORDS = {"Low": "Low", "Medium": "Medium", "High": "High (big swings)",
+              "Very high": "Very high (big swings, small size)"}
+
+
+def _plan_line(t: dict) -> str:
+    p = t["plan"]
+    if p["status"] == "Enter zone":
+        return f"🟢 <b>BUY NOW</b> at about {fmt_price(p['entry'])}"
+    if p["status"] == "Wait for pullback":
+        return (f"🟡 <b>WAIT, then buy at {fmt_price(p['entry'])}</b>\n"
+                f"It's running hot at {fmt_price(p['price'])}. Set a buy order lower; don't chase it.")
+    return (f"🟡 <b>WAIT for a breakout above {fmt_price(p['entry'])}</b>\n"
+            f"Now {fmt_price(p['price'])}. Buy only if a 4-hour candle closes above that level.")
+
+
+def _pick_message(i: int, t: dict) -> str:
     import html
-    today = datetime.now(timezone.utc).strftime("%a %d %b")
+    esc = lambda x: html.escape(str(x), quote=False)  # noqa: E731
+    p = t["plan"]
+    passed, total = sum(1 for c in t["safety"] if c["ok"]), len(t["safety"])
+    nums = "1️⃣ 2️⃣ 3️⃣ 4️⃣ 5️⃣ 6️⃣ 7️⃣ 8️⃣ 9️⃣".split()
+    lines = [f"{nums[i - 1] if i <= 9 else str(i) + '.'} <b>{t['symbol']}</b> ({esc(t['name'])})",
+             f"{esc(t['narrative'])} · market cap {_mcap(t['market_cap'])}",
+             "",
+             _plan_line(t),
+             "",
+             f"📈 Growth score: <b>{t['potential']:.0f}/100</b>",
+             f"⚠️ Risk: <b>{RISK_WORDS[t['risk_rating']]}</b>",
+             f"🛡 Safety: passed <b>{passed} of {total}</b> checks"
+             + (f" ({esc(', '.join(t['unknown_checks']).lower())} couldn't be verified)" if t["unknown_checks"] else "")]
+    if t["potential_notes"]:
+        lines += ["", "<b>Why it could grow</b>"] + [f"• {esc(n)}" for n in t["potential_notes"][:4]]
+    if t["scenarios"]:
+        sc = {s["case"]: s for s in t["scenarios"]}
+        lines += ["", "<b>The plan</b>",
+                  f"• Buy: {fmt_price(p['entry'])} with about {p['notional']:,.0f} USDT",
+                  f"• Stop-loss: {fmt_price(p['stop'])} ({sc['Bear']['pct']:+.0f}%). If it falls here, sell. "
+                  f"You'd lose about {p['max_loss']:,.0f} USDT.",
+                  f"• Target 1: {fmt_price(p['tp1'])} ({sc['Base']['pct']:+.0f}%). Sell half, move your stop to the buy price.",
+                  f"• Target 2: {fmt_price(p['tp2'])} ({sc['Stretch']['pct']:+.0f}%). Sell the rest."]
+        if "Bull" in sc:
+            lines.append(f"• Best case: {fmt_price(sc['Bull']['price'])} ({sc['Bull']['pct']:+.0f}%) "
+                         "if it returns to its all-time high")
+    return "\n".join(lines)
+
+
+def morning_messages(tokens: list[dict], hot: list[dict], n: int, dashboard_url: str | None) -> list[str]:
+    """The morning report as separate Telegram messages: intro, one per pick, then a guide."""
+    import html
+    today = datetime.now(timezone.utc).strftime("%A %d %B")
     picks = [t for t in tokens if t["safe"] and t["plan"]["status"] in BUY_STATES][:n]
     rejected = [t for t in tokens if not t["safe"]]
-    lines = [f"🌅 <b>Morning gems</b> · {today}",
-             "Small, newer tokens from every narrative that passed the safety checks, best first."]
-    if hot:
-        lines.append("Hot narratives today: " + ", ".join(
-            f"{html.escape(h['name'], quote=False)} {h['change_24h']:+.1f}%" for h in hot[:4]))
-    if not picks:
-        lines.append("\nNo token passed every safety check with a buy setup today. Sitting out is a position too.")
-    for i, t in enumerate(picks, 1):
-        p = t["plan"]
-        passed = sum(1 for c in t["safety"] if c["ok"])
-        lines.append(f"\n<b>{i}. {t['symbol']}</b> ({html.escape(t['name'], quote=False)}) · {html.escape(t['narrative'], quote=False)} · "
-                     f"cap {_mcap(t['market_cap'])}")
-        lines.append(f"Potential {t['potential']:.0f}/100 · {t['risk_rating'].lower()} risk · "
-                     f"safety {passed}/{len(t['safety'])} ✅"
-                     + (f" ({', '.join(t['unknown_checks']).lower()} unverified)" if t["unknown_checks"] else ""))
-        if t["potential_notes"]:
-            lines.append("Why: " + html.escape("; ".join(t["potential_notes"]), quote=False))
-        lines.append(f"Timing: <b>{p['status']}</b>. {html.escape(p['action'], quote=False)}")
-        if t["scenarios"]:
-            lines.append("Prediction from entry " + fmt_price(p["entry"]) + ": " + " · ".join(
-                f"{s['case'].lower()} {s['pct']:+.0f}% ({fmt_price(s['price'])}, cap {_mcap(s['mcap'])})"
-                for s in t["scenarios"]))
-            lines.append(f"Size ≈ {p['notional']:,.0f} USDT, max loss {p['max_loss']:,.0f} USDT")
+    intro = [f"🌅 <b>Morning gems</b> · {today}", ""]
     if picks:
-        lines.append("\n<b>When to leave:</b> sell half at the base target and move the stop to your entry; "
-                     "sell the rest at the stretch target, on a 4h close below the 20-period average, "
-                     "or after 10 days with no move.")
+        intro.append(f"I checked {len(tokens)} small, little-known tokens from every sector. "
+                     f"<b>{len(picks)}</b> passed the safety checks and have a buy setup. Best first:")
+    else:
+        intro.append(f"I checked {len(tokens)} small, little-known tokens from every sector. None passed "
+                     "every safety check with a buy setup today, so the best move is to wait.")
+    if hot:
+        intro += ["", "🔥 <b>Sectors rising today</b>"] + [
+            f"• {html.escape(h['name'], quote=False)} {h['change_24h']:+.1f}%" for h in hot[:4]]
+    msgs = ["\n".join(intro)] + [_pick_message(i, t) for i, t in enumerate(picks, 1)]
+    guide = ["📘 <b>How to read this</b>",
+             "• <b>Growth score</b>: how much room and momentum a token has. Higher is better.",
+             "• <b>Risk</b>: how wildly the price swings. Riskier tokens get smaller amounts, "
+             "so a stop-loss never costs more than 0.25–1% of your account.",
+             "• <b>Stop-loss</b>: the price where you sell to keep a loss small.",
+             "• <b>Leave early</b> if a 4-hour candle closes below its trend line, or after 10 days with no move. "
+             "I'll message you when that happens."]
     if rejected:
-        lines.append("\nFailed safety: " + "; ".join(
-            f"{t['symbol']} (didn't pass: {', '.join(t['failed_checks']).lower()})" for t in rejected[:6]))
+        reasons: dict[str, int] = {}
+        for t in rejected:
+            for c in t["failed_checks"]:
+                reasons[c] = reasons.get(c, 0) + 1
+        top = max(reasons, key=reasons.get)
+        why = {"Most supply unlocked": "too many tokens still locked, so more selling is coming",
+               "Fair valuation": "too many tokens still to be released",
+               "Real trading volume": "too little trading to get in and out safely",
+               "Contract safe": "risky contract code",
+               "Not a pump-and-dump": "already pumped too hard",
+               "Volatility under control": "price swings too wild",
+               "Enough trading history": "too new to judge"}.get(top, top.lower())
+        guide += ["", f"🚫 <b>Rejected today:</b> {', '.join(t['symbol'] for t in rejected)}. "
+                      f"The most common reason was {why}."]
     if dashboard_url:
-        lines.append(f'<a href="{html.escape(dashboard_url)}">Full details on the dashboard</a>')
-    lines.append("<i>Small caps can fall fast. Predictions are scenarios, not promises. Not financial advice.</i>")
-    text = "\n".join(lines)
-    return text if len(text) < 4000 else text[:3990] + "…"
+        guide.append(f'\n<a href="{html.escape(dashboard_url)}">Open the dashboard for full details</a>')
+    guide.append("\n<i>Small tokens can fall fast. Targets are possibilities, not promises. Not financial advice.</i>")
+    msgs.append("\n".join(guide))
+    return [m if len(m) < 4000 else m[:3990] + "…" for m in msgs]
