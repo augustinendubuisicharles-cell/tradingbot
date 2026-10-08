@@ -83,7 +83,7 @@ trend:
 # Altcoin trend portion (bot/altsleeve.py): 25% of the account spread over the
 # top-20 altcoins that are trending, BTC/ETH signals use the other 75%.
 alt_sleeve:
-  enabled: false
+  enabled: true
 
 # Hidden-gem scanner. Every morning it scans the 1,000 most-traded coins across
 # every narrative, keeps small Bitget-listed ones, runs safety checks, and
