@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
+from .ai import stance_score
 from .social import Post, influence
 
 # VADER's lexicon is general English; these words carry a clear direction in
@@ -101,21 +102,34 @@ def _finish(acc: dict, top_n: int) -> dict:
 
 def aggregate(posts: list[Post], watchlist: dict, weights: dict,
               now: datetime | None = None, half_life_hours: float = 12.0,
-              top_n: int = 3, market_top_n: int = 12) -> tuple[dict[str, dict], dict]:
-    """Per-coin sentiment plus overall market mood from every post."""
+              top_n: int = 3, market_top_n: int = 12,
+              ai_labels: dict[int, dict] | None = None) -> tuple[dict[str, dict], dict]:
+    """Per-coin sentiment plus overall market mood from every post.
+
+    With `ai_labels` (from bot.ai), the model's reading of each post replaces
+    word scoring; posts the model skipped still fall back to word scoring.
+    """
     now = now or datetime.now(timezone.utc)
     patterns = coin_patterns(watchlist)
     per_coin = {c: _empty() for c in watchlist}
     market = _empty()
-    for post in posts:
-        if is_noise(post.text):
-            continue
-        s = score_text(post.text)
+    for i, post in enumerate(posts):
+        label = (ai_labels or {}).get(i)
+        if label:
+            if label.get("advert"):
+                continue
+            s = stance_score(label)
+            coins = [c for c in dict.fromkeys(x.upper() for x in label.get("coins", [])) if c in per_coin]
+        else:
+            if is_noise(post.text):
+                continue
+            s = score_text(post.text)
+            coins = mentioned_coins(post.text, patterns)
         age_h = max((now - post.ts).total_seconds() / 3600, 0.0)
         w = (weights.get(post.source, 1.0) * post.source_weight * influence(post)
              * 0.5 ** (age_h / half_life_hours))
-        coins = mentioned_coins(post.text, patterns)
-        entry = {**post.to_dict(), "sentiment": round(s, 3), "weight": round(w, 3), "coins": coins}
+        entry = {**post.to_dict(), "sentiment": round(s, 3), "weight": round(w, 3), "coins": coins,
+                 "read_by": "ai" if label else "words"}
         entry["text"] = entry["text"][:280]
         targets = [per_coin[c] for c in coins] + [market]
         for acc in targets:

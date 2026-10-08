@@ -25,7 +25,13 @@ In the repository on github.com, go to **Settings → Secrets and variables → 
 4. Back in GitHub, under **Settings → Secrets and variables → Actions → Variables**, add `DASHBOARD_URL` with that link. The Telegram digest will then include it.
 5. Optional: to keep the dashboard private, turn on Cloudflare Access for the site (free for up to 50 users).
 
-### 4. Start it
+### 4. AI post reading (optional, free)
+1. Go to aistudio.google.com, sign in with a Google account and click **Get API key → Create API key**.
+2. In GitHub, add it as a repository secret named `GEMINI_API_KEY`.
+
+With the key, Google's Gemini model reads each post every 4 hours. It works out which coins the post is about, whether the author is bullish or bearish and how strongly, and whether the post is just an advert. Without the key, the bot falls back to counting bullish and bearish words.
+
+### 5. Start it
 Go to the **Actions** tab, open **4-hour analysis** and click **Run workflow**. After that, it runs on its own.
 
 ## Changing what it watches
@@ -56,7 +62,7 @@ The dashboard keeps a **track record** of every idea (target hit, stopped, or ex
 - Reddit sometimes blocks requests from GitHub's servers. When that happens, the dashboard's "Data sources" table shows it and the other sources still work.
 - GitHub can start scheduled runs a few minutes late.
 - A private repo gets 2,000 free Actions minutes a month. This setup uses about 1,800. A public repo has no limit.
-- Sentiment comes from a free word-based model (VADER plus crypto slang). It can't detect sarcasm.
+- Without the Gemini key, sentiment comes from a free word-based model (VADER plus crypto slang), which can't detect sarcasm. Gemini's free tier has daily limits; the bot only calls it once every 4 hours.
 
 ## Run locally
 

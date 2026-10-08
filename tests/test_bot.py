@@ -169,3 +169,63 @@ def test_unlisted_coin_is_skipped_not_fatal():
     m = Market.__new__(Market)
     m.spot, m.quote = FakeExchange(), "USDT"
     assert set(m.tickers(["BTC", "ETH", "TON"])) == {"BTC", "ETH"}
+
+
+def test_ai_labels_override_word_scoring():
+    posts = [
+        social.Post("telegram", "a", "ETH/USDT SHORT Entry Zone - Join Fast", NOW, ""),
+        social.Post("telegram", "b", "CRYPTO FEAR AND GREED INDEX 59 Neutral, BTC ranging", NOW, ""),
+        social.Post("news", "c", "Solana rallies as ETF inflows grow", NOW, ""),
+    ]
+    labels = {
+        0: {"i": 0, "coins": ["ETH"], "stance": "bearish", "confidence": 0.9, "advert": True},
+        1: {"i": 1, "coins": ["BTC"], "stance": "neutral", "confidence": 0.2, "advert": False},
+        # post 2 has no label: falls back to word scoring
+    }
+    per_coin, mood = sentiment.aggregate(posts, CFG["watchlist"], CFG["sources"]["weights"],
+                                         now=NOW, ai_labels=labels)
+    assert per_coin["ETH"]["mentions"] == 0          # advert skipped
+    assert per_coin["BTC"]["score"] == 0.0           # neutral, not "fear" = bearish
+    assert per_coin["SOL"]["score"] > 0.3            # word scoring fallback
+    assert mood["mentions"] == 2
+
+
+def test_ai_label_posts_without_key_or_on_error(monkeypatch):
+    from bot import ai
+
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    labels, status = ai.label_posts([], "m")
+    assert labels is None and status.startswith("off")
+
+    monkeypatch.setenv("GEMINI_API_KEY", "k")
+
+    def boom(*a, **k):
+        raise ai.requests.ConnectionError("down")
+    monkeypatch.setattr(ai.requests, "post", boom)
+    posts = [social.Post("news", "x", "BTC up", NOW, "")]
+    labels, status = ai.label_posts(posts, "m")
+    assert labels is None and status.startswith("failed")
+
+
+def test_ai_label_posts_parses_response(monkeypatch):
+    import json as _json
+    from bot import ai
+
+    monkeypatch.setenv("GEMINI_API_KEY", "k")
+    seen = {}
+
+    class Resp:
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            out = [{"i": 0, "coins": ["btc"], "stance": "bullish", "confidence": 1, "advert": False}]
+            return {"candidates": [{"content": {"parts": [{"text": _json.dumps(out)}]}}]}
+
+    def fake_post(url, headers, json, timeout):
+        seen["key_in_header"] = headers.get("x-goog-api-key") == "k" and "k" not in url
+        return Resp()
+    monkeypatch.setattr(ai.requests, "post", fake_post)
+    labels, status = ai.label_posts([social.Post("news", "x", "BTC up", NOW, "")], "m")
+    assert seen["key_in_header"] and status.startswith("ok")
+    assert ai.stance_score(labels[0]) == 1.0

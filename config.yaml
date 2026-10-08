@@ -51,6 +51,12 @@ sources:
     reddit: 1.0
     news: 1.2
 
+# AI reading of posts with Google's free Gemini API. Needs a GEMINI_API_KEY
+# repository secret; without it the bot uses word scoring.
+ai:
+  enabled: true
+  model: gemini-flash-latest
+
 risk:
   account_size: 1000          # in USDT; used only to size suggestions
   risk_per_trade_pct: 1.0     # max loss per trade if the stop is hit

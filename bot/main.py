@@ -11,7 +11,7 @@ import os
 import uuid
 from datetime import datetime, timezone
 
-from . import alerts, analysis, dashboard, market, social
+from . import ai, alerts, analysis, dashboard, market, social
 from .config import DATA_DIR, ROOT, load_config
 from .sentiment import aggregate
 from .storage import load_json, load_jsonl, save_json, save_jsonl
@@ -20,7 +20,7 @@ log = logging.getLogger("bot")
 
 
 def build_report(cfg: dict, mkt, posts, health: dict, fng, trending, state: dict,
-                 now: datetime) -> tuple[dict, dict]:
+                 now: datetime, ai_labels: dict | None = None) -> tuple[dict, dict]:
     coins = list(cfg["watchlist"])
     try:
         tickers = mkt.tickers(coins)
@@ -32,7 +32,8 @@ def build_report(cfg: dict, mkt, posts, health: dict, fng, trending, state: dict
         health["exchange"] = f"failed: {type(e).__name__}"
         tickers = {}
 
-    sentiments, mood = aggregate(posts, cfg["watchlist"], cfg["sources"]["weights"], now=now)
+    sentiments, mood = aggregate(posts, cfg["watchlist"], cfg["sources"]["weights"], now=now,
+                                 ai_labels=ai_labels)
     prev_oi = state.get("oi", {})
     analyses, candles = [], {}
     for coin in coins:
@@ -100,8 +101,13 @@ def cmd_run(args) -> None:
     state = load_json(DATA_DIR / "state.json", {})
     mkt = market.Market(cfg["exchange"], cfg["quote"])
     posts, health = social.collect(cfg, now)
+    labels = None
+    # AI reading runs on the 4-hourly publish only, which keeps well inside the
+    # free API quota; the 30-minute alert checks use word scoring.
+    if args.publish and cfg.get("ai", {}).get("enabled", True):
+        labels, health["ai post reading"] = ai.label_posts(posts, cfg.get("ai", {}).get("model", "gemini-flash-latest"))
     report, candles = build_report(cfg, mkt, posts, health, market.fear_greed(),
-                                   market.trending_coins(), state, now)
+                                   market.trending_coins(), state, now, ai_labels=labels)
     log.info("scored %d coins, %d ideas, %d posts", len(report["coins"]),
              len(report["suggestions"]), len(posts))
     if not report["coins"]:

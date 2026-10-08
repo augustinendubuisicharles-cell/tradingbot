@@ -145,7 +145,7 @@ tr:last-child td { border-bottom: 0; }
       <li><div>{{ p.text }}</div>
         <div class="meta">{{ p.author }} · {{ p.source }} · {{ p.ts[:16]|replace('T', ' ') }} UTC ·
           <span class="{{ 'up' if p.sentiment > 0.05 else ('down' if p.sentiment < -0.05 else '') }}">sentiment {{ '%+.2f'|format(p.sentiment) }}</span>
-          {% if p.coins %}· {{ p.coins|join(', ') }}{% endif %}
+          {% if p.coins %}· {{ p.coins|join(', ') }}{% endif %}{% if p.read_by == 'ai' %} · read by AI{% endif %}
           {% if p.url|safe_url %}· <a href="{{ p.url|safe_url }}" rel="noopener noreferrer" target="_blank">source</a>{% endif %}</div></li>
       {% endfor %}
     </ul>
