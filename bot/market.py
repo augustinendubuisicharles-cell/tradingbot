@@ -25,10 +25,18 @@ class Market:
         return f"{coin}/{self.quote}:{self.quote}"
 
     def tickers(self, coins: list[str]) -> dict[str, dict]:
-        """Last price, 24h change % and 24h quote volume per coin."""
-        raw = self.spot.fetch_tickers([self.spot_symbol(c) for c in coins])
+        """Last price, 24h change % and 24h quote volume per coin.
+
+        Coins the exchange doesn't list are left out rather than failing the
+        whole request.
+        """
+        self.spot.load_markets()
+        listed = [c for c in coins if self.spot_symbol(c) in self.spot.markets]
+        if not listed:
+            return {}
+        raw = self.spot.fetch_tickers([self.spot_symbol(c) for c in listed])
         out = {}
-        for coin in coins:
+        for coin in listed:
             t = raw.get(self.spot_symbol(coin))
             if not t or t.get("last") is None:
                 continue

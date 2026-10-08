@@ -151,3 +151,21 @@ def test_channel_weight_changes_influence():
     weak = social.Post("telegram", "bad", "$SOL looks bearish", NOW, "", 0, source_weight=0.3)
     per_coin, _ = sentiment.aggregate([strong, weak], CFG["watchlist"], CFG["sources"]["weights"], now=NOW)
     assert per_coin["SOL"]["score"] > 0.3
+
+
+def test_unlisted_coin_is_skipped_not_fatal():
+    from bot.market import Market
+
+    class FakeExchange:
+        markets = {"BTC/USDT": {}, "ETH/USDT": {}}
+
+        def load_markets(self):
+            return self.markets
+
+        def fetch_tickers(self, symbols):
+            assert "TON/USDT" not in symbols
+            return {s: {"last": 1.0, "percentage": 0.5, "quoteVolume": 1e9} for s in symbols}
+
+    m = Market.__new__(Market)
+    m.spot, m.quote = FakeExchange(), "USDT"
+    assert set(m.tickers(["BTC", "ETH", "TON"])) == {"BTC", "ETH"}

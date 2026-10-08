@@ -24,7 +24,9 @@ def build_report(cfg: dict, mkt, posts, health: dict, fng, trending, state: dict
     coins = list(cfg["watchlist"])
     try:
         tickers = mkt.tickers(coins)
-        health["exchange"] = f"ok ({len(tickers)} markets)"
+        missing = [c for c in coins if c not in tickers]
+        health["exchange"] = f"ok ({len(tickers)} markets)" + (
+            f"; not listed: {', '.join(missing)}" if missing else "")
     except Exception as e:  # noqa: BLE001
         log.error("exchange tickers failed: %s", e)
         health["exchange"] = f"failed: {type(e).__name__}"
