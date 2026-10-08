@@ -132,13 +132,13 @@ def simulate(history: dict[str, list[list]], w: dict[str, dict], start: str | No
 
 def stats(dates: list[str], equity: list[float]) -> dict:
     if len(equity) < 2:
-        return {"total": 0.0, "max_dd": 0.0, "days": len(equity)}
+        return {"total": 0.0, "max_dd": 0.0, "drawdown": 0.0, "days": len(equity)}
     peak, dd = equity[0], 0.0
     for e in equity:
         peak = max(peak, e)
         dd = min(dd, e / peak - 1)
     return {"total": round((equity[-1] / equity[0] - 1) * 100, 1), "max_dd": round(dd * 100, 1),
-            "days": len(equity) - 1}
+            "drawdown": round((equity[-1] / peak - 1) * 100, 1), "days": len(equity) - 1}
 
 
 # ---------- data ----------
@@ -160,15 +160,40 @@ def update_history(cache: dict, mkt, now: datetime | None = None) -> dict:
 
 # ---------- signals ----------
 
-def signals(w: dict[str, dict], state: dict, account: float) -> list[str]:
+# Safeguards. Tested worst drop since 2023 was -23%; falling well past that
+# live means the market no longer behaves like the test, so stop buying.
+PAUSE_DRAWDOWN = -35.0
+STALE_DAYS = 2
+
+
+def guard(live: dict, as_of: str, now: datetime, health: dict | None = None) -> dict:
+    """Decides whether new buys are allowed. Sells always go out."""
+    reasons = []
+    if live.get("drawdown", 0.0) <= PAUSE_DRAWDOWN:
+        reasons.append(f"live paper record is down {live['drawdown']:.0f}% from its peak, "
+                       f"past the {PAUSE_DRAWDOWN:.0f}% safety limit")
+    age = (now.date() - datetime.strptime(as_of, "%Y-%m-%d").date()).days
+    if age > STALE_DAYS:
+        reasons.append(f"prices are {age} days old")
+    health_bad = (health or {}).get("status") == "weak"
+    if health_bad:
+        reasons.append("the weekly re-test shows the rule has stopped working "
+                       f"(2-year Sharpe {health['sharpe_2y']:.2f})")
+    return {"buys_allowed": not reasons, "reasons": reasons}
+
+
+def signals(w: dict[str, dict], state: dict, account: float, buys_allowed: bool = True) -> list[str]:
     """Telegram messages when a coin's target moved 5%+ of the account since the
-    last signal. `state` remembers the last announced targets."""
+    last signal. `state` remembers the last announced targets. While paused,
+    increases are held back (sells still go out)."""
     msgs = []
     sent = state.setdefault("announced", {})
     for coin, d in w.items():
         new, old = d["target"], sent.get(coin)
         if old is None:
             sent[coin] = new             # first run: remember silently
+            continue
+        if new > old and not buys_allowed:
             continue
         if abs(new - old) < BAND and not (new == 0 < old):
             continue
@@ -219,3 +244,12 @@ def intro_text(w: dict[str, dict], account: float) -> str:
               "Tested 2017-2026: worst drop -23% since 2023 vs -53% holding Bitcoin. "
               "It earns less than holding in strong bull runs; its job is avoiding the big crashes. Not advice."]
     return "\n".join(lines)
+
+
+def pause_text(reasons: list[str]) -> str:
+    return ("⏸ Trend signals: new BUYS paused\n\nWhy: " + "; ".join(reasons) + ".\n\n"
+            "Sell signals still come through. Buys restart on their own once this clears.")
+
+
+def resume_text() -> str:
+    return "▶️ Trend signals: buys are back on. The safety check is clear again."

@@ -33,6 +33,12 @@ out = {
     "trades_per_year": round(sim["trades"] / (len(eq) / 365), 1),
     "exposure_pct": round(float(pd.DataFrame({c: wt[c]["series"] for c in wt}).sum(axis=1).mean() * 100), 0),
 }
+two = eq.loc[eq.index[-1] - pd.Timedelta(days=730):]
+sh2 = lab.metrics(two).get("sharpe", 0.0)
+# Re-tested every Sunday on fresh prices. "weak" pauses new buys (bot/trend.py guard).
+out["health"] = {"sharpe_2y": sh2, "return_2y": lab.metrics(two).get("total"),
+                 "status": "weak" if sh2 < 0 else "ok",
+                 "rule": "weak when the last 2 years' Sharpe ratio drops below 0"}
 out = json.loads(json.dumps(out, default=float))
 Path("data/trend_backtest.json").write_text(json.dumps(out, indent=2))
 print(json.dumps(out, indent=1))

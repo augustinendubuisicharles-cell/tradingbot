@@ -594,3 +594,18 @@ def test_trend_paper_trading_charges_fees_and_follows_targets():
     flat = {"BTC": _trend_hist([100.0] * 120), "ETH": _trend_hist([100.0] * 120)}
     s2 = trend.simulate(flat, trend.weights(flat))
     assert s2["equity"][-1] <= 1.0
+
+
+def test_trend_guard_pauses_buys_but_not_sells():
+    from datetime import datetime, timezone
+    from bot import trend
+    now = datetime(2026, 10, 9, 2, tzinfo=timezone.utc)
+    assert trend.guard({"drawdown": -5.0}, "2026-10-08", now)["buys_allowed"]
+    g = trend.guard({"drawdown": -40.0}, "2026-10-08", now)
+    assert not g["buys_allowed"] and "safety limit" in g["reasons"][0]
+    assert not trend.guard({"drawdown": 0.0}, "2026-10-01", now)["buys_allowed"]          # stale prices
+    assert not trend.guard({}, "2026-10-08", now, {"status": "weak", "sharpe_2y": -0.3})["buys_allowed"]
+    d = {"target": 0.30, "votes_on": 6, "votes": 8, "close": 100.0, "next_trim": 95.0, "full_exit": 80.0, "next_add": None}
+    state = {"announced": {"BTC": 0.10}}
+    assert trend.signals({"BTC": d}, state, 1000, buys_allowed=False) == []
+    assert trend.signals({"BTC": dict(d, target=0.0)}, state, 1000, buys_allowed=False)  # sells still go

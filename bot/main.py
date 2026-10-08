@@ -150,13 +150,22 @@ def run_trend(cfg: dict, mkt, report: dict, now: datetime) -> list[str]:
     account = float(cfg["risk"]["account_size"])
     first = "start" not in state
     state.setdefault("start", max(d["as_of"] for d in w.values()))
-    msgs = trend.signals(w, state, account)
+    live = trend.simulate(hist, w, start=state["start"])
+    live_stats = trend.stats(live["dates"], live["equity"])
+    tested = load_json(DATA_DIR / "trend_backtest.json", {}) or {}
+    as_of = min(d["as_of"] for d in w.values())
+    g = trend.guard(live_stats, as_of, now, tested.get("health"))
+    msgs = []
+    if g["buys_allowed"] == state.get("paused", False):        # pause state changed
+        msgs.append(trend.resume_text() if g["buys_allowed"] else trend.pause_text(g["reasons"]))
+        state["paused"] = not g["buys_allowed"]
+    msgs += trend.signals(w, state, account, g["buys_allowed"])
     if first:
         msgs.append(trend.intro_text(w, account))
-    live = trend.simulate(hist, w, start=state["start"])
     save_json(state_path, state)
-    health.setdefault("trend signals", f"ok (prices to {max(d['as_of'] for d in w.values())})")
-    report["trend"] = trend_view(hist, w, live, state["start"], account)
+    health.setdefault("trend signals", (f"ok (prices to {as_of})" if g["buys_allowed"]
+                                        else "buys paused: " + "; ".join(g["reasons"])))
+    report["trend"] = trend_view(hist, w, live, state["start"], account) | {"guard": g}
     return msgs
 
 

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-08T19:34:59.184984+00:00",
+  "generated_at": "2026-10-08T20:15:06.870165+00:00",
   "data": "Binance daily prices Aug 2017 to Oct 2026, 0.15% cost per side",
   "periods": [
     {
@@ -96,5 +96,11 @@
     }
   ],
   "trades_per_year": 9.8,
-  "exposure_pct": 28.0
+  "exposure_pct": 28.0,
+  "health": {
+    "sharpe_2y": 0.65,
+    "return_2y": 23.9,
+    "status": "ok",
+    "rule": "weak when the last 2 years' Sharpe ratio drops below 0"
+  }
 }
