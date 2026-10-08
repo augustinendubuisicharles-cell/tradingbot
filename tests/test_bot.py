@@ -316,7 +316,7 @@ def test_gem_prefilter_skips_stables_big_pumped_and_unlisted():
 def test_gem_contract_check(monkeypatch):
     from bot import emerging
     assert emerging.contract_check({})[0] is True                       # native coin
-    assert emerging.contract_check({"solana": "abc"})[0] is None        # not covered
+    assert emerging.contract_check({"sui": "abc"})[0] is None            # not covered
 
     class R:
         def __init__(self, info): self.info = info
@@ -384,3 +384,140 @@ def test_gem_rating_safety_predictions_and_alerts():
     first = emerging.status_alerts(tokens, state)
     assert all("PLUME" not in m for m in first)                         # unsafe tokens never alert
     assert emerging.status_alerts(tokens, state) == []
+
+
+# ---------- track record and backtest ----------
+
+def _bars(path, start_h=0):
+    """Candles from (high, low, close) tuples."""
+    rows, prev = [], path[0][2]
+    for i, (h, l, c) in enumerate(path):
+        rows.append([(NOW + timedelta(hours=start_h + 4 * i)).timestamp() * 1000, prev, h, l, c, 1.0])
+        prev = c
+    return rows
+
+
+def test_trade_rules_stop_targets_and_breakeven():
+    from bot.tracker import manage_trade
+    flat = [(100.5, 99.5, 100)] * 3
+    # Stop first when one candle touches both.
+    r = manage_trade(_bars(flat + [(125, 89, 100)]), 2, 100, 90, 120, 140, exit_on_ema20=False)
+    assert r["status"] == "stopped" and r["result_r"] < -1
+    # Target 1 (half at +2R), then the stop moves to entry.
+    r = manage_trade(_bars(flat + [(121, 99, 115), (116, 99.9, 101)]), 2, 100, 90, 120, 140, exit_on_ema20=False)
+    assert r["status"] == "target 1 then breakeven" and 0.9 < r["result_r"] < 1.0
+    # Both targets: half at +2R and half at +4R = +3R before fees.
+    r = manage_trade(_bars(flat + [(121, 99, 115), (141, 114, 139)]), 2, 100, 90, 120, 140, exit_on_ema20=False)
+    assert r["status"] == "target 2" and 2.9 < r["result_r"] < 3.0
+    # A limit entry that price never reaches doesn't count.
+    r = manage_trade(_bars(flat + [(105, 101, 104)] * 31), 2, 100, 90, 120, 140, limit=True, exit_on_ema20=False)
+    assert r["status"] == "never filled" and r["result_r"] == 0.0
+    # Time exit after max_bars.
+    r = manage_trade(_bars(flat + [(101, 99, 100.5)] * 61), 2, 100, 90, 120, 140, exit_on_ema20=False)
+    assert r["status"] == "time exit"
+
+
+def test_gem_picks_logged_once_and_settled():
+    from bot import emerging
+    from bot.demo import FakeMarket, fake_emerging
+    tokens = emerging.rerate(fake_emerging(), FakeMarket(NOW), CFG, [], [])
+    hist = []
+    n = emerging.log_picks(hist, tokens, NOW - timedelta(days=3), emerging.DEFAULT_TIMING)
+    assert n >= 1 and emerging.log_picks(hist, tokens, NOW, emerging.DEFAULT_TIMING) == 0
+    h = hist[0]
+    entry, stop = h["entry"], h["stop"]
+    start = (NOW - timedelta(days=3, hours=4))
+    c4h = _bars([(entry * 1.001, entry * 0.999, entry)] * 3 + [(entry * 1.01, stop * 0.99, stop)], 0)
+    for i, c in enumerate(c4h):
+        c[0] = (start + timedelta(hours=4 * i)).timestamp() * 1000
+    emerging.settle_picks(hist, {h["symbol"]: c4h})
+    if h["kind"] == "market":
+        assert h["status"] == "stopped" and h["result_r"] < 0
+    rec = emerging.picks_record(hist)
+    assert rec["total"] == len(hist)
+
+
+def test_backtest_signal_matches_live_rules():
+    from bot import backtest, emerging
+    from bot.demo import _walk
+    c4h = _walk("bt", 10.0, 0.004, 0.012, 400, timedelta(hours=4), NOW)
+    ind = backtest.indicators(c4h)
+    agree = 0
+    for i in range(300, 399, 7):
+        sub = c4h[:i + 1]
+        days = [r for j, r in enumerate(sub) if j % 6 == 5]
+        trend, _ = analysis.trend_score(sub[-200:], days)
+        live = emerging.timing_plan(sub[-200:], days, trend, "Medium", CFG["risk"], 10)
+        sig = backtest.signal_at(c4h, ind, i, emerging.DEFAULT_TIMING)
+        live_buy = live["status"] in ("Enter zone", "Wait for pullback")
+        agree += (sig is not None) == live_buy
+        if sig and live["status"] == "Enter zone":
+            assert not sig["limit"] and abs(sig["entry"] - live["entry"]) < 1e-9
+    assert agree >= 12  # of 15; small differences come from indicator warm-up and the daily candle
+
+
+def test_backtest_tuning_needs_recent_confirmation():
+    from bot import backtest
+    base = {"trades": 50, "avg_r": 0.10}
+    better = {"params": {**backtest.DEFAULT_TIMING, "stop_atr": 3.5}, "train": {"trades": 80, "avg_r": 0.5}}
+    ev = {"default": {"test": base}, "variants": [{**better, "test": {"trades": 30, "avg_r": 0.3}}]}
+    assert backtest.choose(ev)["adopted"] is True
+    ev["variants"][0]["test"] = {"trades": 30, "avg_r": 0.05}       # worse on unseen months
+    assert backtest.choose(ev)["adopted"] is False
+    ev["variants"][0]["test"] = {"trades": 5, "avg_r": 0.9}         # too few to trust
+    assert backtest.choose(ev)["adopted"] is False
+
+
+def test_backtest_runs_end_to_end_on_made_up_prices():
+    from bot import backtest
+    from bot.demo import _walk
+    data = {}
+    for k in range(6):
+        c4h = _walk(f"c{k}", 5.0, 0.002 * (k - 2), 0.02, 900, timedelta(hours=4), NOW)
+        data[f"C{k}"] = (c4h, backtest.indicators(c4h), 1e6 * k)
+    split = (NOW - timedelta(days=60)).timestamp() * 1000
+    ev = backtest.evaluate(data, split, {"C0", "C1"})
+    assert len(ev["variants"]) == 72 and ev["default"]["train"]["trades"] > 0
+    report = {"coins": 6, "days": 150, "test_days": 60, "default": ev["default"], "choice": backtest.choose(ev)}
+    assert "Weekly accuracy check" in backtest.summary_text(report)
+
+
+def test_spike_is_not_chased_and_targets_respect_the_old_high():
+    from bot import emerging
+    quiet = [(0.335, 0.325, 0.33)] * 60 + [(0.37, 0.34, 0.36)] * 24          # base 0.34–0.37
+    spike = [(0.40, 0.36, 0.39), (0.46, 0.39, 0.45), (0.54, 0.44, 0.50),
+             (0.52, 0.45, 0.47), (0.49, 0.44, 0.45), (0.46, 0.44, 0.445)]
+    c4h = _bars(quiet + spike)
+    for c in c4h[-6:]:
+        c[5] = 30.0                                                            # volume spike
+    days = [r for j, r in enumerate(c4h) if j % 6 == 5]
+    trend, _ = analysis.trend_score(c4h, days)
+    plan = emerging.timing_plan(c4h, days, trend, "High", CFG["risk"], 10, ath=0.69)
+    assert plan["status"] == "Wait for pullback" and plan.get("spike")
+    assert abs(plan["entry"] - 0.37) < 1e-9 and plan["stop"] < 0.34
+    assert abs(plan["tp1"] - 0.54) < 1e-9 and plan["tp2"] == 0.69
+    assert "Don't buy the spike" in plan["action"]
+    cg = {"price_change_percentage_7d_in_currency": 47, "price_change_percentage_30d_in_currency": 120,
+          "market_cap": 2.4e8, "ath": 0.69, "atl": 0.094, "current_price": 0.445}
+    base = {"watchers": 7476, "narrative": "DEX", "narrative_change": 1.0}
+    calm, _ = emerging.potential_score(cg, base, trend, 1.2, 0, False, CFG["emerging"])
+    spiky, notes = emerging.potential_score(cg, base, trend, 8.0, 0, False, CFG["emerging"],
+                                            emerging.spike_info(c4h))
+    assert spiky < calm and any("spike" in n for n in notes)
+    assert not any("under the radar" in n.lower() or "possibly still early" in n.lower() for n in notes)
+
+
+def test_solana_token_scan(monkeypatch):
+    from bot import emerging
+
+    class R:
+        def __init__(self, info): self.info = info
+        def raise_for_status(self): pass
+        def json(self): return {"result": {"MINT": self.info}}
+    monkeypatch.setattr(emerging.time, "sleep", lambda s: None)
+    monkeypatch.setattr(emerging.requests, "get", lambda *a, **k: R({"freezable": {"status": "0"},
+                                                                     "mintable": {"status": "0"}}))
+    assert emerging.contract_check({"solana": "MINT"})[0] is True
+    monkeypatch.setattr(emerging.requests, "get", lambda *a, **k: R({"freezable": {"status": "1"}}))
+    ok, note, _ = emerging.contract_check({"solana": "MINT"})
+    assert ok is False and "freeze" in note

@@ -151,6 +151,33 @@ tr:last-child td { border-bottom: 0; }
   <p class="muted" style="font-size:13px">Hover a safety check or prediction row for details. ❔ means the check couldn't be verified. Timing uses 4h candle closes, and riskier tokens get smaller sizes so a stop-out costs 0.25–1% of the account.</p>
   {% endif %}
 
+  <h2>How accurate is it?</h2>
+  {% set gr = emerging.record if emerging and emerging.record else none %}
+  <div class="tiles" style="margin-top:0">
+    <div class="tile"><div class="k">Gem picks, real results</div>
+      {% if gr and gr.closed %}<div class="v">{{ gr.win_rate }}%</div><div class="n">made money · {{ gr.closed }} finished · {{ '%+.2f'|format(gr.avg_r) }}R average</div>
+      {% else %}<div class="v">–</div><div class="n">{{ gr.open if gr else 0 }} running, none finished yet</div>{% endif %}</div>
+    {% if backtest %}{% set t = backtest.default.test %}{% set sm = backtest.default.small_coins %}
+    <div class="tile"><div class="k">Backtest, last {{ backtest.test_days }} days</div>
+      {% if t.trades %}<div class="v">{{ t.win_rate }}%</div><div class="n">made money · {{ t.trades }} trades · {{ '%+.2f'|format(t.avg_r) }}R average</div>
+      {% else %}<div class="v">–</div><div class="n">no trades</div>{% endif %}</div>
+    <div class="tile"><div class="k">Backtest, smaller coins, 1 year</div>
+      {% if sm.trades %}<div class="v">{{ sm.win_rate }}%</div><div class="n">made money · {{ sm.trades }} trades · {{ '%+.2f'|format(sm.avg_r) }}R average</div>
+      {% else %}<div class="v">–</div><div class="n">no trades</div>{% endif %}</div>
+    <div class="tile"><div class="k">Timing settings</div>
+      <div class="v" style="font-size:18px">{{ 'Tuned' if backtest.choice.adopted else 'Default' }}</div><div class="n">{{ backtest.choice.reason }}</div></div>
+    {% endif %}
+  </div>
+  <p class="muted" style="font-size:13px">"R" is the amount risked on a trade: +1R means you made what you risked, −1R means the stop-loss was hit. Fees are included. The backtest replays the buy and sell rules on {{ backtest.coins if backtest else 'past' }} Bitget coins over the past year; it can't replay safety checks or social buzz, which the real results above measure instead.{% if backtest %} Last run {{ backtest.generated_at[:16]|replace('T', ' ') }} UTC.{% endif %}</p>
+  {% if emerging and emerging.history %}
+  <div class="panel"><table>
+    <thead><tr><th>Gem</th><th>Picked</th><th>Entry</th><th>Stop</th><th>Target 1</th><th class="l">Status</th><th>Result</th></tr></thead><tbody>
+    {% for h in emerging.history %}<tr><td><b>{{ h.symbol }}</b></td><td>{{ h.created[:16]|replace('T', ' ') }}</td><td>{{ fp(h.entry) }}</td><td>{{ fp(h.stop) }}</td><td>{{ fp(h.tp1) }}</td>
+      <td class="l">{{ h.status }}</td>
+      <td class="{{ 'up' if (h.result_r or h.unrealized_r or 0) > 0 else ('down' if (h.result_r or h.unrealized_r or 0) < 0 else '') }}">{% if h.result_r is defined %}{{ '%+.2fR'|format(h.result_r) }}{% elif h.unrealized_r is defined %}{{ '%+.2fR'|format(h.unrealized_r) }} so far{% else %}–{% endif %}</td></tr>{% endfor %}
+    </tbody></table></div>
+  {% endif %}
+
   <h2>All coins</h2>
   <div class="panel">
     <table>

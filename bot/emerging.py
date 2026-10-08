@@ -92,6 +92,8 @@ def contract_check(platforms: dict | None) -> tuple[bool | None, str, list[str]]
     if not platforms:
         return True, "native coin of its own blockchain (no token contract to exploit)", []
     chain_key = next((k for k in platforms if k in CHAINS), None)
+    if chain_key is None and "solana" in platforms:
+        return solana_check(platforms["solana"])
     if chain_key is None:
         return None, f"contract on {next(iter(platforms))}, which the free scanner doesn't cover", []
     addr = platforms[chain_key].lower()
@@ -124,6 +126,36 @@ def contract_check(platforms: dict | None) -> tuple[bool | None, str, list[str]]
     if fails:
         return False, "contract scan failed: " + ", ".join(fails), warns
     return True, f"contract scanned clean on {chain_key.replace('-', ' ')}", warns
+
+
+def solana_check(mint: str) -> tuple[bool | None, str, list[str]]:
+    """GoPlus scan of a Solana (SPL) token: who can freeze, close or change balances."""
+    try:
+        r = requests.get("https://api.gopluslabs.io/api/v1/solana/token_security",
+                         params={"contract_addresses": mint}, timeout=HTTP_TIMEOUT)
+        r.raise_for_status()
+        res = r.json().get("result") or {}
+        info = res.get(mint) or next(iter(res.values()), None)
+        time.sleep(2)
+    except Exception as e:  # noqa: BLE001
+        log.warning("goplus solana check failed for %s: %s", mint, e)
+        return None, "Solana token scanner unavailable", []
+    if not info:
+        return None, "Solana token not in the scanner's database yet", []
+
+    def on(key: str) -> bool:
+        v = info.get(key)
+        v = v.get("status") if isinstance(v, dict) else v
+        return str(v) == "1"
+    fails = [label for key, label in (("freezable", "team can freeze wallets"),
+                                      ("balance_mutable_authority", "someone can change balances"),
+                                      ("closable", "token accounts can be closed by the team"),
+                                      ("non_transferable", "can't be transferred"))
+             if on(key)]
+    warns = ["team can mint more tokens"] if on("mintable") else []
+    if fails:
+        return False, "Solana token scan failed: " + ", ".join(fails), warns
+    return True, "Solana token scanned clean (no freeze or balance-change powers)", warns
 
 
 def details(cg_id: str) -> dict:
@@ -225,10 +257,22 @@ def volume_surge(c4h: list[list[float]]) -> float | None:
 
 RISK_PCT = {"Low": 1.0, "Medium": 0.75, "High": 0.5, "Very high": 0.25}
 
+# Timing settings. The weekly backtest may replace these with better-tested values
+# (data/tuned.json), but only if they also beat these on recent months it didn't tune on.
+DEFAULT_TIMING = {"trend_min": 55, "rsi_max": 70, "stretch_atr": 1.0, "stop_atr": 2.5,
+                  "tp1_r": 2.0, "tp2_r": 4.0, "exit_on_ema20": True}
+
+
+def timing_params(cfg: dict) -> dict:
+    return {**DEFAULT_TIMING, **(cfg.get("emerging", {}).get("timing") or {})}
+
 
 def timing_plan(c4h: list[list[float]], c1d: list[list[float]], trend: float, rating: str,
-                risk_cfg: dict, max_position_pct: float) -> dict:
+                risk_cfg: dict, max_position_pct: float, params: dict | None = None,
+                ath: float | None = None) -> dict:
     """When to get in, where the stop goes, and when to get out."""
+    tp = {**DEFAULT_TIMING, **(params or {})}
+    spike = spike_info(c4h)
     closes = [c[4] for c in c4h]
     price = closes[-1]
     e20 = analysis.ema(closes, 20)[-1]
@@ -259,10 +303,12 @@ def timing_plan(c4h: list[list[float]], c1d: list[list[float]], trend: float, ra
                 "action": f"Uptrend is breaking: price closed below {fmt_price(e20)} (20-period average) "
                           "and momentum is fading. If you hold it, this is the time to leave."}
 
-    if trend >= 55 and r is not None and r <= 70 and price - e20 <= 1.0 * a:
+    if spike and spike["base_high"] < price:
+        return spike_plan(plan, spike, price, rating, risk_cfg, max_position_pct, ath, tp)
+    if trend >= tp["trend_min"] and r is not None and r <= tp["rsi_max"] and price - e20 <= tp["stretch_atr"] * a:
         status, entry = "Enter zone", price
         action = "Uptrend confirmed and not overextended. A good time to position, at today's price."
-    elif trend >= 55:
+    elif trend >= tp["trend_min"]:
         status, entry = "Wait for pullback", e20
         action = (f"Uptrend, but price is stretched. Set a buy around {fmt_price(e20)} "
                   "(its 20-period average) instead of chasing.")
@@ -271,29 +317,64 @@ def timing_plan(c4h: list[list[float]], c1d: list[list[float]], trend: float, ra
         action = (f"Not trending yet. Buy only if a 4h candle closes above {fmt_price(high20)} "
                   "(the recent high) on rising volume.")
 
-    # Stop under the recent swing low, but never closer than 1 or further than 2.5 average 4h ranges.
-    stop = max(min(swing_low, entry - a), entry - 2.5 * a) if status == "Enter zone" else entry - 2.5 * a
+    stop = plan_stop(entry, swing_low, a, tp["stop_atr"], status == "Enter zone")
     risk_per_unit = entry - stop
     if risk_per_unit <= 0:
         return {**plan, "status": "Avoid", "action": "No sensible stop-loss level right now."}
+    tp1, tp2 = entry + tp["tp1_r"] * risk_per_unit, entry + tp["tp2_r"] * risk_per_unit
+    if ath and tp1 < ath < tp2:
+        tp2 = ath  # no target above the all-time high: there's no chart level to aim at
+    return {**plan, **_sizing(entry, stop, rating, risk_cfg, max_position_pct),
+            "status": status, "action": action, "entry": entry, "stop": stop, "tp1": tp1, "tp2": tp2,
+            "exit_rule": _exit_rule(entry, tp)}
+
+
+def _sizing(entry: float, stop: float, rating: str, risk_cfg: dict, max_position_pct: float) -> dict:
     account = risk_cfg["account_size"]
     pct = RISK_PCT[rating]
+    risk_per_unit = entry - stop
     qty = min(account * pct / 100 / risk_per_unit, account * max_position_pct / 100 / entry)
-    return {
-        **plan,
-        "status": status,
-        "action": action,
-        "entry": entry,
-        "stop": stop,
-        "tp1": entry + 2 * risk_per_unit,
-        "tp2": entry + 4 * risk_per_unit,
-        "risk_pct": pct,
-        "notional": qty * entry,
-        "max_loss": qty * risk_per_unit,
-        "exit_rule": (f"Sell half at target 1 and move the stop to {fmt_price(entry)} (breakeven). "
-                      "Exit the rest at target 2, on a 4h close below the 20-period average, "
-                      "or if RSI tops 80 and turns down. Leave after 10 days if it hasn't moved."),
-    }
+    return {"risk_pct": pct, "notional": qty * entry, "max_loss": qty * risk_per_unit}
+
+
+def _exit_rule(entry: float, tp: dict) -> str:
+    return (f"Sell half at target 1 and move the stop to {fmt_price(entry)} (breakeven). "
+            "Exit the rest at target 2"
+            + (", on a 4h close below the 20-period average," if tp["exit_on_ema20"] else "")
+            + " or after 10 days if it hasn't moved.")
+
+
+def spike_plan(plan: dict, spike: dict, price: float, rating: str, risk_cfg: dict,
+               max_position_pct: float, ath: float | None, tp: dict) -> dict:
+    """After a one-day spike: don't chase. Buy only a pullback to the top of the base it
+    broke out of, stop under that base, first target the spike high, then the old high."""
+    entry, stop = spike["base_high"], spike["base_low"] * 0.99
+    tp1 = spike["spike_high"]
+    tp2 = ath if ath and ath > tp1 * 1.05 else tp1 + (tp1 - entry)
+    if entry - stop <= 0 or (entry - stop) / entry > 0.30:
+        return {**plan, "status": "Avoid", "action": (
+            f"Just spiked {spike['change_24h']:+.0f}% in a day with no sensible stop level. "
+            "Let it settle before considering it.")}
+    skip_above = entry + 0.5 * (price - entry)
+    return {**plan, **_sizing(entry, stop, rating, risk_cfg, max_position_pct),
+            "status": "Wait for pullback", "spike": True,
+            "action": (f"Don't buy the spike (+{spike['change_24h']:.0f}% in 24h). Set a limit buy at "
+                       f"{fmt_price(entry)}, the top of the range it broke out of. "
+                       f"Skip it if price is still above {fmt_price(skip_above)} after a day or two."),
+            "entry": entry, "stop": stop, "tp1": tp1, "tp2": tp2,
+            "exit_rule": (f"Stop below the pre-spike range at {fmt_price(stop)}: a close under it means the "
+                          f"breakout failed. Sell half at {fmt_price(tp1)} (the spike high) and move the stop "
+                          "to your buy price; sell the rest at "
+                          + (f"{fmt_price(tp2)}, the old all-time high." if ath and tp2 == ath
+                             else f"{fmt_price(tp2)}.")),
+            }
+
+
+def plan_stop(entry: float, swing_low: float, a: float, stop_atr: float, at_market: bool) -> float:
+    """Under the recent swing low, but never closer than 1 or further than `stop_atr` average 4h ranges."""
+    if at_market:
+        return max(min(swing_low, entry - a), entry - stop_atr * a)
+    return entry - stop_atr * a
 
 
 
@@ -307,9 +388,26 @@ def mention_pattern(sym: str, name: str) -> re.Pattern:
 
 
 
+def spike_info(c4h: list[list[float]]) -> dict | None:
+    """A one-day spike: up 25%+ in 24h, or volume 4×+ normal while up 15%+.
+    Returns the pre-spike base (the 3 days before) and the spike high."""
+    if len(c4h) < 30:
+        return None
+    price, day_ago = c4h[-1][4], c4h[-7][4]
+    change = price / day_ago - 1 if day_ago else 0
+    surge = volume_surge(c4h) or 1.0
+    if not (change >= 0.25 or (surge >= 4 and change >= 0.15)):
+        return None
+    base = c4h[-25:-6]
+    return {"change_24h": change * 100, "surge": surge,
+            "base_high": max(c[2] for c in base), "base_low": min(c[3] for c in base),
+            "spike_high": max(c[2] for c in c4h[-6:]), "spike_low": min(c[3] for c in c4h[-6:])}
+
+
 def potential_score(cg: dict, base: dict, trend: float, surge: float | None, mentions: int,
-                    trending: bool, ecfg: dict) -> tuple[float, list[str]]:
-    """0..100: how much room and fuel the token has, and how early it still is."""
+                    trending: bool, ecfg: dict, spike: dict | None = None) -> tuple[float, list[str]]:
+    """0..100: how much room and fuel the token has, and how early it still is.
+    Looks at the last 30 days and the all-time range, not just today."""
     notes = []
     score = 0.25 * trend
     ch7 = cg.get("price_change_percentage_7d_in_currency") or 0.0
@@ -317,31 +415,48 @@ def potential_score(cg: dict, base: dict, trend: float, surge: float | None, men
     rel = max(-30.0, min(30.0, 0.6 * ch7 + 0.4 * ch30))
     score += 0.15 * (50 + rel * 50 / 30)
     if ch7 >= 5:
-        notes.append(f"Up {ch7:.0f}% this week")
-    if surge is not None:
+        notes.append(f"Up {ch7:.0f}% this week and {ch30:+.0f}% over 30 days")
+    # Already-extended moves have less room left.
+    if ch30 > 100:
+        score -= 10
+        notes.append(f"Already up {ch30:.0f}% in a month, so much of the move may be done")
+    if spike:
+        score -= 10
+        notes.append(f"Today is a spike (+{spike['change_24h']:.0f}% in 24h, volume {spike['surge']:.0f}× normal), "
+                     "not steady buying. Spikes often give part of it back")
+    elif surge is not None:
         score += 0.10 * max(0.0, min(100.0, (surge - 0.5) * 66))
         if surge >= 1.5:
-            notes.append(f"Trading volume is {surge:.1f}× its normal level, so buyers are arriving")
+            notes.append(f"Trading volume has risen steadily to {surge:.1f}× normal over the past day")
     nch = base.get("narrative_change")
     if nch is not None:
         score += 0.15 * max(0.0, min(100.0, 50 + nch * 5))
         if nch > 2:
             notes.append(f"Its sector ({base['narrative']}) is rising today ({nch:+.1f}%)")
-    # Early: few people watching it yet, not trending, rarely mentioned.
+    # Early: hard to prove. Few watchers is only a weak hint, and a big recent run means
+    # the market has already noticed it.
     watchers = base.get("watchers")
-    early = 50.0 if watchers is None else max(0.0, 100 - watchers / 500)
+    early = 40.0 if watchers is None else max(0.0, 80 - watchers / 250)
     if trending:
         early -= 30
     if mentions > 3:
         early -= 20
-    score += 0.20 * max(0.0, early)
-    if watchers is not None and watchers < 20000:
-        notes.append(f"Still under the radar: only {watchers:,} people watch it on CoinGecko")
+    if ch30 > 80 or spike:
+        early = min(early, 15.0)
+    score += 0.15 * max(0.0, early)
+    if early >= 50 and watchers is not None:
+        notes.append(f"Possibly still early: {watchers:,} CoinGecko watchers and no big run yet (a hint, not proof)")
     if mentions:
         notes.append(f"Traders are starting to talk about it ({mentions} posts)")
     mcap = cg.get("market_cap") or ecfg["max_market_cap"]
     room = max(0.0, min(100.0, 100 * (ecfg["max_market_cap"] - mcap) / (ecfg["max_market_cap"] - 30e6)))
     score += 0.10 * room
+    ath, atl = cg.get("ath") or 0, cg.get("atl") or 0
+    price = cg.get("current_price") or 0
+    if ath and price and atl:
+        pos = (price - atl) / (ath - atl) if ath > atl else 1
+        notes.append(f"Price is {pos:.0%} of the way from its all-time low ({fmt_price(atl)}) "
+                     f"to its high ({fmt_price(ath)})")
     age = base.get("age_days")
     if age is not None and not base.get("age_capped"):
         score += 0.05 * (100 if age <= 60 else 60 if age <= 180 else 20)
@@ -349,7 +464,7 @@ def potential_score(cg: dict, base: dict, trend: float, surge: float | None, men
             notes.append(f"New listing: on Bitget for only {age} days")
     else:
         score += 0.05 * 20
-    return round(score, 1), notes
+    return round(max(0.0, min(100.0, score)), 1), notes
 
 
 def scenarios(cg: dict, plan: dict) -> list[dict]:
@@ -361,7 +476,7 @@ def scenarios(cg: dict, plan: dict) -> list[dict]:
             ("Base", plan["tp1"], "first target, if the setup works"),
             ("Stretch", plan["tp2"], "second target, if the trend runs")]
     ath = cg.get("ath") or 0
-    if ath > plan["tp2"] and ath <= entry * 6:
+    if ath > plan["tp2"] * 1.02 and ath <= entry * 6:
         rows.append(("Bull", ath, "back to its all-time high"))
     return [{"case": c, "price": p, "pct": (p / entry - 1) * 100,
              "mcap": mcap * p / price if price else None, "note": n} for c, p, n in rows]
@@ -381,8 +496,12 @@ def build_token(base: dict, c4h: list, c1d: list, bitget_volume: float, cfg: dic
     risk_notes += base.get("contract_warnings", [])
     pat = mention_pattern(sym, cg.get("name", ""))
     mentions = sum(1 for text in posts_text if pat.search(text))
-    pot, pot_notes = potential_score(cg, base, trend, volume_surge(c4h), mentions, sym in trending, ecfg)
-    plan = timing_plan(c4h, c1d, trend, rating, cfg["risk"], ecfg.get("max_position_pct", 10))
+    spike = spike_info(c4h)
+    pot, pot_notes = potential_score(cg, base, trend, volume_surge(c4h), mentions, sym in trending, ecfg, spike)
+
+    plan = timing_plan(c4h, c1d, trend, rating, cfg["risk"], ecfg.get("max_position_pct", 10),
+                       timing_params(cfg), ath=cg.get("ath"))
+    surge = volume_surge(c4h)
     failed = [c["name"] for c in checks if c["ok"] is False]
     return {
         "symbol": sym, "name": cg.get("name", sym), "narrative": base["narrative"],
@@ -393,6 +512,14 @@ def build_token(base: dict, c4h: list, c1d: list, bitget_volume: float, cfg: dic
         "risk_score": risk, "risk_rating": rating, "risk_notes": risk_notes,
         "potential": pot, "potential_notes": pot_notes, "plan": plan,
         "scenarios": scenarios(cg, plan),
+        # Inputs saved with each logged pick, so the bot can later learn which ones predicted wins.
+        "features": {"potential": pot, "risk_score": risk, "trend": trend, "atr_pct": atr_pct,
+                     "change_7d": cg.get("price_change_percentage_7d_in_currency"),
+                     "change_30d": cg.get("price_change_percentage_30d_in_currency"),
+                     "market_cap": cg.get("market_cap"), "watchers": base.get("watchers"),
+                     "age_days": base.get("age_days"), "volume_surge": surge, "mentions": mentions,
+                     "narrative_change": base.get("narrative_change"), "rsi": plan.get("rsi"),
+                     "unknown_checks": len([c for c in checks if c["ok"] is None])},
     }
 
 
@@ -473,6 +600,65 @@ def rerate(scan: dict, mkt, cfg: dict, posts_text: list[str], trending: list[str
     return _rate_bases(scan.get("bases", []), mkt, cfg, posts_text, trending)
 
 
+# ---------- track record of picks ----------
+
+def log_picks(history: list[dict], tokens: list[dict], now: datetime, params: dict) -> int:
+    """Records safe picks with a buy setup, once per token until that trade is over."""
+    import uuid
+    active = {h["symbol"] for h in history if h["status"] in ("open", "pending")}
+    added = 0
+    for t in tokens:
+        p = t["plan"]
+        if not t["safe"] or p["status"] not in ("Enter zone", "Wait for pullback") or t["symbol"] in active:
+            continue
+        history.append({
+            "id": uuid.uuid4().hex[:8], "symbol": t["symbol"], "created": now.isoformat(),
+            "kind": "market" if p["status"] == "Enter zone" else "limit",
+            "entry": p["entry"], "stop": p["stop"], "tp1": p["tp1"], "tp2": p["tp2"],
+            "exit_on_ema20": params["exit_on_ema20"], "narrative": t["narrative"],
+            "risk_rating": t["risk_rating"], "potential": t["potential"], "features": t.get("features", {}),
+            "status": "open" if p["status"] == "Enter zone" else "pending",
+        })
+        added += 1
+    return added
+
+
+def settle_picks(history: list[dict], candles_by_symbol: dict[str, list]) -> None:
+    """Replays each unfinished pick against the candles since it was made."""
+    from .tracker import manage_trade
+    for h in history:
+        if h["status"] not in ("open", "pending"):
+            continue
+        c4h = candles_by_symbol.get(h["symbol"])
+        if not c4h:
+            continue
+        created_ms = datetime.fromisoformat(h["created"]).timestamp() * 1000
+        start = max((i for i, c in enumerate(c4h) if c[0] <= created_ms), default=None)
+        if start is None:
+            continue
+        res = manage_trade(c4h, start, h["entry"], h["stop"], h["tp1"], h["tp2"],
+                           limit=h["kind"] == "limit", exit_on_ema20=h.get("exit_on_ema20", True))
+        h["status"] = res["status"]
+        for k in ("result_r", "unrealized_r", "half_taken"):
+            if k in res:
+                h[k] = res[k]
+        if "closed_i" in res:
+            h["closed"] = datetime.fromtimestamp(c4h[res["closed_i"]][0] / 1000, tz=timezone.utc).isoformat()
+
+
+def picks_record(history: list[dict]) -> dict:
+    closed = [h for h in history if "result_r" in h and h["status"] != "never filled"]
+    wins = [h for h in closed if h["result_r"] > 0]
+    return {
+        "total": len(history),
+        "open": sum(h["status"] in ("open", "pending") for h in history),
+        "closed": len(closed),
+        "win_rate": round(100 * len(wins) / len(closed)) if closed else None,
+        "avg_r": round(sum(h["result_r"] for h in closed) / len(closed), 2) if closed else None,
+        "total_r": round(sum(h["result_r"] for h in closed), 2),
+    }
+
+
 # ---------- messages ----------
 
 def status_alerts(tokens: list[dict], state: dict) -> list[str]:
@@ -509,6 +695,8 @@ def _plan_line(t: dict) -> str:
     p = t["plan"]
     if p["status"] == "Enter zone":
         return f"🟢 <b>BUY NOW</b> at about {fmt_price(p['entry'])}"
+    if p.get("spike"):
+        return f"🟡 <b>WAIT, don't chase the spike</b>\n{p['action']}"
     if p["status"] == "Wait for pullback":
         return (f"🟡 <b>WAIT, then buy at {fmt_price(p['entry'])}</b>\n"
                 f"It's running hot at {fmt_price(p['price'])}. Set a buy order lower; don't chase it.")

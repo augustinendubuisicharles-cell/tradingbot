@@ -86,6 +86,7 @@ def publish(report: dict, candles: dict, state: dict, now: datetime,
     record = analysis.summarize_record(history)
     report["record"] = record
     if persist:
+        report["backtest"] = load_json(data_dir / "backtest.json", None)
         save_jsonl(data_dir / "history.jsonl", history)
         save_json(data_dir / "latest.json", report)
         state["oi"] = {a["coin"]: a["open_interest"] for a in report["coins"] if a["open_interest"]}
@@ -127,11 +128,37 @@ def run_emerging(cfg: dict, mkt, posts, report: dict, state: dict, morning: bool
         health["hidden gems"] = (f"ok ({len(tokens)} checked, {sum(t['safe'] for t in tokens)} passed safety; "
                                  f"scan from {scan['as_of'][:16].replace('T', ' ')} UTC)")
     report["emerging"] = {"tokens": tokens, "hot": scan.get("hot_narratives", []), "as_of": scan.get("as_of")}
+    track_picks(cfg, mkt, tokens, report)
     return msgs + emerging.status_alerts(tokens, state)
 
 
+def track_picks(cfg: dict, mkt, tokens: list[dict], report: dict) -> None:
+    """Settles earlier gem picks against real prices and logs today's new ones."""
+    path = DATA_DIR / "gem_history.jsonl"
+    history = load_jsonl(path)
+    candles = {}
+    for sym in {h["symbol"] for h in history if h["status"] in ("open", "pending")}:
+        try:
+            candles[sym] = mkt.candles(sym, "4h", 200)
+        except Exception as e:  # noqa: BLE001
+            log.warning("could not settle %s: %s", sym, e)
+    emerging.settle_picks(history, candles)
+    emerging.log_picks(history, tokens, datetime.now(timezone.utc), emerging.timing_params(cfg))
+    save_jsonl(path, history)
+    report["emerging"]["record"] = emerging.picks_record(history)
+    report["emerging"]["history"] = list(reversed(history))[:20]
+
+
+def apply_tuning(cfg: dict) -> dict:
+    """Uses the backtest's timing settings when it adopted better ones."""
+    tuned = load_json(DATA_DIR / "tuned.json", {})
+    if tuned.get("adopted"):
+        cfg.setdefault("emerging", {})["timing"] = tuned["params"]
+    return cfg
+
+
 def cmd_run(args) -> None:
-    cfg = load_config()
+    cfg = apply_tuning(load_config())
     now = datetime.now(timezone.utc)
     state = load_json(DATA_DIR / "state.json", {})
     mkt = market.Market(cfg["exchange"], cfg["quote"])
@@ -190,9 +217,24 @@ def cmd_demo(_args) -> None:
     tokens = emerging.rerate(scan, FakeMarket(now), cfg, [p.text for p in posts], ["FET"])
     report["emerging"] = {"tokens": tokens, "hot": scan["hot_narratives"], "as_of": scan["as_of"]}
     print("\n\n".join(emerging.morning_messages(tokens, scan["hot_narratives"], 5, None)) + "\n")
+    report["backtest"] = load_json(DATA_DIR / "backtest.json", None)
     publish(report, candles, {}, now, site_dir=ROOT / "demo", persist=False)
     print(alerts.digest_text(report, "https://example.pages.dev"))
     print(f"\nDemo dashboard written to {ROOT / 'demo' / 'index.html'}")
+
+
+def cmd_backtest(_args) -> None:
+    from . import backtest
+
+    cfg = load_config()
+    mkt = market.Market(cfg["exchange"], cfg["quote"])
+    extra = list(cfg["watchlist"]) + [b["symbol"] for b in load_json(DATA_DIR / "emerging.json", {}).get("bases", [])]
+    report, tuned = backtest.run(cfg, mkt, extra)
+    save_json(DATA_DIR / "backtest.json", report)
+    save_json(DATA_DIR / "tuned.json", tuned)
+    log.info("backtest: %d coins, %d candles, %ss; adopted=%s (%s)", report["coins"], report["candles"],
+             report["seconds"], tuned["adopted"], tuned["reason"])
+    alerts.send_telegram(backtest.summary_text(report))
 
 
 def cmd_chat_id(_args) -> None:
@@ -215,6 +257,7 @@ def main() -> None:
     run.set_defaults(fn=cmd_run)
     sub.add_parser("demo").set_defaults(fn=cmd_demo)
     sub.add_parser("telegram-chat-id").set_defaults(fn=cmd_chat_id)
+    sub.add_parser("backtest").set_defaults(fn=cmd_backtest)
     args = p.parse_args()
     args.fn(args)
 

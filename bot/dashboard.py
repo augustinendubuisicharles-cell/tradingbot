@@ -35,6 +35,7 @@ def render(report: dict, history: list[dict], record: dict, out_dir=SITE_DIR) ->
         fp=fmt_price,
         demo=report.get("demo", False),
         emerging=report.get("emerging"),
+        backtest=report.get("backtest"),
     )
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "index.html").write_text(page)

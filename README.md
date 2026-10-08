@@ -75,6 +75,12 @@ Every morning at 07:00 UK time (06:00 in winter) the bot scans the 1,000 most-tr
 
 **When to get in and out.** Timing is one of *Enter zone*, *Wait for pullback*, *Watch for breakout*, *Take profit*, *Exit signal* or *Avoid*. The 4-hourly runs refresh the timing with live prices, and Telegram pings you when a safe pick moves into a buy or an exit. Riskier tokens get smaller sizes (a stop-out costs 1% of the account for Low risk, down to 0.25% for Very high). Settings are under `emerging` in `config.yaml`.
 
+## How accurate is it?
+
+- **Real results.** Every gem pick that reaches a buy is logged and played forward against real Bitget prices (stop, targets, breakeven, trend exit, 10-day limit, fees). The dashboard shows the win rate and average result.
+- **Weekly backtest.** Every Sunday the bot replays its buy and sell rules on the past year of 4-hour prices for about 100 Bitget coins, tests 72 setting variations, and sends a report card to Telegram. A better variation is only adopted if it also wins on the most recent 90 days, which it wasn't tuned on. This guards against settings that only look good on old data.
+- **Spikes.** A one-day spike (+25% in 24 hours, or a big volume burst) is never a "buy now". The plan becomes a limit buy at the top of the range it broke out of, a stop under that range, the spike high as target 1 and the old all-time high as target 2.
+
 ## Limits to know
 
 - **No direct X feed.** X has no free API, and scraping it breaks X's terms. If you later pay for X API access, it can be added as another source.
