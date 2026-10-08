@@ -74,6 +74,21 @@ risk:
   min_score_to_suggest: 65
   max_suggestions: 5
 
+# Emerging-token scanner (every 4 hours). Finds smaller AI and real-world-asset
+# tokens that Bitget lists, rates their risk, and says when to get in and out.
+# Narratives are matched against CoinGecko's free category names.
+emerging:
+  enabled: true
+  narratives:
+    AI: [artificial intelligence, ai agents, ai framework, ai applications]
+    RWA: [real world assets, rwa, tokenized]
+  per_category: 60            # tokens fetched from each matching category
+  min_market_cap: 10000000    # 10M USD: smaller is too easy to manipulate
+  max_market_cap: 3000000000  # 3B USD: bigger isn't "emerging" any more
+  min_volume: 1000000         # 1M USD traded a day, across all exchanges
+  max_tokens: 20              # how many to rate each run
+  max_position_pct: 10        # never more than 10% of the account in one small token
+
 alerts:
   strong_score: 72            # alert when a coin's score reaches this
   price_move_pct: 5           # alert on a move this big since the last check

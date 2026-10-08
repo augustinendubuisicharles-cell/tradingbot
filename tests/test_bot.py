@@ -287,3 +287,76 @@ def test_teasers_brags_and_empty_posts_are_noise():
     assert sentiment.is_noise("#WINUSDT 130% 10X")
     assert sentiment.is_noise("#KASUSDT 1H")
     assert not sentiment.is_noise("🔴 SHORT $ZEC/USDT | Cross 30X ✅ Entry: 1340 🎯 TP: 1310 - 1280 - 1240 🛑 SL: 1410")
+
+
+# ---------- emerging-token scanner ----------
+
+def _series(closes, start_h=-800):
+    rows, prev = [], closes[0]
+    for i, c in enumerate(closes):
+        rows.append([(NOW + timedelta(hours=start_h + 4 * i)).timestamp() * 1000,
+                     prev, max(prev, c) * 1.01, min(prev, c) * 0.99, c, 100.0])
+        prev = c
+    return rows
+
+
+def test_emerging_category_match_and_shortlist():
+    from bot import emerging
+    cats = [{"id": "ai", "name": "Artificial Intelligence (AI)", "market_cap": 5e10},
+            {"id": "rwa", "name": "Real World Assets (RWA)", "market_cap": 2e10},
+            {"id": "mail", "name": "Email", "market_cap": 1e9}]
+    m = emerging.match_categories(cats, CFG["emerging"]["narratives"])
+    assert [c["id"] for c in m["AI"]] == ["ai"] and [c["id"] for c in m["RWA"]] == ["rwa"]
+    cands = [{"symbol": "FET", "market_cap": 1e9, "total_volume": 5e7},
+             {"symbol": "TINY", "market_cap": 2e6, "total_volume": 5e7},     # too small
+             {"symbol": "NOTLISTED", "market_cap": 1e9, "total_volume": 5e7},
+             {"symbol": "LINK", "market_cap": 1e9, "total_volume": 5e7}]     # already on watchlist
+    picks = emerging.shortlist(cands, {"FET", "TINY", "LINK"}, set(CFG["watchlist"]), CFG["emerging"])
+    assert [p["symbol"] for p in picks] == ["FET"]
+
+
+def test_emerging_risk_rating():
+    from bot import emerging
+    safe = emerging.risk_profile({"market_cap": 2e9}, 2.0, 5e7)
+    wild = emerging.risk_profile({"market_cap": 3e7, "circulating_supply": 2, "total_supply": 10,
+                                  "ath_change_percentage": -95}, 12.0, 5e5)
+    assert safe[1] == "Low" and wild[1] == "Very high"
+    assert any("unlocked" in n for n in wild[2])
+
+
+def test_emerging_timing_states():
+    from bot import emerging
+    up = [1.0 * 1.004 ** i for i in range(200)]
+    up = [c * (1 + 0.01 * ((i % 6) - 3) / 3) for i, c in enumerate(up)]   # wiggle so RSI isn't 100
+    c4h, c1d = _series(up), _series([1.0 * 1.01 ** i for i in range(120)])
+    trend, _ = analysis.trend_score(c4h, c1d)
+    plan = emerging.timing_plan(c4h, c1d, trend, "High", CFG["risk"], 10)
+    assert plan["status"] in ("Enter zone", "Wait for pullback")
+    assert plan["stop"] < plan["entry"] < plan["tp1"] < plan["tp2"]
+    assert plan["max_loss"] <= CFG["risk"]["account_size"] * 0.005 + 1e-6   # High risk -> 0.5%
+    assert plan["notional"] <= CFG["risk"]["account_size"] * 0.10 + 1e-6
+
+    down = list(reversed(up))
+    c4h, c1d = _series(down), _series([1.0 * 0.99 ** i for i in range(120)])
+    trend, _ = analysis.trend_score(c4h, c1d)
+    assert emerging.timing_plan(c4h, c1d, trend, "High", CFG["risk"], 10)["status"] == "Avoid"
+
+    hot = [1.0] * 150 + [1.0 * 1.03 ** i for i in range(1, 51)]
+    c4h = _series(hot)
+    trend, _ = analysis.trend_score(c4h, c1d)
+    assert emerging.timing_plan(c4h, c1d, trend, "High", CFG["risk"], 10)["status"] == "Take profit"
+
+
+def test_emerging_alerts_only_on_change_and_skips_mismatched_ticker():
+    from bot import emerging
+    from bot.demo import FakeMarket, fake_emerging
+    picks, nar = fake_emerging()
+    picks[1] = {**picks[1], "current_price": picks[1]["current_price"] * 3}   # different coin, same ticker
+    tokens = emerging.rate(picks, nar, FakeMarket(NOW), CFG, ["$FET looks strong"], [])
+    assert picks[1]["symbol"] not in {t["symbol"] for t in tokens}
+    fet = next(t for t in tokens if t["symbol"] == "FET")
+    assert any("mentioned" in n for n in fet["potential_notes"])
+    state = {}
+    first = emerging.status_alerts(tokens, state)
+    assert any("time to position" in m for m in first) == any(t["plan"]["status"] == "Enter zone" for t in tokens)
+    assert emerging.status_alerts(tokens, state) == []

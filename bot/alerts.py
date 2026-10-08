@@ -119,6 +119,14 @@ def digest_text(report: dict, dashboard_url: str | None) -> str:
         lines.append("\nNo low-risk spot setups right now. Sitting out is a position too.")
     top = sorted(report["coins"], key=lambda a: a["score"], reverse=True)[:5]
     lines.append("Top scores: " + ", ".join(f"{a['coin']} {a['score']:.0f}" for a in top))
+    em = [t for t in report.get("emerging", {}).get("tokens", [])
+          if t["plan"]["status"] in ("Enter zone", "Wait for pullback", "Watch for breakout")][:4]
+    if em:
+        lines.append("\n<b>Emerging AI / RWA tokens</b>")
+        for t in em:
+            lines.append(f"{t['symbol']} ({t['narrative']}, {t['risk_rating'].lower()} risk): "
+                         f"{t['plan']['status'].lower()}, entry {fmt_price(t['plan']['entry'])}, "
+                         f"stop {fmt_price(t['plan']['stop'])}")
     if dashboard_url:
         lines.append(f'\n<a href="{html.escape(dashboard_url)}">Open dashboard</a>')
     lines.append("<i>Not financial advice. Ideas only; the bot never trades.</i>")

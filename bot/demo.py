@@ -12,6 +12,9 @@ COINS = {
     "ADA": (0.36, -0.0008, 0.017, 4e7), "AVAX": (27, 0.0002, 0.020, 3e7),
     "LINK": (11.5, 0.0014, 0.015, 3.5e7), "TON": (5.2, -0.0015, 0.013, 2.5e7),
     "SUI": (1.9, 0.0030, 0.028, 6e7), "DOT": (4.3, -0.0005, 0.016, 1.5e7),
+    # emerging-token preview
+    "FET": (1.35, 0.0025, 0.022, 2.4e7), "ONDO": (0.92, 0.0016, 0.015, 1.8e7),
+    "VIRTUAL": (1.10, 0.0045, 0.040, 6e6), "PLUME": (0.11, -0.0030, 0.030, 3e6),
 }
 FUNDING = {"BTC": 0.0001, "ETH": 0.00008, "SOL": 0.0002, "SUI": 0.0009, "DOGE": 0.0004}
 
@@ -75,3 +78,21 @@ SAMPLE_POSTS = [
 def fake_posts(now: datetime) -> list[Post]:
     return [Post(source=s, author=a, text=t, ts=now - timedelta(hours=h), url="", engagement=e)
             for s, a, t, h, e in SAMPLE_POSTS]
+
+
+def fake_emerging() -> tuple[list[dict], dict]:
+    """CoinGecko-shaped rows for the emerging-token preview."""
+    rows = [
+        ("FET", "Artificial Superintelligence Alliance", "AI", 1.2e9, 9.0, 14.0, 0.75),
+        ("VIRTUAL", "Virtuals Protocol", "AI", 7.2e8, 22.0, 41.0, 0.65),
+        ("ONDO", "Ondo", "RWA", 1.4e9, 6.0, 11.0, 0.32),
+        ("PLUME", "Plume", "RWA", 3.1e8, -12.0, -25.0, 0.30),
+    ]
+    picks = [{"symbol": s, "name": n, "narrative": nar, "market_cap": mc, "current_price": COINS[s][0],
+              "total_volume": COINS[s][3] * 3, "price_change_percentage_7d_in_currency": d7,
+              "price_change_percentage_30d_in_currency": d30, "circulating_supply": circ,
+              "total_supply": 1.0, "ath_change_percentage": -70.0}
+             for s, n, nar, mc, d7, d30, circ in rows]
+    narratives = {"AI": {"change_24h": 3.4, "categories": ["Artificial Intelligence (AI)"]},
+                  "RWA": {"change_24h": 1.1, "categories": ["Real World Assets (RWA)"]}}
+    return picks, narratives

@@ -55,6 +55,17 @@ A coin only becomes a trade idea when it scores 65 or more, its trend is up, it 
 
 The dashboard keeps a **track record** of every idea (target hit, stopped, or expired after 14 days), so you can judge the signals before trusting them with real money.
 
+## Emerging tokens (AI and real-world assets)
+
+Every 4 hours the bot also scans smaller tokens in CoinGecko's AI and real-world-asset (RWA) categories that Bitget lists, between $10M and $3B in market cap, and skips ones already on the watchlist. For each, it shows:
+
+- **Risk rating** (Low to Very high) from market size, Bitget trading volume, how wildly it moves, how much supply is still locked, and how far it sits below its peak.
+- **Potential score** from trend, recent gains, volume surges, whether the AI or RWA narrative is gaining, and mentions by your channels or CoinGecko trending.
+- **When to get in**: *Enter zone* (uptrend confirmed, not overstretched), *Wait for pullback* (a buy level near the 20-period average), *Watch for breakout* (a level a 4h candle must close above), or *Avoid* (downtrend).
+- **When to get out**: a stop-loss, two targets (sell half at the first, move the stop to breakeven), and an exit on a 4h close below the 20-period average, an overheated RSI, or after 10 days with no move. *Take profit* and *Exit signal* flag tokens to sell if you hold them.
+
+Riskier tokens get smaller sizes (a stop-out costs 1% of the account for Low risk, down to 0.25% for Very high), and no token takes more than 10% of the account. Telegram pings you when a token moves into *Enter zone*, or from a buy state into *Take profit* or *Exit signal*. Settings are under `emerging` in `config.yaml`.
+
 ## Limits to know
 
 - **No direct X feed.** X has no free API, and scraping it breaks X's terms. If you later pay for X API access, it can be added as another source.

@@ -11,7 +11,7 @@ import os
 import uuid
 from datetime import datetime, timezone
 
-from . import ai, alerts, analysis, dashboard, market, social
+from . import ai, alerts, analysis, dashboard, emerging, market, social
 from .config import DATA_DIR, ROOT, load_config
 from .sentiment import aggregate
 from .storage import load_json, load_jsonl, save_json, save_jsonl
@@ -123,9 +123,22 @@ def cmd_run(args) -> None:
         raise SystemExit("no market data from the exchange; nothing published")
 
     if args.publish:
+        new_token_alerts = []
+        if cfg.get("emerging", {}).get("enabled"):
+            # A failed scan is reported on the dashboard but never blocks the main report.
+            try:
+                tokens, narratives, report["source_health"]["emerging scanner"] = emerging.scan(
+                    cfg, mkt, [p.text for p in posts], report.get("trending", []))
+                report["emerging"] = {"tokens": tokens, "narratives": narratives}
+                new_token_alerts = emerging.status_alerts(tokens, state)
+            except Exception as e:  # noqa: BLE001
+                log.error("emerging scan failed: %s", e)
+                report["source_health"]["emerging scanner"] = f"failed: {type(e).__name__}"
         publish(report, candles, state, now)
         if args.digest:
             alerts.send_telegram(alerts.digest_text(report, os.environ.get("DASHBOARD_URL")))
+            for msg in new_token_alerts:
+                alerts.send_telegram(msg)
 
     if args.alerts:
         astate = load_json(DATA_DIR / "alert_state.json", {})
@@ -145,6 +158,11 @@ def cmd_demo(_args) -> None:
                                    {"value": 58, "label": "Greed"},
                                    ["SUI", "SOL", "PEPE"], {}, now)
     report["demo"] = True
+    from .demo import fake_emerging
+    picks, narratives = fake_emerging()
+    report["emerging"] = {"tokens": emerging.rate(picks, narratives, FakeMarket(now), cfg,
+                                                  [p.text for p in posts], ["FET"]),
+                          "narratives": narratives}
     publish(report, candles, {}, now, site_dir=ROOT / "demo", persist=False)
     print(alerts.digest_text(report, "https://example.pages.dev"))
     print(f"\nDemo dashboard written to {ROOT / 'demo' / 'index.html'}")
