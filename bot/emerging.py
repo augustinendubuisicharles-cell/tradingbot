@@ -86,8 +86,28 @@ def narrative_of(categories: list[str]) -> str:
     return useful[0] if useful else "Other"
 
 
+def top_holder_share(info: dict) -> float | None:
+    """Share of supply held by the 10 biggest wallets, leaving out locked, burnt and labelled
+    (exchange or pool) wallets, which hold coins for many people."""
+    holders = info.get("holders") or []
+    if not holders:
+        return None
+    dead = ("0x000000000000000000000000000000000000dead", "0x0000000000000000000000000000000000000000")
+    pcts = []
+    for h in holders:
+        if str(h.get("is_locked", "0")) == "1" or str(h.get("address", "")).lower() in dead or h.get("tag"):
+            continue
+        try:
+            pcts.append(float(h.get("percent") or 0))
+        except ValueError:
+            continue
+    return sum(sorted(pcts, reverse=True)[:10])
+
+
 def contract_check(platforms: dict | None) -> tuple[bool | None, str, list[str]]:
-    """GoPlus token-security scan. (passed, summary, warnings); passed None = couldn't check."""
+    """GoPlus token-security scan. (passed, summary, warnings); passed None = couldn't check.
+    The top-10 holder share, when known, is left in `contract_check.last_share`."""
+    contract_check.last_share = None
     platforms = {k: v for k, v in (platforms or {}).items() if k and v}
     if not platforms:
         return True, "native coin of its own blockchain (no token contract to exploit)", []
@@ -108,6 +128,7 @@ def contract_check(platforms: dict | None) -> tuple[bool | None, str, list[str]]
         return None, "contract scanner unavailable", []
     if not info:
         return None, "contract not in the scanner's database yet", []
+    contract_check.last_share = top_holder_share(info)
     flag = lambda k: str(info.get(k, "0")) == "1"  # noqa: E731
     tax = lambda k: float(info.get(k) or 0)  # noqa: E731
     fails = []
@@ -142,6 +163,7 @@ def solana_check(mint: str) -> tuple[bool | None, str, list[str]]:
         return None, "Solana token scanner unavailable", []
     if not info:
         return None, "Solana token not in the scanner's database yet", []
+    contract_check.last_share = top_holder_share(info)
 
     def on(key: str) -> bool:
         v = info.get(key)
@@ -172,6 +194,14 @@ def details(cg_id: str) -> dict:
 
 # ---------- safety, risk and potential ----------
 
+def _project_check(base: dict) -> tuple:
+    if base.get("is_meme") or "meme" in (base.get("narrative") or "").lower():
+        return ("Real product", False, "meme coin: nothing behind it but attention")
+    return ("Real product", bool(base.get("homepage")) or None,
+            ("has a website" if base.get("homepage") else "no website listed")
+            + (f", {base['commits_4w']} code updates in 4 weeks" if base.get("commits_4w") else ""))
+
+
 def safety_checks(cg: dict, base: dict, bitget_volume: float, atr_pct: float | None,
                   ecfg: dict) -> list[dict]:
     """Each check: name, ok (True / False / None = unknown), detail."""
@@ -201,9 +231,11 @@ def safety_checks(cg: dict, base: dict, bitget_volume: float, atr_pct: float | N
          else "listing date unknown"),
         ("Volatility under control", (atr_pct <= 12) if atr_pct is not None else None,
          f"moves {atr_pct:.1f}% per 4h candle on average" if atr_pct is not None else "not enough data"),
-        ("Real project", bool(base.get("homepage")) or None,
-         ("has a website" if base.get("homepage") else "no website listed")
-         + (f", {base['commits_4w']} code updates in 4 weeks" if base.get("commits_4w") else "")),
+        ("Spread across many holders",
+         (base["top10_share"] <= 0.5) if base.get("top10_share") is not None else None,
+         f"top 10 private wallets hold {base['top10_share']:.0%} of supply" if base.get("top10_share") is not None
+         else "holder data not available"),
+        _project_check(base),
     ]
     return [{"name": n, "ok": ok, "detail": d} for n, ok, d in checks]
 
@@ -303,9 +335,17 @@ def timing_plan(c4h: list[list[float]], c1d: list[list[float]], trend: float, ra
                 "action": f"Uptrend is breaking: price closed below {fmt_price(e20)} (20-period average) "
                           "and momentum is fading. If you hold it, this is the time to leave."}
 
+    datr = analysis.atr(c1d) if len(c1d) > 15 else None
+    min_dist = 0.8 * datr if datr else 0.0
+    month = closes[-1] / closes[-181] - 1 if len(closes) > 180 and closes[-181] else None
     if spike and spike["base_high"] < price:
-        return spike_plan(plan, spike, price, rating, risk_cfg, max_position_pct, ath, tp)
-    if trend >= tp["trend_min"] and r is not None and r <= tp["rsi_max"] and price - e20 <= tp["stretch_atr"] * a:
+        return spike_plan(plan, spike, price, rating, risk_cfg, max_position_pct, ath, tp, min_dist)
+    low7 = min(c[3] for c in c4h[-42:])
+    if month is not None and month > 1.0 and trend >= tp["trend_min"]:
+        status, entry = "Wait for pullback", low7 * 1.02
+        action = (f"Up {month:.0%} in a month, so too stretched to buy now. Only buy a pullback to about "
+                  f"{fmt_price(entry)}, near this week's low.")
+    elif trend >= tp["trend_min"] and r is not None and r <= tp["rsi_max"] and price - e20 <= tp["stretch_atr"] * a:
         status, entry = "Enter zone", price
         action = "Uptrend confirmed and not overextended. A good time to position, at today's price."
     elif trend >= tp["trend_min"]:
@@ -317,16 +357,26 @@ def timing_plan(c4h: list[list[float]], c1d: list[list[float]], trend: float, ra
         action = (f"Not trending yet. Buy only if a 4h candle closes above {fmt_price(high20)} "
                   "(the recent high) on rising volume.")
 
-    stop = plan_stop(entry, swing_low, a, tp["stop_atr"], status == "Enter zone")
+    stop = plan_stop(entry, swing_low, a, tp["stop_atr"], status == "Enter zone", min_dist)
     risk_per_unit = entry - stop
     if risk_per_unit <= 0:
         return {**plan, "status": "Avoid", "action": "No sensible stop-loss level right now."}
-    tp1, tp2 = entry + tp["tp1_r"] * risk_per_unit, entry + tp["tp2_r"] * risk_per_unit
-    if ath and tp1 < ath < tp2:
-        tp2 = ath  # no target above the all-time high: there's no chart level to aim at
+    tp1, tp2 = chart_targets(max(c[2] for c in c4h[-42:]), max(c[2] for c in c4h[-180:]),
+                             entry, risk_per_unit, tp, ath)
     return {**plan, **_sizing(entry, stop, rating, risk_cfg, max_position_pct),
             "status": status, "action": action, "entry": entry, "stop": stop, "tp1": tp1, "tp2": tp2,
             "exit_rule": _exit_rule(entry, tp)}
+
+
+def chart_targets(high7: float, high30: float, entry: float, risk: float, tp: dict,
+                  ath: float | None) -> tuple[float, float]:
+    """Targets at real chart levels (this week's high, then this month's high) when they
+    are far enough away; otherwise fixed multiples of the risk. Never above the old high."""
+    tp1 = high7 if high7 >= entry + 1.0 * risk else entry + tp["tp1_r"] * risk
+    tp2 = high30 if high30 >= tp1 + 0.5 * risk else max(entry + tp["tp2_r"] * risk, tp1 + risk)
+    if ath and tp1 < ath < tp2:
+        tp2 = ath
+    return tp1, tp2
 
 
 def _sizing(entry: float, stop: float, rating: str, risk_cfg: dict, max_position_pct: float) -> dict:
@@ -345,10 +395,11 @@ def _exit_rule(entry: float, tp: dict) -> str:
 
 
 def spike_plan(plan: dict, spike: dict, price: float, rating: str, risk_cfg: dict,
-               max_position_pct: float, ath: float | None, tp: dict) -> dict:
+               max_position_pct: float, ath: float | None, tp: dict, min_dist: float = 0.0) -> dict:
     """After a one-day spike: don't chase. Buy only a pullback to the top of the base it
     broke out of, stop under that base, first target the spike high, then the old high."""
-    entry, stop = spike["base_high"], spike["base_low"] * 0.99
+    entry = spike["base_high"]
+    stop = min(spike["base_low"] * 0.99, entry - min_dist)
     tp1 = spike["spike_high"]
     tp2 = ath if ath and ath > tp1 * 1.05 else tp1 + (tp1 - entry)
     if entry - stop <= 0 or (entry - stop) / entry > 0.30:
@@ -370,11 +421,12 @@ def spike_plan(plan: dict, spike: dict, price: float, rating: str, risk_cfg: dic
             }
 
 
-def plan_stop(entry: float, swing_low: float, a: float, stop_atr: float, at_market: bool) -> float:
-    """Under the recent swing low, but never closer than 1 or further than `stop_atr` average 4h ranges."""
-    if at_market:
-        return max(min(swing_low, entry - a), entry - stop_atr * a)
-    return entry - stop_atr * a
+def plan_stop(entry: float, swing_low: float, a: float, stop_atr: float, at_market: bool,
+              min_dist: float = 0.0) -> float:
+    """Under the recent swing low, but never closer than 1 or further than `stop_atr` average 4h
+    ranges, and always outside a normal day's swing (`min_dist`), so noise doesn't stop you out."""
+    stop = max(min(swing_low, entry - a), entry - stop_atr * a) if at_market else entry - stop_atr * a
+    return min(stop, entry - min_dist)
 
 
 
@@ -476,8 +528,8 @@ def scenarios(cg: dict, plan: dict) -> list[dict]:
             ("Base", plan["tp1"], "first target, if the setup works"),
             ("Stretch", plan["tp2"], "second target, if the trend runs")]
     ath = cg.get("ath") or 0
-    if ath > plan["tp2"] * 1.02 and ath <= entry * 6:
-        rows.append(("Bull", ath, "back to its all-time high"))
+    if plan["tp2"] * 1.02 < ath <= plan["tp2"] * 1.5:
+        rows.append(("Old high", ath, "its all-time high: a reference, not a target"))
     return [{"case": c, "price": p, "pct": (p / entry - 1) * 100,
              "mcap": mcap * p / price if price else None, "note": n} for c, p, n in rows]
 
@@ -582,12 +634,14 @@ def morning_scan(cfg: dict, mkt, posts_text: list[str], trending: list[str]) -> 
             continue
         narrative = narrative_of(det["categories"])
         ok, note, warns = contract_check(det["platforms"])
+        share = contract_check.last_share
         bases.append({
             "symbol": cg["symbol"], "cg": cg, "narrative": narrative,
             "narrative_change": cat_change.get(narrative),
             "watchers": det["watchers"], "homepage": det["homepage"], "commits_4w": det["commits_4w"],
             "age_days": len(daily), "age_capped": len(daily) >= 300,
             "contract_ok": ok, "contract_note": note, "contract_warnings": warns,
+            "top10_share": share, "is_meme": any("meme" in c.lower() for c in det["categories"]),
         })
     scan = {"as_of": datetime.now(timezone.utc).isoformat(), "bases": bases,
             "hot_narratives": [{"name": c["name"], "change_24h": round(c["market_cap_change_24h"], 1)}
@@ -729,9 +783,9 @@ def _pick_message(i: int, t: dict) -> str:
                   f"You'd lose about {p['max_loss']:,.0f} USDT.",
                   f"• Target 1: {fmt_price(p['tp1'])} ({sc['Base']['pct']:+.0f}%). Sell half, move your stop to the buy price.",
                   f"• Target 2: {fmt_price(p['tp2'])} ({sc['Stretch']['pct']:+.0f}%). Sell the rest."]
-        if "Bull" in sc:
-            lines.append(f"• Best case: {fmt_price(sc['Bull']['price'])} ({sc['Bull']['pct']:+.0f}%) "
-                         "if it returns to its all-time high")
+        if "Old high" in sc:
+            lines.append(f"• Old high: {fmt_price(sc['Old high']['price'])} ({sc['Old high']['pct']:+.0f}%), "
+                         "for reference only, not a target")
     return "\n".join(lines)
 
 
@@ -771,7 +825,9 @@ def morning_messages(tokens: list[dict], hot: list[dict], n: int, dashboard_url:
                "Contract safe": "risky contract code",
                "Not a pump-and-dump": "already pumped too hard",
                "Volatility under control": "price swings too wild",
-               "Enough trading history": "too new to judge"}.get(top, top.lower())
+               "Enough trading history": "too new to judge",
+               "Spread across many holders": "a few wallets own most of the supply",
+               "Real product": "meme coins with nothing behind them"}.get(top, top.lower())
         guide += ["", f"🚫 <b>Rejected today:</b> {', '.join(t['symbol'] for t in rejected)}. "
                       f"The most common reason was {why}."]
     if dashboard_url:

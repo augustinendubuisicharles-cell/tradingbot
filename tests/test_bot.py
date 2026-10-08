@@ -521,3 +521,30 @@ def test_solana_token_scan(monkeypatch):
     monkeypatch.setattr(emerging.requests, "get", lambda *a, **k: R({"freezable": {"status": "1"}}))
     ok, note, _ = emerging.contract_check({"solana": "MINT"})
     assert ok is False and "freeze" in note
+
+
+def test_extended_month_wide_stop_chart_targets_and_meme_holder_checks():
+    from bot import emerging
+    # A coin that more than doubled in a month: never "buy now".
+    px = [0.03 * 1.0045 ** k * (1 + 0.03 * ((k % 4) - 1.5) / 1.5) for k in range(200)]
+    path = [(0.031, 0.029, 0.03)] * 20 + [(c * 1.01, c * 0.99, c) for c in px]
+    c4h = _bars(path)
+    days = [r for j, r in enumerate(c4h) if j % 6 == 5]
+    days = [[d[0], d[1], d[2] * 1.03, d[3] * 0.97, d[4], 1] for d in days]   # ~6% daily range
+    trend, _ = analysis.trend_score(c4h, days)
+    plan = emerging.timing_plan(c4h, days, trend, "High", CFG["risk"], 10, ath=0.216)
+    assert plan["status"] == "Wait for pullback" and "stretched to buy now" in plan["action"]
+    assert plan["entry"] - plan["stop"] >= 0.8 * analysis.atr(days) - 1e-12   # outside a normal day
+    assert plan["tp1"] <= max(c[2] for c in c4h[-42:]) + 1e-12 or plan["tp1"] > plan["entry"]
+    sc = emerging.scenarios({"market_cap": 7.1e7, "ath": 0.216}, plan)
+    assert all(s["case"] != "Old high" for s in sc)            # a 2025 high far away is not a target
+
+    info = {"holders": [{"address": "0xa", "percent": "0.40"}, {"address": "0xb", "percent": "0.30"},
+                        {"address": "0xdead", "percent": "0.9", "tag": "Binance"},
+                        {"address": "0xc", "percent": "0.5", "is_locked": 1}]}
+    assert abs(emerging.top_holder_share(info) - 0.70) < 1e-9
+    base = {"narrative": "Meme", "top10_share": 0.7, "contract_ok": True, "age_days": 300}
+    checks = {c["name"]: c["ok"] for c in emerging.safety_checks(
+        {"market_cap": 7e7, "total_volume": 2e7, "circulating_supply": 1e9, "total_supply": 1e9,
+         "fully_diluted_valuation": 7e7}, base, 5e6, 4.0, CFG["emerging"])}
+    assert checks["Real product"] is False and checks["Spread across many holders"] is False

@@ -12,7 +12,7 @@ import time
 from datetime import datetime, timedelta, timezone
 
 from . import analysis
-from .emerging import DEFAULT_TIMING, plan_stop
+from .emerging import DEFAULT_TIMING, chart_targets, plan_stop, spike_info
 from .tracker import manage_trade
 
 log = logging.getLogger(__name__)
@@ -88,16 +88,23 @@ def indicators(c4h: list) -> dict:
                    for i in range(1, n)]
     for i in range(14, n):
         atr[i] = sum(trs[1:15]) / 14 if i == 14 else (atr[i - 1] * 13 + trs[i]) / 14
-    # Daily trend from completed UTC days only.
-    day_close, day_idx = [], [None] * n
+    # Daily candles from completed UTC days only.
+    days, day_idx, cur = [], [None] * n, None
     for i, c in enumerate(c4h):
         day = int(c[0] // 86400_000)
+        cur = [c[0], c[1], c[2], c[3], c[4], 0] if cur is None else [cur[0], cur[1], max(cur[2], c[2]),
+                                                                       min(cur[3], c[3]), c[4], 0]
         if i + 1 == n or int(c4h[i + 1][0] // 86400_000) != day:
-            day_close.append(c[4])
-        day_idx[i] = len(day_close) - 1  # the latest day that has closed by this candle
-    d50 = analysis.ema(day_close, 50)
+            days.append(cur)
+            cur = None
+        day_idx[i] = len(days) - 1  # the latest day that has closed by this candle
+    day_close = [d[4] for d in days]
+    datr = [None] * len(days)
+    for d in range(15, len(days)):
+        datr[d] = analysis.atr(days[d - 15:d + 1]) if d < 40 else analysis.atr(days[d - 40:d + 1])
     return {"closes": closes, "e20": analysis.ema(closes, 20), "e50": analysis.ema(closes, 50),
-            "rsi": rsi, "atr": atr, "day_close": day_close, "d50": d50, "day_idx": day_idx}
+            "rsi": rsi, "atr": atr, "day_close": day_close, "d50": analysis.ema(day_close, 50),
+            "datr": datr, "day_idx": day_idx}
 
 
 def trend_at(ind: dict, i: int) -> float:
@@ -116,27 +123,49 @@ def trend_at(ind: dict, i: int) -> float:
 
 
 def signal_at(c4h: list, ind: dict, i: int, p: dict) -> dict | None:
-    """The live timing rules at candle i: a market buy ("Enter zone") or a limit buy ("Wait for pullback")."""
+    """The live timing rules (emerging.timing_plan) at candle i: a market buy ("Enter zone")
+    or a limit buy ("Wait for pullback", including after spikes and extended months)."""
     a, e20, e50, r = ind["atr"][i], ind["e20"][i], ind["e50"][i], ind["rsi"][i]
-    if a is None or e20 is None or e50 is None or r is None or i < 60:
+    if a is None or e20 is None or e50 is None or r is None or i < 180:
         return None
-    price, trend = ind["closes"][i], trend_at(ind, i)
-    if trend < p["trend_min"] or r >= 78:
+    closes = ind["closes"]
+    price, trend = closes[i], trend_at(ind, i)
+    d = ind["day_idx"][i]
+    downtrend = price < e50 and (d is None or d < 0 or ind["d50"][d] is None or ind["day_close"][d] < ind["d50"][d])
+    if (downtrend and trend < 30) or r >= 78:
         return None
     prev_r = ind["rsi"][i - 1]
     if e20 > e50 and price < e20 and prev_r is not None and r < 50 and r < prev_r:
         return None
-    if r <= p["rsi_max"] and price - e20 <= p["stretch_atr"] * a:
+    datr = ind["datr"][d] if d is not None and d >= 0 else None
+    min_dist = 0.8 * datr if datr else 0.0
+    if closes[i - 6] and closes[i] / closes[i - 6] >= 1.15:
+        spike = spike_info(c4h[i - 35:i + 1])
+        if spike and spike["base_high"] < price:
+            entry = spike["base_high"]
+            stop = min(spike["base_low"] * 0.99, entry - min_dist)
+            if entry - stop <= 0 or (entry - stop) / entry > 0.30:
+                return None
+            tp1 = spike["spike_high"]
+            return {"entry": entry, "stop": stop, "tp1": tp1, "tp2": tp1 + (tp1 - entry), "limit": True}
+    if trend < p["trend_min"]:
+        return None
+    month = closes[i] / closes[i - 180] - 1 if closes[i - 180] else None
+    low7 = min(c[3] for c in c4h[i - 41:i + 1])
+    if month is not None and month > 1.0:
+        entry, limit = low7 * 1.02, True
+    elif r <= p["rsi_max"] and price - e20 <= p["stretch_atr"] * a:
         entry, limit = price, False
     else:
         entry, limit = e20, True
     swing_low = min(c[3] for c in c4h[i - 9:i + 1])
-    stop = plan_stop(entry, swing_low, a, p["stop_atr"], not limit)
+    stop = plan_stop(entry, swing_low, a, p["stop_atr"], not limit, min_dist)
     risk = entry - stop
     if risk <= 0:
         return None
-    return {"entry": entry, "stop": stop, "tp1": entry + p["tp1_r"] * risk,
-            "tp2": entry + p["tp2_r"] * risk, "limit": limit}
+    tp1, tp2 = chart_targets(max(c[2] for c in c4h[i - 41:i + 1]), max(c[2] for c in c4h[i - 179:i + 1]),
+                             entry, risk, p, None)
+    return {"entry": entry, "stop": stop, "tp1": tp1, "tp2": tp2, "limit": limit}
 
 
 # ---------- simulation ----------
