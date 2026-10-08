@@ -30,7 +30,7 @@ SKIP = re.compile(r"^(USDC|FDUSD|TUSD|BUSD|USDP|DAI|EUR|GBP|AEUR|PAXG|WBTC|WBETH
 OUT = Path(sys.argv[1] if len(sys.argv) > 1 else "research")
 
 
-def get(url: str, tries: int = 4) -> bytes | None:
+def get(url: str, tries: int = 6) -> bytes | None:
     for k in range(tries):
         try:
             with urllib.request.urlopen(url, timeout=60) as r:
@@ -48,7 +48,10 @@ def listing(prefix: str, folders: bool = True) -> list[str]:
     out, marker = [], ""
     while True:
         url = f"{BUCKET}?delimiter=/&prefix={prefix}" + (f"&marker={marker}" if marker else "")
-        root = ElementTree.fromstring(get(url))
+        blob = get(url)
+        if blob is None:
+            raise RuntimeError(f"listing failed: {prefix}")
+        root = ElementTree.fromstring(blob)
         if folders:
             items = [p.find(f"{NS}Prefix").text for p in root.findall(f"{NS}CommonPrefixes")]
         else:
@@ -68,6 +71,24 @@ def rows_from_zip(blob: bytes) -> list[list[str]]:
 def ms(v: str) -> int:
     t = int(v)
     return t // 1000 if t > 10**14 else t   # 2025+ files use microseconds
+
+
+DONE = [0]
+
+
+def safe(fn):
+    """One coin failing must not stop the whole download."""
+    def run(symbol):
+        try:
+            return fn(symbol)
+        except Exception as e:
+            print(f"skipped {symbol}: {e}", flush=True)
+            return []
+        finally:
+            DONE[0] += 1
+            if DONE[0] % 50 == 0:
+                print(f"{DONE[0]} coins done", flush=True)
+    return run
 
 
 def daily(symbol: str) -> list[tuple]:
@@ -107,8 +128,8 @@ def main() -> None:
     symbols = [p.rstrip("/").split("/")[-1] for p in listing("data/spot/monthly/klines/")]
     symbols = [s for s in symbols if s.endswith("USDT") and not SKIP.match(s)]
     print(f"{len(symbols)} USDT spot symbols in the archive", flush=True)
-    with ThreadPoolExecutor(16) as ex:
-        results = list(ex.map(daily, symbols))
+    with ThreadPoolExecutor(10) as ex:
+        results = list(ex.map(safe(daily), symbols))
     n = 0
     with gzip.open(OUT / "daily.csv.gz", "wt", newline="") as f:
         w = csv.writer(f)
@@ -120,8 +141,9 @@ def main() -> None:
 
     perps = {p.rstrip("/").split("/")[-1] for p in listing("data/futures/um/monthly/fundingRate/")}
     fsyms = [s for s in symbols if s in perps]
-    with ThreadPoolExecutor(16) as ex:
-        fres = list(ex.map(funding, fsyms))
+    DONE[0] = 0
+    with ThreadPoolExecutor(10) as ex:
+        fres = list(ex.map(safe(funding), fsyms))
     with gzip.open(OUT / "funding.csv.gz", "wt", newline="") as f:
         w = csv.writer(f)
         w.writerow(["symbol", "date", "funding"])
