@@ -1,0 +1,32 @@
+name: Research price history
+
+# Downloads years of free daily prices (including delisted coins) for strategy
+# research and keeps them on the separate "research-data" branch, so main stays small.
+on:
+  schedule:
+    - cron: "30 1 * * 0"   # Sundays 01:30 UTC, before the weekly accuracy check
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download history
+        run: python scripts/fetch_history.py "$RUNNER_TEMP/research"
+      - name: Save to the research-data branch
+        run: |
+          cd "$RUNNER_TEMP/research"
+          git init -q -b research-data
+          git config user.name "tradingbot"
+          git config user.email "tradingbot@users.noreply.github.com"
+          git add -A
+          git commit -qm "Price history $(date -u +'%Y-%m-%d')"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" research-data
