@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-08T14:40:39.122166+00:00",
+  "generated_at": "2026-10-08T15:10:08.797761+00:00",
   "exchange": "bitget",
   "lookback_hours": 24,
   "fear_greed": {
@@ -8,27 +8,27 @@
   },
   "trending": [
     "SIMD",
-    "TRUMP",
-    "QTC",
-    "STRK",
     "DRV",
-    "OGN",
+    "STRK",
+    "QTC",
+    "TRUMP",
     "PYTH",
-    "PRL",
     "PENGU",
     "NEAR",
-    "ONDO",
+    "OGN",
+    "PRL",
     "BTC",
-    "ZEC",
-    "PONS",
-    "SUI"
+    "LIT",
+    "ONDO",
+    "ALGO",
+    "ZEC"
   ],
   "market_mood": {
-    "score": 0.124,
-    "adjusted": 0.116,
-    "mentions": 71,
-    "bullish_pct": 27,
-    "bearish_pct": 3,
+    "score": 0.078,
+    "adjusted": 0.073,
+    "mentions": 65,
+    "bullish_pct": 23,
+    "bearish_pct": 2,
     "top_posts": [
       {
         "source": "telegram",
@@ -36,52 +36,11 @@
         "text": "\ud83d\udd34 SHORT $ZEC/USDT | Cross 30X \u2705 Entry: 1340 \ud83c\udfaf TP: 1310 -\u00a01280 -\u00a01240 \ud83d\uded1 SL: 1410",
         "ts": "2026-10-08T06:02:21+00:00",
         "url": "https://t.me/gorilla_crypto/79736",
-        "engagement": 2530.0,
+        "engagement": 2560.0,
         "source_weight": 1.5,
         "sentiment": -0.93,
-        "weight": 3.691,
+        "weight": 3.591,
         "coins": [],
-        "read_by": "ai"
-      },
-      {
-        "source": "telegram",
-        "author": "gorilla_crypto",
-        "text": "#KASUSDT 1H",
-        "ts": "2026-10-08T08:22:56+00:00",
-        "url": "https://t.me/gorilla_crypto/79739",
-        "engagement": 2240.0,
-        "source_weight": 1.5,
-        "sentiment": 0.737,
-        "weight": 4.184,
-        "coins": [],
-        "read_by": "ai"
-      },
-      {
-        "source": "telegram",
-        "author": "gorilla_crypto",
-        "text": "#WINUSDT 130% 10X",
-        "ts": "2026-10-08T08:20:15+00:00",
-        "url": "https://t.me/gorilla_crypto/79737",
-        "engagement": 2200.0,
-        "source_weight": 1.5,
-        "sentiment": 0.704,
-        "weight": 4.167,
-        "coins": [],
-        "read_by": "ai"
-      },
-      {
-        "source": "telegram",
-        "author": "gorilla_crypto",
-        "text": "ETH/USDT SHORT \ud83d\udeab Entry Zone - Target \ud83d\udc47 \u26a1\ufe0f https://t.me/+UoPySxz3ic42ZDNk Join Fast | Targets \u261d\ufe0f",
-        "ts": "2026-10-07T19:16:04+00:00",
-        "url": "https://t.me/gorilla_crypto/79733",
-        "engagement": 3050.0,
-        "source_weight": 1.5,
-        "sentiment": -0.93,
-        "weight": 2.011,
-        "coins": [
-          "ETH"
-        ],
         "read_by": "ai"
       },
       {
@@ -93,7 +52,7 @@
         "engagement": 0.0,
         "source_weight": 1.0,
         "sentiment": 0.739,
-        "weight": 1.181,
+        "weight": 1.148,
         "coins": [
           "ADA"
         ],
@@ -108,7 +67,7 @@
         "engagement": 0.0,
         "source_weight": 1.0,
         "sentiment": 0.679,
-        "weight": 1.135,
+        "weight": 1.103,
         "coins": [],
         "read_by": "ai"
       },
@@ -121,7 +80,7 @@
         "engagement": 0.0,
         "source_weight": 1.0,
         "sentiment": 0.729,
-        "weight": 0.999,
+        "weight": 0.971,
         "coins": [
           "BTC"
         ],
@@ -136,7 +95,7 @@
         "engagement": 0.0,
         "source_weight": 1.0,
         "sentiment": 0.688,
-        "weight": 1.031,
+        "weight": 1.003,
         "coins": [
           "BTC",
           "SUI"
@@ -152,7 +111,7 @@
         "engagement": 0.0,
         "source_weight": 1.0,
         "sentiment": 0.797,
-        "weight": 0.847,
+        "weight": 0.824,
         "coins": [],
         "read_by": "ai"
       },
@@ -165,7 +124,7 @@
         "engagement": 0.0,
         "source_weight": 1.0,
         "sentiment": 0.72,
-        "weight": 0.869,
+        "weight": 0.845,
         "coins": [
           "SOL"
         ],
@@ -180,7 +139,7 @@
         "engagement": 0.0,
         "source_weight": 1.0,
         "sentiment": 0.741,
-        "weight": 0.83,
+        "weight": 0.806,
         "coins": [],
         "read_by": "ai"
       },
@@ -193,7 +152,48 @@
         "engagement": 0.0,
         "source_weight": 1.0,
         "sentiment": 0.666,
-        "weight": 0.879,
+        "weight": 0.854,
+        "coins": [],
+        "read_by": "ai"
+      },
+      {
+        "source": "news",
+        "author": "Cointelegraph.com News",
+        "text": "Samsung Wallet to add USDC transfers for US Galaxy users in October. Eligible US Galaxy will be able to send USDC to crypto wallets and transfer funds to bank accounts in more than 60 countries.",
+        "ts": "2026-10-08T08:24:24+00:00",
+        "url": "https://cointelegraph.com/news/samsung-wallet-usdc-transfers-us-galaxy-users-october?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+        "engagement": 0.0,
+        "source_weight": 1.0,
+        "sentiment": 0.694,
+        "weight": 0.812,
+        "coins": [],
+        "read_by": "ai"
+      },
+      {
+        "source": "news",
+        "author": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+        "text": "Ripple is earning fees financing leveraged stock bets, a business long run by banks. ",
+        "ts": "2026-10-08T06:17:13+00:00",
+        "url": "https://www.coindesk.com/markets/2026/10/08/ripple-is-earning-fees-financing-leveraged-stock-bets-a-business-long-run-by-banks",
+        "engagement": 0.0,
+        "source_weight": 1.0,
+        "sentiment": 0.696,
+        "weight": 0.718,
+        "coins": [
+          "XRP"
+        ],
+        "read_by": "ai"
+      },
+      {
+        "source": "news",
+        "author": "Cointelegraph.com News",
+        "text": "Crypto must cement adoption to withstand US policy shifts: Canton CEO. Canton CEO Yuval Rooz compared blockchain adoption to Uber and Airbnb, arguing that widespread adoption could help insulate it from potential policy reversals.",
+        "ts": "2026-10-08T04:28:27+00:00",
+        "url": "https://cointelegraph.com/news/canton-ceo-crypto-adoption-us-policy-reversals?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+        "engagement": 0.0,
+        "source_weight": 1.0,
+        "sentiment": 0.697,
+        "weight": 0.647,
         "coins": [],
         "read_by": "ai"
       }
@@ -202,21 +202,21 @@
   "coins": [
     {
       "coin": "BTC",
-      "price": 82586.42,
-      "change_24h": -0.543,
-      "volume_24h": 258395714.767319,
-      "rsi": 30.2,
+      "price": 82399.78,
+      "change_24h": -0.691,
+      "volume_24h": 259437497.946436,
+      "rsi": 28.4,
       "atr": 805.2696958445218,
       "atr_pct": 0.98,
-      "ema20": 84031.90720861856,
+      "ema20": 84015.18530385666,
       "funding_rate": 0.0001,
-      "open_interest": 37047.67979999997,
-      "oi_change_pct": -0.74,
+      "open_interest": 37026.99769999996,
+      "oi_change_pct": -0.06,
       "sentiment": {
-        "score": 0.065,
-        "adjusted": 0.052,
-        "mentions": 20,
-        "bullish_pct": 15,
+        "score": 0.057,
+        "adjusted": 0.045,
+        "mentions": 19,
+        "bullish_pct": 11,
         "bearish_pct": 0,
         "top_posts": [
           {
@@ -228,7 +228,7 @@
             "engagement": 0.0,
             "source_weight": 1.0,
             "sentiment": 0.729,
-            "weight": 0.999,
+            "weight": 0.971,
             "coins": [
               "BTC"
             ],
@@ -243,7 +243,7 @@
             "engagement": 0.0,
             "source_weight": 1.0,
             "sentiment": 0.688,
-            "weight": 1.031,
+            "weight": 1.003,
             "coins": [
               "BTC",
               "SUI"
@@ -251,15 +251,15 @@
             "read_by": "ai"
           },
           {
-            "source": "news",
-            "author": "Cointelegraph.com News",
-            "text": "Bitcoin price drops to $82.7K October low as bond sell-off resumes on Iran nerves. Bitcoin fell below $83,000 to reach month-to-date lows as stocks reversed after all-time highs and bond yields spiked higher.",
-            "ts": "2026-10-07T15:06:14+00:00",
-            "url": "https://cointelegraph.com/markets/bitcoin-price-drops-to-827k-october-low-as-bond-sell-off-resumes-on-iran-nerves?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-            "engagement": 0.0,
-            "source_weight": 1.0,
-            "sentiment": 0.655,
-            "weight": 0.307,
+            "source": "telegram",
+            "author": "gorilla_crypto",
+            "text": "\ud83d\udcb0 $BTC Keep an eye on these two trendlines.  A breakdown could trigger the start of a 5\u201310% correction.",
+            "ts": "2026-10-07T17:53:31+00:00",
+            "url": "https://t.me/gorilla_crypto/79732",
+            "engagement": 3290.0,
+            "source_weight": 1.5,
+            "sentiment": 0.0,
+            "weight": 1.816,
             "coins": [
               "BTC"
             ],
@@ -269,12 +269,12 @@
       },
       "components": {
         "trend": 30.0,
-        "momentum": 40,
-        "sentiment": 52.6,
+        "momentum": 20,
+        "sentiment": 52.2,
         "positioning": 60,
         "risk": 100.0
       },
-      "score": 50.6,
+      "score": 47.6,
       "label": "Neutral",
       "trend_notes": [
         "daily close above EMA50"
@@ -284,63 +284,65 @@
     },
     {
       "coin": "ETH",
-      "price": 2529.29,
-      "change_24h": -1.194,
-      "volume_24h": 128577628.6898,
-      "rsi": 21.5,
+      "price": 2521.27,
+      "change_24h": -1.628,
+      "volume_24h": 128118479.6005,
+      "rsi": 20.7,
       "atr": 31.865927590777243,
       "atr_pct": 1.26,
-      "ema20": 2615.972252822847,
+      "ema20": 2615.2703480609425,
       "funding_rate": 0.0001,
-      "open_interest": 807206.31,
-      "oi_change_pct": -0.1,
+      "open_interest": 805400.04,
+      "oi_change_pct": -0.22,
       "sentiment": {
-        "score": -0.151,
-        "adjusted": -0.101,
-        "mentions": 10,
-        "bullish_pct": 10,
-        "bearish_pct": 10,
+        "score": 0.0,
+        "adjusted": 0.0,
+        "mentions": 8,
+        "bullish_pct": 0,
+        "bearish_pct": 0,
         "top_posts": [
-          {
-            "source": "telegram",
-            "author": "gorilla_crypto",
-            "text": "ETH/USDT SHORT \ud83d\udeab Entry Zone - Target \ud83d\udc47 \u26a1\ufe0f https://t.me/+UoPySxz3ic42ZDNk Join Fast | Targets \u261d\ufe0f",
-            "ts": "2026-10-07T19:16:04+00:00",
-            "url": "https://t.me/gorilla_crypto/79733",
-            "engagement": 3050.0,
-            "source_weight": 1.5,
-            "sentiment": -0.93,
-            "weight": 2.011,
-            "coins": [
-              "ETH"
-            ],
-            "read_by": "ai"
-          },
-          {
-            "source": "news",
-            "author": "Decrypt",
-            "text": "Bitmine's Relentless Ethereum Buying Is About to End, Tom Lee Says. Speaking at Token2049 in Singapore, the chairman said Bitmine is about 100,000 ETH\u2014roughly six to seven weeks\u2014from its 5% cap, setting an end date on a buying spree that made it the world's largest Ethereum treas",
-            "ts": "2026-10-07T14:55:32+00:00",
-            "url": "https://decrypt.co/380287/bitmine-ethereum-buying-will-stop-tom-lee",
-            "engagement": 0.0,
-            "source_weight": 1.0,
-            "sentiment": 0.675,
-            "weight": 0.304,
-            "coins": [
-              "ETH"
-            ],
-            "read_by": "ai"
-          },
           {
             "source": "telegram",
             "author": "BitcoinBullets",
             "text": "#ETH Market Analysis ETH is at 2,566.81 on the 8h. A sharp flush knocked it out of the 2,680 to 2,760 range that held since late September, and price is now sitting right on the lower trendline of the rising channel from August. Bull case: hold the channel support near 2,550 and ",
             "ts": "2026-10-08T03:38:47+00:00",
             "url": "https://t.me/BitcoinBullets/17316",
-            "engagement": 3690.0,
+            "engagement": 3710.0,
             "source_weight": 1.5,
             "sentiment": 0.0,
-            "weight": 3.312,
+            "weight": 3.22,
+            "coins": [
+              "BTC",
+              "ETH"
+            ],
+            "read_by": "ai"
+          },
+          {
+            "source": "news",
+            "author": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+            "text": "Bitcoin and ether holders urged to enter \u2018bunker mode\u2019 against possible AI attacks. ",
+            "ts": "2026-10-08T11:47:16+00:00",
+            "url": "https://www.coindesk.com/tech/2026/10/08/bitcoin-and-ether-holders-urged-to-prepare-bunker-mode-against-possible-ai-attacks",
+            "engagement": 0.0,
+            "source_weight": 1.0,
+            "sentiment": 0.0,
+            "weight": 0.987,
+            "coins": [
+              "BTC",
+              "ETH"
+            ],
+            "read_by": "ai"
+          },
+          {
+            "source": "news",
+            "author": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+            "text": "Bitcoin slips below $83,000 as Ethereum researcher's 'bunker mode' call divides crypto. ",
+            "ts": "2026-10-08T10:30:41+00:00",
+            "url": "https://www.coindesk.com/markets/2026/10/08/bitcoin-slips-below-usd83-000-as-ethereum-researcher-s-bunker-mode-call-divides-crypto",
+            "engagement": 0.0,
+            "source_weight": 1.0,
+            "sentiment": 0.0,
+            "weight": 0.917,
             "coins": [
               "BTC",
               "ETH"
@@ -352,11 +354,11 @@
       "components": {
         "trend": 30.0,
         "momentum": 20,
-        "sentiment": 45.0,
+        "sentiment": 50.0,
         "positioning": 60,
         "risk": 100.0
       },
-      "score": 45.7,
+      "score": 47.0,
       "label": "Neutral",
       "trend_notes": [
         "daily close above EMA50"
@@ -366,16 +368,16 @@
     },
     {
       "coin": "SOL",
-      "price": 112.36,
-      "change_24h": -3.004,
-      "volume_24h": 37370911.2206,
-      "rsi": 23.3,
+      "price": 111.8,
+      "change_24h": -3.479,
+      "volume_24h": 37874954.6975,
+      "rsi": 22.2,
       "atr": 1.665024734185695,
-      "atr_pct": 1.48,
-      "ema20": 117.24813994180357,
+      "atr_pct": 1.49,
+      "ema20": 117.19766375132738,
       "funding_rate": 0.0001,
-      "open_interest": 4163690.5999999605,
-      "oi_change_pct": 0.35,
+      "open_interest": 4172439.6999999606,
+      "oi_change_pct": 0.21,
       "sentiment": {
         "score": 0.319,
         "adjusted": 0.091,
@@ -392,7 +394,7 @@
             "engagement": 0.0,
             "source_weight": 1.0,
             "sentiment": 0.72,
-            "weight": 0.869,
+            "weight": 0.845,
             "coins": [
               "SOL"
             ],
@@ -407,7 +409,7 @@
             "engagement": 0.0,
             "source_weight": 1.0,
             "sentiment": 0.0,
-            "weight": 1.096,
+            "weight": 1.065,
             "coins": [
               "SOL"
             ],
@@ -432,16 +434,16 @@
     },
     {
       "coin": "XRP",
-      "price": 1.4027,
-      "change_24h": -1.806,
-      "volume_24h": 32061524.8268,
-      "rsi": 26.7,
+      "price": 1.3938,
+      "change_24h": -2.402,
+      "volume_24h": 32536787.0441,
+      "rsi": 23.7,
       "atr": 0.022982574503899733,
-      "atr_pct": 1.64,
-      "ema20": 1.451773261824362,
+      "atr_pct": 1.65,
+      "ema20": 1.4509923094434094,
       "funding_rate": 0.0001,
-      "open_interest": 192973964.0,
-      "oi_change_pct": -0.02,
+      "open_interest": 192974487.0,
+      "oi_change_pct": 0.0,
       "sentiment": {
         "score": 0.696,
         "adjusted": 0.116,
@@ -458,7 +460,7 @@
             "engagement": 0.0,
             "source_weight": 1.0,
             "sentiment": 0.696,
-            "weight": 0.739,
+            "weight": 0.718,
             "coins": [
               "XRP"
             ],
@@ -467,32 +469,30 @@
         ]
       },
       "components": {
-        "trend": 30.0,
+        "trend": 0.0,
         "momentum": 20,
         "sentiment": 55.8,
         "positioning": 60,
-        "risk": 96.9
+        "risk": 96.7
       },
-      "score": 48.0,
-      "label": "Neutral",
-      "trend_notes": [
-        "daily close above EMA50"
-      ],
+      "score": 37.5,
+      "label": "Weak",
+      "trend_notes": [],
       "eligible": true,
       "suggestion": null
     },
     {
       "coin": "BNB",
-      "price": 758.0,
-      "change_24h": -1.043,
-      "volume_24h": 975010.3939,
-      "rsi": 32.4,
+      "price": 754.45,
+      "change_24h": -1.522,
+      "volume_24h": 989599.7122,
+      "rsi": 30.2,
       "atr": 7.791344741695675,
       "atr_pct": 1.03,
-      "ema20": 773.0204726261026,
-      "funding_rate": 1.9e-05,
-      "open_interest": 90407.53000000006,
-      "oi_change_pct": -0.02,
+      "ema20": 772.6833297689597,
+      "funding_rate": 2.2e-05,
+      "open_interest": 90419.05000000006,
+      "oi_change_pct": 0.01,
       "sentiment": {
         "score": 0.0,
         "adjusted": 0.0,
@@ -518,16 +518,16 @@
     },
     {
       "coin": "DOGE",
-      "price": 0.08716,
-      "change_24h": -1.258,
-      "volume_24h": 15519794.6119,
-      "rsi": 27.5,
+      "price": 0.08655,
+      "change_24h": -1.837,
+      "volume_24h": 15345567.7177,
+      "rsi": 26.1,
       "atr": 0.0017476816600092025,
-      "atr_pct": 2.01,
-      "ema20": 0.090717394225164,
+      "atr_pct": 2.02,
+      "ema20": 0.09066501327278306,
       "funding_rate": 0.0001,
-      "open_interest": 1386799090.0,
-      "oi_change_pct": 0.05,
+      "open_interest": 1386964524.0,
+      "oi_change_pct": 0.01,
       "sentiment": {
         "score": 0.0,
         "adjusted": 0.0,
@@ -541,7 +541,7 @@
         "momentum": 20,
         "sentiment": 50.0,
         "positioning": 60,
-        "risk": 88.8
+        "risk": 88.5
       },
       "score": 34.8,
       "label": "Weak",
@@ -551,16 +551,16 @@
     },
     {
       "coin": "ADA",
-      "price": 0.2477,
-      "change_24h": -2.172,
-      "volume_24h": 5037909.698,
-      "rsi": 39.5,
+      "price": 0.2452,
+      "change_24h": -2.968,
+      "volume_24h": 5108552.371,
+      "rsi": 37.8,
       "atr": 0.00669813098082519,
-      "atr_pct": 2.7,
-      "ema20": 0.2568273728063642,
-      "funding_rate": 0.0001,
-      "open_interest": 234060433.0,
-      "oi_change_pct": 0.81,
+      "atr_pct": 2.73,
+      "ema20": 0.25661784899684037,
+      "funding_rate": 9.6e-05,
+      "open_interest": 231795091.0,
+      "oi_change_pct": -0.97,
       "sentiment": {
         "score": 0.739,
         "adjusted": 0.123,
@@ -577,7 +577,7 @@
             "engagement": 0.0,
             "source_weight": 1.0,
             "sentiment": 0.739,
-            "weight": 1.181,
+            "weight": 1.148,
             "coins": [
               "ADA"
             ],
@@ -590,9 +590,9 @@
         "momentum": 40,
         "sentiment": 56.1,
         "positioning": 60,
-        "risk": 73.2
+        "risk": 72.6
       },
-      "score": 56.3,
+      "score": 56.2,
       "label": "Neutral",
       "trend_notes": [
         "4h EMA20 above EMA50",
@@ -603,16 +603,16 @@
     },
     {
       "coin": "AVAX",
-      "price": 10.588,
-      "change_24h": -6.151,
-      "volume_24h": 1601807.4514,
-      "rsi": 37.7,
-      "atr": 0.2763740417891712,
-      "atr_pct": 2.61,
-      "ema20": 11.05016165974862,
-      "funding_rate": 4.3e-05,
-      "open_interest": 2711492.499999997,
-      "oi_change_pct": 0.29,
+      "price": 10.479,
+      "change_24h": -5.832,
+      "volume_24h": 1554351.1465,
+      "rsi": 35.9,
+      "atr": 0.2769454703605998,
+      "atr_pct": 2.64,
+      "ema20": 11.040447374034335,
+      "funding_rate": 4.6e-05,
+      "open_interest": 2707497.5999999973,
+      "oi_change_pct": -0.15,
       "sentiment": {
         "score": 0.0,
         "adjusted": 0.0,
@@ -626,9 +626,9 @@
         "momentum": 40,
         "sentiment": 50.0,
         "positioning": 60,
-        "risk": 75.3
+        "risk": 74.6
       },
-      "score": 55.0,
+      "score": 54.9,
       "label": "Neutral",
       "trend_notes": [
         "4h EMA20 above EMA50",
@@ -639,16 +639,16 @@
     },
     {
       "coin": "LINK",
-      "price": 12.964,
-      "change_24h": -3.037,
-      "volume_24h": 2264027.9378,
-      "rsi": 27.6,
+      "price": 12.88,
+      "change_24h": -3.643,
+      "volume_24h": 2229615.6814,
+      "rsi": 26.6,
       "atr": 0.254357035424125,
-      "atr_pct": 1.96,
-      "ema20": 13.529238284563743,
-      "funding_rate": 9.7e-05,
-      "open_interest": 3892878.0,
-      "oi_change_pct": -0.06,
+      "atr_pct": 1.97,
+      "ema20": 13.523047808373267,
+      "funding_rate": 9.6e-05,
+      "open_interest": 3898775.0,
+      "oi_change_pct": 0.15,
       "sentiment": {
         "score": 0.0,
         "adjusted": 0.0,
@@ -662,9 +662,9 @@
         "momentum": 20,
         "sentiment": 50.0,
         "positioning": 60,
-        "risk": 89.7
+        "risk": 89.4
       },
-      "score": 45.5,
+      "score": 45.4,
       "label": "Neutral",
       "trend_notes": [
         "daily close above EMA50"
@@ -674,16 +674,16 @@
     },
     {
       "coin": "SUI",
-      "price": 1.0962,
-      "change_24h": -1.783,
-      "volume_24h": 17022441.56,
-      "rsi": 33.7,
+      "price": 1.0896,
+      "change_24h": -2.47,
+      "volume_24h": 17321777.38,
+      "rsi": 32.7,
       "atr": 0.02869283852348149,
-      "atr_pct": 2.62,
-      "ema20": 1.149036624760049,
-      "funding_rate": 0.0001,
-      "open_interest": 65937097.60000002,
-      "oi_change_pct": 0.01,
+      "atr_pct": 2.63,
+      "ema20": 1.1484556723790966,
+      "funding_rate": 9.4e-05,
+      "open_interest": 65683742.40000001,
+      "oi_change_pct": -0.38,
       "sentiment": {
         "score": 0.204,
         "adjusted": 0.076,
@@ -700,7 +700,7 @@
             "engagement": 0.0,
             "source_weight": 1.0,
             "sentiment": 0.688,
-            "weight": 1.031,
+            "weight": 1.003,
             "coins": [
               "BTC",
               "SUI"
@@ -713,10 +713,10 @@
             "text": "#SUI Market Analysis SUI is at 1.1238 on the 8h, sliding out of the 1.16 to 1.25 range that held since late September. Price is now testing the steep ascending trendline from the mid September lows near 0.68. Bull case: hold the trendline near 1.11 and reclaim 1.16, opening a pat",
             "ts": "2026-10-07T19:37:58+00:00",
             "url": "https://t.me/BitcoinBullets/17315",
-            "engagement": 3840.0,
+            "engagement": 3850.0,
             "source_weight": 1.5,
             "sentiment": 0.0,
-            "weight": 2.091,
+            "weight": 2.033,
             "coins": [
               "BTC",
               "SUI"
@@ -732,7 +732,7 @@
             "engagement": 0.0,
             "source_weight": 1.0,
             "sentiment": 0.0,
-            "weight": 0.359,
+            "weight": 0.349,
             "coins": [
               "SUI"
             ],
@@ -745,7 +745,7 @@
         "momentum": 40,
         "sentiment": 53.8,
         "positioning": 60,
-        "risk": 75.2
+        "risk": 74.8
       },
       "score": 47.2,
       "label": "Neutral",
@@ -757,16 +757,16 @@
     },
     {
       "coin": "DOT",
-      "price": 1.1035,
-      "change_24h": 0.209,
-      "volume_24h": 976357.873,
-      "rsi": 35.5,
-      "atr": 0.02999515191740233,
-      "atr_pct": 2.72,
-      "ema20": 1.1461586296644841,
+      "price": 1.0951,
+      "change_24h": -0.128,
+      "volume_24h": 980047.877,
+      "rsi": 34.0,
+      "atr": 0.03012372334597376,
+      "atr_pct": 2.75,
+      "ema20": 1.145358629664484,
       "funding_rate": 0.0001,
-      "open_interest": 18127118.0,
-      "oi_change_pct": 0.25,
+      "open_interest": 18062390.0,
+      "oi_change_pct": -0.36,
       "sentiment": {
         "score": 0.0,
         "adjusted": 0.0,
@@ -780,9 +780,9 @@
         "momentum": 40,
         "sentiment": 50.0,
         "positioning": 60,
-        "risk": 72.9
+        "risk": 72.2
       },
-      "score": 45.9,
+      "score": 45.8,
       "label": "Neutral",
       "trend_notes": [
         "daily close above EMA50"
@@ -803,9 +803,9 @@
     "reddit:Bitcoin": "failed: HTTPError",
     "reddit:ethtrader": "failed: HTTPError",
     "news:https://www.coindesk.com/arc/outboundfeeds/rss/": "ok (22 posts)",
-    "news:https://cointelegraph.com/rss": "ok (23 posts)",
-    "news:https://decrypt.co/feed": "ok (16 posts)",
-    "ai post reading": "ok (75 posts read by CryptoBERT)",
+    "news:https://cointelegraph.com/rss": "ok (22 posts)",
+    "news:https://decrypt.co/feed": "ok (15 posts)",
+    "ai post reading": "ok (73 posts read by CryptoBERT)",
     "exchange": "ok (11 markets); not listed: TON"
   },
   "record": {
