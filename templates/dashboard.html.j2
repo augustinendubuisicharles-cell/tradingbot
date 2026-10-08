@@ -6,245 +6,351 @@
 <title>Crypto Signals</title>
 <style>
 :root {
-  --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #6f6d68;
+  --page: #f9f9f7; --surface: #fcfcfb; --raised: #f2f1ec; --ink: #0b0b0b; --ink-2: #52514e; --muted: #6f6d68;
   --grid: #e1e0d9; --track: #ecebe6; --border: rgba(11,11,11,0.10);
-  --bar: #2a78d6; --up: #006300; --down: #b42828;
-  --good: #0ca30c; --warn: #fab219; --crit: #d03b3b;
+  --bar: #2a78d6; --up: #006300; --down: #b42828; --good: #0ca30c; --warn: #fab219; --crit: #d03b3b;
+  --good-bg: rgba(12,163,12,0.10); --warn-bg: rgba(250,178,25,0.16); --crit-bg: rgba(208,59,59,0.10);
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #9a9890;
+    --page: #0d0d0d; --surface: #1a1a19; --raised: #232321; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #9a9890;
     --grid: #2c2c2a; --track: #2c2c2a; --border: rgba(255,255,255,0.10);
-    --bar: #3987e5; --up: #0ca30c; --down: #f07a7a; color-scheme: dark;
+    --bar: #3987e5; --up: #3fc23f; --down: #f07a7a;
+    --good-bg: rgba(12,163,12,0.18); --warn-bg: rgba(250,178,25,0.18); --crit-bg: rgba(240,122,122,0.16);
+    color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #9a9890;
+  --page: #0d0d0d; --surface: #1a1a19; --raised: #232321; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #9a9890;
   --grid: #2c2c2a; --track: #2c2c2a; --border: rgba(255,255,255,0.10);
-  --bar: #3987e5; --up: #0ca30c; --down: #f07a7a; color-scheme: dark;
+  --bar: #3987e5; --up: #3fc23f; --down: #f07a7a;
+  --good-bg: rgba(12,163,12,0.18); --warn-bg: rgba(250,178,25,0.18); --crit-bg: rgba(240,122,122,0.16);
+  color-scheme: dark;
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--page); color: var(--ink);
   font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
-main { max-width: 1120px; margin: 0 auto; padding: 24px 16px 48px; }
-h1 { font-size: 24px; margin: 0; }
-h2 { font-size: 17px; margin: 32px 0 12px; }
-.sub { color: var(--ink-2); margin: 4px 0 0; }
+main { max-width: 1080px; margin: 0 auto; padding: 20px 16px 48px; }
+h1 { font-size: 22px; margin: 0; letter-spacing: -0.01em; }
+h2 { font-size: 16px; margin: 28px 0 10px; }
+.sub { color: var(--muted); font-size: 13px; margin: 2px 0 0; }
 .muted { color: var(--muted); }
-.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-top: 20px; }
-.tile, .card, .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
-.tile { padding: 14px 16px; }
-.tile .k { color: var(--ink-2); font-size: 13px; }
-.tile .v { font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; }
-.tile .n { color: var(--muted); font-size: 13px; }
-.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
-.card { padding: 16px; }
-.card h3 { margin: 0 0 4px; font-size: 18px; display: flex; justify-content: space-between; gap: 8px; }
-.card dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; margin: 10px 0; font-variant-numeric: tabular-nums; }
-.card dt { color: var(--ink-2); } .card dd { margin: 0; text-align: right; }
-.card ul { margin: 8px 0 0; padding-left: 18px; color: var(--ink-2); font-size: 13px; }
-.pill { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border); white-space: nowrap; }
-.panel { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
-th, td { padding: 9px 12px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--grid); }
-th { color: var(--ink-2); font-weight: 500; font-size: 13px; }
-th:first-child, td:first-child, td.l { text-align: left; }
-tr:last-child td { border-bottom: 0; }
+.small { font-size: 13px; }
 .up { color: var(--up); } .down { color: var(--down); }
-.score { display: inline-flex; align-items: center; gap: 8px; }
-.track { width: 80px; height: 8px; background: var(--track); border-radius: 4px; overflow: hidden; }
-.fill { height: 100%; background: var(--bar); border-radius: 0 4px 4px 0; }
-.status { display: inline-flex; align-items: center; gap: 6px; }
-.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-.s-Bullish .dot { background: var(--good); } .s-Neutral .dot { background: var(--warn); } .s-Weak .dot { background: var(--crit); }
+.num { font-variant-numeric: tabular-nums; }
+
+/* summary strip */
+.strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 16px; }
+@media (max-width: 720px) { .strip { grid-template-columns: repeat(2, 1fr); } }
+.stat { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
+.stat .k { color: var(--ink-2); font-size: 12px; }
+.stat .v { font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.3; }
+.stat .n { color: var(--muted); font-size: 12px; }
+
+/* action list */
+.actions { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.act { display: grid; grid-template-columns: auto 1fr auto; gap: 4px 12px; align-items: center;
+  padding: 12px 14px; border-bottom: 1px solid var(--grid); }
+.act:last-child { border-bottom: 0; }
+.act .what { font-size: 14px; }
+.act .what b { font-size: 15px; }
+.act .lv { color: var(--ink-2); font-size: 13px; font-variant-numeric: tabular-nums; }
+@media (max-width: 560px) { .act { grid-template-columns: auto 1fr; } .act .lv { grid-column: 2; } }
+.empty { padding: 14px; color: var(--ink-2); }
+
+/* status pills: icon + label, never colour alone */
+.pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600;
+  padding: 2px 9px; border-radius: 999px; white-space: nowrap; border: 1px solid transparent; }
+.pill.go { background: var(--good-bg); color: var(--up); }
+.pill.wait { background: var(--warn-bg); color: var(--ink); }
+.pill.out { background: var(--crit-bg); color: var(--down); }
+.pill.idle { background: var(--raised); color: var(--ink-2); }
+
+/* tabs (no script needed) */
+.tabs { margin-top: 28px; }
+.tabs > input { position: absolute; opacity: 0; pointer-events: none; }
+.tabbar { display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid var(--grid); scrollbar-width: none; }
+.tabbar label { padding: 9px 14px; font-size: 14px; color: var(--ink-2); cursor: pointer; white-space: nowrap;
+  border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tabbar label .c { color: var(--muted); font-size: 12px; margin-left: 4px; }
+.panel-tab { display: none; padding-top: 16px; }
+#t-gems:checked ~ .tabbar label[for="t-gems"], #t-coins:checked ~ .tabbar label[for="t-coins"],
+#t-acc:checked ~ .tabbar label[for="t-acc"], #t-news:checked ~ .tabbar label[for="t-news"],
+#t-src:checked ~ .tabbar label[for="t-src"] { color: var(--ink); border-bottom-color: var(--ink); font-weight: 600; }
+#t-gems:checked ~ #p-gems, #t-coins:checked ~ #p-coins, #t-acc:checked ~ #p-acc,
+#t-news:checked ~ #p-news, #t-src:checked ~ #p-src { display: block; }
+.tabs > input:focus-visible ~ .tabbar { outline: 2px solid var(--bar); outline-offset: 2px; }
+
+/* gem cards */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+@media (max-width: 380px) { .cards { grid-template-columns: 1fr; } }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; min-width: 0; }
+.card .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.card .sym { font-size: 17px; font-weight: 650; }
+.card .meta { color: var(--muted); font-size: 12px; }
+.spark { width: 100%; height: auto; display: block; margin: 10px 0 4px; }
+.spark .lvl { font-size: 10px; fill: var(--ink-2); font-family: inherit; }
+.trade { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 14px; margin-top: 6px; }
+.trade td { padding: 4px 0; border-bottom: 1px solid var(--grid); }
+.trade td:nth-child(2), .trade td:nth-child(3) { text-align: right; }
+.trade td:nth-child(3) { width: 56px; color: var(--muted); font-size: 13px; }
+.trade tr:last-child td { border-bottom: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.chip { font-size: 12px; padding: 2px 8px; border-radius: 6px; background: var(--raised); color: var(--ink-2); }
+details { margin-top: 10px; }
+details summary { cursor: pointer; font-size: 13px; color: var(--ink-2); list-style: none; }
+details summary::-webkit-details-marker { display: none; }
+details summary::before { content: "▸ "; }
+details[open] summary::before { content: "▾ "; }
+details .body { font-size: 13px; color: var(--ink-2); padding-top: 6px; }
+details .body ul { margin: 4px 0 8px; padding-left: 18px; }
+details .body h4 { margin: 8px 0 2px; font-size: 13px; color: var(--ink); }
+
+/* tables */
+.tbl { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow-x: auto; }
+table.data { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 14px; }
+table.data th, table.data td { padding: 9px 12px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--grid); }
+table.data th { color: var(--ink-2); font-weight: 500; font-size: 12px; }
+table.data th:first-child, table.data td:first-child, table.data .l { text-align: left; }
+table.data tr:last-child td { border-bottom: 0; }
+.bar { display: inline-flex; align-items: center; gap: 8px; }
+.track { width: 70px; height: 6px; background: var(--track); border-radius: 3px; overflow: hidden; }
+.fill { height: 100%; background: var(--bar); border-radius: 0 3px 3px 0; display: block; }
+
 .posts { list-style: none; margin: 0; padding: 0; }
-.posts li { padding: 12px 16px; border-bottom: 1px solid var(--grid); }
+.posts li { padding: 11px 14px; border-bottom: 1px solid var(--grid); font-size: 14px; }
 .posts li:last-child { border-bottom: 0; }
-.posts .meta { font-size: 13px; color: var(--muted); }
+.posts .meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
 .posts a { color: inherit; }
-.note { font-size: 13px; color: var(--muted); margin-top: 32px; }
-.empty { padding: 16px; color: var(--ink-2); }
-.card .act { margin: 8px 0 0; font-size: 14px; }
-.card .why { margin: 6px 0 0; font-size: 13px; color: var(--ink-2); }
-.st-go { border-color: var(--good); color: var(--up); }
-.st-out { border-color: var(--crit); color: var(--down); }
-.nar { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: -4px 0 12px; font-size: 14px; color: var(--ink-2); }
+.note { font-size: 12px; color: var(--muted); margin-top: 28px; }
+.banner { background: var(--warn-bg); border-radius: 10px; padding: 10px 14px; font-size: 14px; margin-bottom: 14px; }
 </style>
 </head>
 <body>
 <main>
-  {% if demo %}<div class="panel empty" style="margin-bottom:16px"><b>Preview with made-up data.</b> Prices, posts and ideas on this page are invented to show the layout. They are not real signals.</div>{% endif %}
+{% macro status_pill(st) -%}
+  {%- if st == 'Enter zone' -%}<span class="pill go">● Buy now</span>
+  {%- elif st == 'Wait for pullback' -%}<span class="pill wait">◆ Wait for dip</span>
+  {%- elif st == 'Watch for breakout' -%}<span class="pill wait">◆ Watch breakout</span>
+  {%- elif st in ['Exit signal', 'Take profit'] -%}<span class="pill out">▼ {{ 'Exit' if st == 'Exit signal' else 'Take profit' }}</span>
+  {%- else -%}<span class="pill idle">○ {{ st }}</span>{%- endif -%}
+{%- endmacro %}
+{% macro pct(a, b) -%}{{ '%+.0f%%'|format((a / b - 1) * 100) if b else '' }}{%- endmacro %}
+
+  {% if demo %}<div class="banner"><b>Preview with made-up data.</b> Prices, posts and ideas are invented to show the layout.</div>{% endif %}
   <h1>Crypto Signals</h1>
-  <p class="sub">Spot ideas for {{ exchange|title }} · updated {{ generated_label }} UTC · next update around {{ next_label }} UTC</p>
+  <p class="sub">Spot ideas for {{ exchange|title }} · updated {{ generated_label }} UTC · next around {{ next_label }} UTC</p>
 
-  <div class="tiles">
-    <div class="tile"><div class="k">Fear &amp; Greed</div>
-      {% if fng %}<div class="v">{{ fng.value }}</div><div class="n">{{ fng.label }}</div>
-      {% else %}<div class="v">–</div><div class="n">unavailable</div>{% endif %}</div>
-    <div class="tile"><div class="k">Social mood</div>
-      <div class="v {{ 'up' if mood.score > 0.05 else ('down' if mood.score < -0.05 else '') }}">{{ '%+.2f'|format(mood.score) }}</div>
-      <div class="n">{{ mood.mentions }} posts, last {{ lookback }}h</div></div>
-    <div class="tile"><div class="k">Spot ideas now</div>
-      <div class="v">{{ suggestions|length }}</div><div class="n">of {{ coins|length }} coins scanned</div></div>
-    <div class="tile"><div class="k">Track record</div>
-      {% if record.closed %}<div class="v">{{ record.win_rate }}%</div><div class="n">win rate, {{ record.closed }} closed, {{ '%+.1f'|format(record.total_r) }}R</div>
-      {% else %}<div class="v">–</div><div class="n">{{ record.open }} open, none closed yet</div>{% endif %}</div>
+  {% set gems = emerging.tokens if emerging else [] %}
+  {% set safe = gems|selectattr('safe')|list %}
+  {% set buys = safe|selectattr('plan.status', 'in', ['Enter zone', 'Wait for pullback'])|list %}
+  {% set held = (emerging.history if emerging and emerging.history else [])|selectattr('status', 'in', ['open'])|map(attribute='symbol')|list %}
+  {% set exits = safe|selectattr('plan.status', 'in', ['Exit signal', 'Take profit'])|list %}
+  {% set btc = coins|selectattr('coin', 'equalto', 'BTC')|first %}
+  {% set bt = backtest.default.test if backtest else none %}
+
+  <div class="strip">
+    <div class="stat"><div class="k">Market</div>
+      {% if fng %}<div class="v">{{ fng.value }} <span class="small muted" style="font-weight:400">{{ fng.label }}</span></div>{% else %}<div class="v">–</div>{% endif %}
+      <div class="n">{% if btc %}Bitcoin <span class="{{ 'up' if btc.change_24h > 0 else 'down' }}">{{ '%+.1f'|format(btc.change_24h) }}%</span> today · {% endif %}mood {{ '%+.2f'|format(mood.score) }}</div></div>
+    <div class="stat"><div class="k">Buy setups</div>
+      <div class="v">{{ buys|length + suggestions|length }}</div>
+      <div class="n">{{ safe|length }} safe gems · {{ coins|length }} coins scanned</div></div>
+    <div class="stat"><div class="k">Exit signals</div>
+      <div class="v {{ 'down' if exits else '' }}">{{ exits|length }}</div>
+      <div class="n">on safe gems{% if held %} · {{ held|length }} picks running{% endif %}</div></div>
+    <div class="stat"><div class="k">Backtest, last 90 days</div>
+      {% if bt and bt.trades %}<div class="v {{ 'up' if bt.avg_r > 0 else 'down' }}">{{ '%+.2f'|format(bt.avg_r) }}R</div>
+      <div class="n">per trade · {{ bt.win_rate }}% won · {{ 'edge found' if bt.avg_r > 0 else 'no edge yet' }}</div>
+      {% else %}<div class="v">–</div><div class="n">runs every Sunday</div>{% endif %}</div>
   </div>
 
-  <h2>Spot trade ideas</h2>
-  {% if suggestions %}
-  <div class="cards">
+  <h2>Do this now</h2>
+  <div class="actions">
     {% for a in suggestions %}{% set s = a.suggestion %}
-    <div class="card">
-      <h3><span>{{ a.coin }} <span class="muted" style="font-weight:400;font-size:14px">{{ s.side }}</span></span>
-        <span class="pill">score {{ '%.0f'|format(a.score) }} · {{ s.confidence }}</span></h3>
-      <dl>
-        <dt>Entry</dt><dd>{{ fp(s.entry) }} <span class="muted">{{ s.order }}</span></dd>
-        <dt>Stop-loss</dt><dd class="down">{{ fp(s.stop) }}</dd>
-        <dt>Target 1</dt><dd class="up">{{ fp(s.tp1) }}</dd>
-        <dt>Target 2</dt><dd class="up">{{ fp(s.tp2) }}</dd>
-        <dt>Size</dt><dd>{{ '{:,.0f}'.format(s.notional) }} USDT</dd>
-        <dt>Max loss</dt><dd>{{ '{:,.0f}'.format(s.max_loss) }} USDT</dd>
-      </dl>
-      <ul>{% for r in s.reasons %}<li>{{ r }}</li>{% endfor %}</ul>
-    </div>
+    <div class="act"><span class="pill go">● Buy</span>
+      <div class="what"><b>{{ a.coin }}</b> <span class="muted small">main coin · score {{ '%.0f'|format(a.score) }}</span></div>
+      <div class="lv">buy {{ fp(s.entry) }} · stop {{ fp(s.stop) }}</div></div>
     {% endfor %}
+    {% for t in buys %}{% set p = t.plan %}
+    <div class="act">{{ status_pill(p.status) }}
+      <div class="what"><b>{{ t.symbol }}</b> <span class="muted small">{{ t.narrative }} · risk {{ t.risk_rating|lower }}</span></div>
+      <div class="lv">{{ 'buy' if p.status == 'Enter zone' else 'limit' }} {{ fp(p.entry) }} · stop {{ fp(p.stop) }}</div></div>
+    {% endfor %}
+    {% for t in exits %}
+    <div class="act">{{ status_pill(t.plan.status) }}
+      <div class="what"><b>{{ t.symbol }}</b> <span class="muted small">{{ 'you hold this pick: ' if t.symbol in held else 'if you hold it: ' }}{{ 'sell' if t.plan.status == 'Exit signal' else 'sell some' }}</span></div>
+      <div class="lv">now {{ fp(t.plan.price) }}</div></div>
+    {% endfor %}
+    {% if not suggestions and not buys and not exits %}<div class="empty">Nothing to do right now. No safe setup at a good level. Sitting out is a position too.</div>{% endif %}
   </div>
-  {% else %}
-  <div class="panel empty">No coin passes the low-risk filters right now. The bot only suggests a trade when trend, sentiment and volatility line up.</div>
-  {% endif %}
+  {% if bt and bt.trades and bt.avg_r <= 0 %}<p class="small muted" style="margin-top:8px">The buy rules haven't made money in recent backtests, so treat these as a watchlist, not trades.</p>{% endif %}
 
-  {% if emerging %}
-  <h2>Hidden gems: small, newer tokens from every narrative</h2>
-  <p class="muted" style="font-size:13px;margin-top:-6px">Picked in the morning scan ({{ (emerging.as_of or '')[:16]|replace('T', ' ') }} UTC); prices and timing refreshed every 4 hours.</p>
-  {% if emerging.hot %}<div class="nar"><span>Hot narratives today:</span>{% for h in emerging.hot %}<span><b>{{ h.name }}</b> <span class="{{ 'up' if h.change_24h > 0 else 'down' }}">{{ '%+.1f'|format(h.change_24h) }}%</span></span>{% endfor %}</div>{% endif %}
-  {% set safe = emerging.tokens|selectattr('safe')|list %}
-  {% if safe %}
-  <div class="cards">
-    {% for t in safe %}{% set p = t.plan %}
-    <div class="card">
-      <h3><span>{{ t.symbol }} <span class="muted" style="font-weight:400;font-size:14px">{{ t.name }}</span></span>
-        <span class="pill {{ 'st-go' if p.status == 'Enter zone' else ('st-out' if p.status in ['Exit signal', 'Take profit', 'Avoid'] else '') }}">{{ p.status }}</span></h3>
-      <div class="muted" style="font-size:13px">{{ t.narrative }} · cap ${{ '{:,.0f}'.format((t.market_cap or 0) / 1e6) }}M{% if t.age_days is not none and t.age_days < 300 %} · on Bitget {{ t.age_days }} days{% endif %} ·
-        7d <span class="{{ 'up' if (t.change_7d or 0) > 0 else 'down' }}">{{ '%+.0f'|format(t.change_7d or 0) }}%</span></div>
-      <div style="margin-top:6px;font-size:14px">Potential <b>{{ '%.0f'|format(t.potential) }}/100</b> · risk <b>{{ t.risk_rating }}</b></div>
-      <p class="act">{{ p.action }}</p>
-      {% if t.scenarios %}
-      <table style="font-size:13px;margin-top:6px"><thead><tr><th>Prediction</th><th>Price</th><th>Change</th><th>Market cap</th></tr></thead><tbody>
-        {% for sc in t.scenarios %}<tr title="{{ sc.note }}"><td class="l">{{ sc.case }}</td><td>{{ fp(sc.price) }}</td>
-          <td class="{{ 'up' if sc.pct > 0 else 'down' }}">{{ '%+.0f'|format(sc.pct) }}%</td><td>${{ '{:,.0f}'.format((sc.mcap or 0) / 1e6) }}M</td></tr>{% endfor %}
-      </tbody></table>
-      <p class="why">Entry {{ fp(p.entry) }} · size {{ '{:,.0f}'.format(p.notional) }} USDT (risk {{ p.risk_pct }}% of account). <b>When to leave:</b> {{ p.exit_rule }}</p>
+  <div class="tabs">
+    <input type="radio" name="tab" id="t-gems" checked>
+    <input type="radio" name="tab" id="t-coins">
+    <input type="radio" name="tab" id="t-acc">
+    <input type="radio" name="tab" id="t-news">
+    <input type="radio" name="tab" id="t-src">
+    <div class="tabbar" role="tablist">
+      <label for="t-gems">Hidden gems<span class="c">{{ safe|length }}</span></label>
+      <label for="t-coins">Main coins<span class="c">{{ coins|length }}</span></label>
+      <label for="t-acc">Accuracy</label>
+      <label for="t-news">News &amp; traders<span class="c">{{ top_posts|length }}</span></label>
+      <label for="t-src">Data sources</label>
+    </div>
+
+    <!-- GEMS -->
+    <section class="panel-tab" id="p-gems">
+      {% if emerging %}
+      <p class="small muted" style="margin:0 0 12px">Small tokens from every sector that passed the safety checks. Picked {{ (emerging.as_of or '')[:16]|replace('T', ' ') }} UTC; prices refresh every 4 hours.
+        {% if emerging.hot %}Rising sectors today: {% for h in emerging.hot[:4] %}{{ h.name }} <span class="{{ 'up' if h.change_24h > 0 else 'down' }}">{{ '%+.1f'|format(h.change_24h) }}%</span>{{ ', ' if not loop.last }}{% endfor %}.{% endif %}</p>
+      {% if safe %}
+      <div class="cards">
+        {% for t in safe %}{% set p = t.plan %}{% set why = p.why or {} %}
+        <article class="card">
+          <div class="top">
+            <div><div class="sym">{{ t.symbol }}</div>
+              <div class="meta">{{ t.name }} · {{ t.narrative }} · ${{ '{:,.0f}'.format((t.market_cap or 0) / 1e6) }}M</div></div>
+            {{ status_pill(p.status) }}
+          </div>
+          {{ spark(t.spark, p) }}
+          {% if p.entry is defined %}
+          <table class="trade">
+            <tr><td>{{ 'Buy now' if p.status == 'Enter zone' else 'Buy limit' }}</td><td>{{ fp(p.entry) }}</td><td>{{ pct(p.entry, p.price) }}</td></tr>
+            <tr><td>Stop-loss</td><td class="down">{{ fp(p.stop) }}</td><td>{{ pct(p.stop, p.entry) }}</td></tr>
+            <tr><td>Sell half</td><td class="up">{{ fp(p.tp1) }}</td><td>{{ pct(p.tp1, p.entry) }}</td></tr>
+            <tr><td>Sell rest</td><td class="up">{{ fp(p.tp2) }}</td><td>{{ pct(p.tp2, p.entry) }}</td></tr>
+            <tr><td>Size</td><td>{{ '{:,.0f}'.format(p.notional) }} USDT</td><td>−{{ '{:,.0f}'.format(p.max_loss) }}</td></tr>
+          </table>
+          {% else %}
+          <p class="small" style="margin:6px 0 0">{{ p.action }}</p>
+          {% endif %}
+          {% set passed = t.safety|selectattr('ok')|list|length %}
+          <div class="chips">
+            <span class="chip">🛡 {{ passed }}/{{ t.safety|length }} checks</span>
+            <span class="chip">Risk {{ t.risk_rating|lower }}</span>
+            <span class="chip">Score {{ '%.0f'|format(t.potential) }}</span>
+            {% if t.change_7d is not none %}<span class="chip">7d {{ '%+.0f'|format(t.change_7d) }}%</span>{% endif %}
+          </div>
+          <details><summary>Why, checks and risks</summary>
+            <div class="body">
+              {% if p.entry is defined %}<p style="margin:4px 0">{{ p.action }}</p>
+              {% if why %}<h4>Why these levels</h4><ul>
+                <li>Buy: {{ why.entry }}</li><li>Stop: {{ why.stop }}</li><li>Sell half: {{ why.tp1 }}</li><li>Sell rest: {{ why.tp2 }}</li></ul>{% endif %}
+              <h4>When to leave</h4><p style="margin:2px 0">{{ p.exit_rule }}</p>{% endif %}
+              <h4>Safety checks</h4><ul>
+                {% for c in t.safety %}<li>{{ '✅' if c.ok else ('❌' if c.ok is sameas false else '❔') }} {{ c.name }}: {{ c.detail }}</li>{% endfor %}</ul>
+              {% if t.risk_notes %}<h4>Risks</h4><ul>{% for r in t.risk_notes %}<li>{{ r }}</li>{% endfor %}</ul>{% endif %}
+              {% if t.potential_notes %}<h4>Context, not a reason to buy</h4><ul>{% for n in t.potential_notes %}<li>{{ n }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+          </details>
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}<div class="actions"><div class="empty">No token passed every safety check in this morning's scan.</div></div>{% endif %}
+      {% set bad = gems|rejectattr('safe')|list %}
+      {% if bad %}
+      <details><summary>{{ bad|length }} token{{ 's' if bad|length != 1 }} failed the safety checks</summary>
+        <div class="body"><ul>{% for t in bad %}<li><b>{{ t.symbol }}</b>: {{ t.failed_checks|join(', ')|lower }}</li>{% endfor %}</ul></div>
+      </details>
       {% endif %}
-      <p class="why"><b>Safety:</b> {% for c in t.safety %}<span title="{{ c.detail }}">{{ '✅' if c.ok else ('❌' if c.ok is sameas false else '❔') }} {{ c.name }}</span>{{ ' · ' if not loop.last }}{% endfor %}</p>
-      {% if t.potential_notes %}<p class="why"><b>Why it could grow:</b> {{ t.potential_notes|join('; ') }}.</p>{% endif %}
-      {% if t.risk_notes %}<p class="why"><b>Risks:</b> {{ t.risk_notes|join('; ') }}.</p>{% endif %}
-    </div>
-    {% endfor %}
-  </div>
-  {% else %}
-  <div class="panel empty">No token passed every safety check in this morning's scan.</div>
-  {% endif %}
-  {% set bad = emerging.tokens|rejectattr('safe')|list %}
-  {% if bad %}<p class="muted" style="font-size:13px">Failed safety checks: {% for t in bad %}{{ t.symbol }} ({{ t.failed_checks|join(', ')|lower }}){{ '; ' if not loop.last }}{% endfor %}.</p>{% endif %}
-  <p class="muted" style="font-size:13px">Hover a safety check or prediction row for details. ❔ means the check couldn't be verified. Timing uses 4h candle closes, and riskier tokens get smaller sizes so a stop-out costs 0.25–1% of the account.</p>
-  {% endif %}
+      {% else %}<div class="actions"><div class="empty">Waiting for the first morning scan.</div></div>{% endif %}
+    </section>
 
-  <h2>How accurate is it?</h2>
-  {% set gr = emerging.record if emerging and emerging.record else none %}
-  <div class="tiles" style="margin-top:0">
-    <div class="tile"><div class="k">Gem picks, real results</div>
-      {% if gr and gr.closed %}<div class="v">{{ gr.win_rate }}%</div><div class="n">made money · {{ gr.closed }} finished · {{ '%+.2f'|format(gr.avg_r) }}R average</div>
-      {% else %}<div class="v">–</div><div class="n">{{ gr.open if gr else 0 }} running, none finished yet</div>{% endif %}</div>
-    {% if backtest %}{% set t = backtest.default.test %}{% set sm = backtest.default.small_coins %}
-    <div class="tile"><div class="k">Backtest, last {{ backtest.test_days }} days</div>
-      {% if t.trades %}<div class="v">{{ t.win_rate }}%</div><div class="n">made money · {{ t.trades }} trades · {{ '%+.2f'|format(t.avg_r) }}R average</div>
-      {% else %}<div class="v">–</div><div class="n">no trades</div>{% endif %}</div>
-    <div class="tile"><div class="k">Backtest, smaller coins, 1 year</div>
-      {% if sm.trades %}<div class="v">{{ sm.win_rate }}%</div><div class="n">made money · {{ sm.trades }} trades · {{ '%+.2f'|format(sm.avg_r) }}R average</div>
-      {% else %}<div class="v">–</div><div class="n">no trades</div>{% endif %}</div>
-    <div class="tile"><div class="k">Timing settings</div>
-      <div class="v" style="font-size:18px">{{ 'Tuned' if backtest.choice.adopted else 'Default' }}</div><div class="n">{{ backtest.choice.reason }}</div></div>
-    {% endif %}
-  </div>
-  <p class="muted" style="font-size:13px">"R" is the amount risked on a trade: +1R means you made what you risked, −1R means the stop-loss was hit. Fees are included. The backtest replays the buy and sell rules on {{ backtest.coins if backtest else 'past' }} Bitget coins over the past year; it can't replay safety checks or social buzz, which the real results above measure instead.{% if backtest %} Last run {{ backtest.generated_at[:16]|replace('T', ' ') }} UTC.{% endif %}</p>
-  {% if emerging and emerging.history %}
-  <div class="panel"><table>
-    <thead><tr><th>Gem</th><th>Picked</th><th>Entry</th><th>Stop</th><th>Target 1</th><th class="l">Status</th><th>Result</th></tr></thead><tbody>
-    {% for h in emerging.history %}<tr><td><b>{{ h.symbol }}</b></td><td>{{ h.created[:16]|replace('T', ' ') }}</td><td>{{ fp(h.entry) }}</td><td>{{ fp(h.stop) }}</td><td>{{ fp(h.tp1) }}</td>
-      <td class="l">{{ h.status }}</td>
-      <td class="{{ 'up' if (h.result_r or h.unrealized_r or 0) > 0 else ('down' if (h.result_r or h.unrealized_r or 0) < 0 else '') }}">{% if h.result_r is defined %}{{ '%+.2fR'|format(h.result_r) }}{% elif h.unrealized_r is defined %}{{ '%+.2fR'|format(h.unrealized_r) }} so far{% else %}–{% endif %}</td></tr>{% endfor %}
-    </tbody></table></div>
-  {% endif %}
+    <!-- MAIN COINS -->
+    <section class="panel-tab" id="p-coins">
+      <div class="tbl"><table class="data">
+        <thead><tr><th>Coin</th><th>Price</th><th>24h</th><th>Score</th><th class="l">Signal</th><th>Sentiment</th></tr></thead>
+        <tbody>
+        {% for a in coins %}
+          <tr title="trend {{ a.components.trend }} · momentum {{ a.components.momentum }} · sentiment {{ a.components.sentiment }} · positioning {{ a.components.positioning }} · low volatility {{ a.components.risk }} · RSI {{ a.rsi }}">
+            <td><b>{{ a.coin }}</b></td>
+            <td>{{ fp(a.price) }}</td>
+            <td class="{{ 'up' if a.change_24h > 0 else 'down' }}">{{ '%+.1f'|format(a.change_24h) }}%</td>
+            <td><span class="bar"><span class="track"><span class="fill" style="width:{{ [[a.score, 0]|max, 100]|min }}%"></span></span>{{ '%.0f'|format(a.score) }}</span></td>
+            <td class="l">{% if a.label == 'Bullish' %}<span class="pill go">▲ Bullish</span>{% elif a.label == 'Weak' %}<span class="pill out">▼ Weak</span>{% else %}<span class="pill idle">● Neutral</span>{% endif %}</td>
+            <td class="{{ 'up' if a.sentiment.score > 0.05 else ('down' if a.sentiment.score < -0.05 else '') }}">{{ '%+.2f'|format(a.sentiment.score) }} <span class="muted small">({{ a.sentiment.mentions }})</span></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table></div>
+      <p class="small muted">Hover a row for the score's parts. A coin becomes a buy idea at 65+ with an uptrend. Sentiment shows the post count in brackets.</p>
+      {% if history %}
+      <details><summary>Past main-coin ideas ({{ history|length }})</summary><div class="body">
+        <div class="tbl"><table class="data"><thead><tr><th>Coin</th><th>Date</th><th>Entry</th><th>Stop</th><th class="l">Status</th><th>Result</th></tr></thead><tbody>
+        {% for h in history %}<tr><td><b>{{ h.coin }}</b></td><td>{{ h.created[:10] }}</td><td>{{ fp(h.entry) }}</td><td>{{ fp(h.stop) }}</td><td class="l">{{ h.status }}</td>
+          <td>{{ ('%+.1fR'|format(h.result_r)) if h.result_r is defined else '–' }}</td></tr>{% endfor %}
+        </tbody></table></div></div></details>
+      {% endif %}
+    </section>
 
-  <h2>All coins</h2>
-  <div class="panel">
-    <table>
-      <thead><tr><th>Coin</th><th>Price</th><th>24h</th><th>Score</th><th class="l">Signal</th><th>RSI</th><th>Volatility</th><th>Funding / 8h</th><th>OI change</th><th>Sentiment</th><th>Mentions</th><th>Bullish posts</th></tr></thead>
-      <tbody>
-      {% for a in coins %}
-        <tr>
-          <td><b>{{ a.coin }}</b></td>
-          <td>{{ fp(a.price) }}</td>
-          <td class="{{ 'up' if a.change_24h > 0 else 'down' }}">{{ '%+.1f'|format(a.change_24h) }}%</td>
-          <td title="trend {{ a.components.trend }} · momentum {{ a.components.momentum }} · sentiment {{ a.components.sentiment }} · positioning {{ a.components.positioning }} · low volatility {{ a.components.risk }}">
-            <span class="score"><span class="track"><span class="fill" style="width:{{ [[a.score, 0]|max, 100]|min }}%; display:block"></span></span>{{ '%.0f'|format(a.score) }}</span></td>
-          <td class="l"><span class="status s-{{ a.label }}"><span class="dot"></span>{{ a.label }}</span></td>
-          <td>{{ a.rsi if a.rsi is not none else '–' }}</td>
-          <td>{{ ('%.1f%%'|format(a.atr_pct)) if a.atr_pct is not none else '–' }}</td>
-          <td>{{ ('%.3f%%'|format(a.funding_rate * 100)) if a.funding_rate is not none else '–' }}</td>
-          <td>{{ ('%+.1f%%'|format(a.oi_change_pct)) if a.oi_change_pct is not none else '–' }}</td>
-          <td class="{{ 'up' if a.sentiment.score > 0.05 else ('down' if a.sentiment.score < -0.05 else '') }}">{{ '%+.2f'|format(a.sentiment.score) }}</td>
-          <td>{{ a.sentiment.mentions }}</td>
-          <td>{{ (a.sentiment.bullish_pct ~ '%') if a.sentiment.bullish_pct is not none else '–' }}</td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  <p class="muted" style="font-size:13px">Hover a score to see its parts. Volatility is the average 4h candle range (ATR) as a share of price. Funding and open interest come from the futures market and are read only as a crowd gauge.</p>
+    <!-- ACCURACY -->
+    <section class="panel-tab" id="p-acc">
+      {% set gr = emerging.record if emerging and emerging.record else none %}
+      <div class="strip" style="margin-top:0">
+        <div class="stat"><div class="k">Gem picks, real results</div>
+          {% if gr and gr.closed %}<div class="v {{ 'up' if gr.avg_r > 0 else 'down' }}">{{ '%+.2f'|format(gr.avg_r) }}R</div><div class="n">{{ gr.win_rate }}% won · {{ gr.closed }} finished</div>
+          {% else %}<div class="v">–</div><div class="n">{{ gr.open if gr else 0 }} running, none finished yet</div>{% endif %}</div>
+        {% if backtest %}{% set tr = backtest.default.train %}{% set sm = backtest.default.small_coins %}
+        <div class="stat"><div class="k">Backtest, last {{ backtest.test_days }} days</div>
+          {% if bt.trades %}<div class="v {{ 'up' if bt.avg_r > 0 else 'down' }}">{{ '%+.2f'|format(bt.avg_r) }}R</div><div class="n">{{ bt.win_rate }}% won · {{ bt.trades }} trades</div>{% else %}<div class="v">–</div>{% endif %}</div>
+        <div class="stat"><div class="k">Backtest, earlier months</div>
+          {% if tr.trades %}<div class="v {{ 'up' if tr.avg_r > 0 else 'down' }}">{{ '%+.2f'|format(tr.avg_r) }}R</div><div class="n">{{ tr.win_rate }}% won · {{ tr.trades }} trades</div>{% else %}<div class="v">–</div>{% endif %}</div>
+        <div class="stat"><div class="k">Settings</div>
+          <div class="v" style="font-size:17px">{{ 'Tuned' if backtest.choice.adopted else 'Default' }}</div><div class="n">{{ backtest.choice.reason }}</div></div>
+        {% endif %}
+      </div>
+      <p class="small muted">"R" is the amount risked: +1R means you made what you risked, −1R means the stop was hit. Fees included.
+        {% if backtest %}The backtest replays the buy and sell rules on {{ backtest.coins }} Bitget coins and tries {{ backtest.best|length and '144' or '' }} setting variations every Sunday; a variation is only used if it also wins on the most recent months. Last run {{ backtest.generated_at[:16]|replace('T', ' ') }} UTC.{% endif %}</p>
+      {% if backtest and backtest.best %}
+      <details><summary>Best variations tried</summary><div class="body">
+        <div class="tbl"><table class="data"><thead><tr><th>Stop</th><th>Targets</th><th>Trend min</th><th>BTC filter</th><th>Early exit</th><th>Earlier</th><th>Recent</th></tr></thead><tbody>
+        {% for v in backtest.best %}{% set q = v.params %}<tr><td>{{ q.stop_atr }}× ATR</td><td>{{ q.tp1_r }}R / {{ q.tp2_r }}R</td><td>{{ q.trend_min }}</td><td>{{ 'yes' if q.btc_filter else 'no' }}</td><td>{{ 'yes' if q.exit_on_ema20 else 'no' }}</td>
+          <td class="{{ 'up' if v.train.avg_r > 0 else 'down' }}">{{ '%+.2f'|format(v.train.avg_r) }}R</td><td class="{{ 'up' if (v.test.avg_r or 0) > 0 else 'down' }}">{{ ('%+.2f'|format(v.test.avg_r)) if v.test.trades else '–' }}R</td></tr>{% endfor %}
+        </tbody></table></div></div></details>
+      {% endif %}
+      {% if emerging and emerging.history %}
+      <h2>Gem picks so far</h2>
+      <div class="tbl"><table class="data">
+        <thead><tr><th>Gem</th><th>Picked</th><th>Entry</th><th>Stop</th><th class="l">Status</th><th>Result</th></tr></thead><tbody>
+        {% for h in emerging.history %}{% set rr = h.result_r if h.result_r is defined else (h.unrealized_r if h.unrealized_r is defined else none) %}
+        <tr><td><b>{{ h.symbol }}</b></td><td>{{ h.created[5:16]|replace('T', ' ') }}</td><td>{{ fp(h.entry) }}</td><td>{{ fp(h.stop) }}</td><td class="l">{{ h.status }}</td>
+          <td class="{{ 'up' if (rr or 0) > 0 else ('down' if (rr or 0) < 0 else '') }}">{% if rr is not none %}{{ '%+.2fR'|format(rr) }}{% if h.result_r is not defined %} <span class="muted small">so far</span>{% endif %}{% else %}–{% endif %}</td></tr>
+        {% endfor %}
+      </tbody></table></div>
+      {% endif %}
+    </section>
 
-  <h2>What traders and news are saying</h2>
-  <div class="panel">
-    {% if top_posts %}
-    <ul class="posts">
-      {% for p in top_posts %}
-      <li><div>{{ p.text }}</div>
-        <div class="meta">{{ p.author }} · {{ p.source }} · {{ p.ts[:16]|replace('T', ' ') }} UTC ·
-          <span class="{{ 'up' if p.sentiment > 0.05 else ('down' if p.sentiment < -0.05 else '') }}">sentiment {{ '%+.2f'|format(p.sentiment) }}</span>
-          {% if p.coins %}· {{ p.coins|join(', ') }}{% endif %}{% if p.read_by == 'ai' %} · read by AI{% endif %}
-          {% if p.url|safe_url %}· <a href="{{ p.url|safe_url }}" rel="noopener noreferrer" target="_blank">source</a>{% endif %}</div></li>
-      {% endfor %}
-    </ul>
-    {% else %}<div class="empty">No posts collected in this window.</div>{% endif %}
-  </div>
+    <!-- NEWS -->
+    <section class="panel-tab" id="p-news">
+      <div class="actions">
+        {% if top_posts %}
+        <ul class="posts">
+          {% for p in top_posts[:12] %}
+          <li><div>{{ p.text|truncate(220) }}</div>
+            <div class="meta">{{ p.author }} · {{ p.ts[11:16] }} UTC ·
+              <span class="{{ 'up' if p.sentiment > 0.05 else ('down' if p.sentiment < -0.05 else '') }}">{{ 'bullish' if p.sentiment > 0.05 else ('bearish' if p.sentiment < -0.05 else 'neutral') }} {{ '%+.2f'|format(p.sentiment) }}</span>
+              {% if p.coins %}· {{ p.coins|join(', ') }}{% endif %}
+              {% if p.url|safe_url %}· <a href="{{ p.url|safe_url }}" rel="noopener noreferrer" target="_blank">open</a>{% endif %}</div></li>
+          {% endfor %}
+        </ul>
+        {% else %}<div class="empty">No posts collected in this window.</div>{% endif %}
+      </div>
+      <p class="small muted">Social mood {{ '%+.2f'|format(mood.score) }} across {{ mood.mentions }} posts in the last {{ lookback }} hours, read by the CryptoBERT AI model.</p>
+    </section>
 
-  <h2>Recent suggestions and results</h2>
-  <div class="panel">
-    {% if history %}
-    <table>
-      <thead><tr><th>Coin</th><th>Suggested</th><th>Entry</th><th>Stop</th><th>Target 1</th><th class="l">Status</th><th>Result</th></tr></thead>
-      <tbody>
-      {% for h in history %}
-        <tr><td><b>{{ h.coin }}</b></td><td>{{ h.created[:16]|replace('T', ' ') }}</td><td>{{ fp(h.entry) }}</td><td>{{ fp(h.stop) }}</td><td>{{ fp(h.tp1) }}</td>
-          <td class="l">{{ h.status }}</td>
-          <td class="{{ 'up' if (h.result_r or 0) > 0 else ('down' if (h.result_r or 0) < 0 else '') }}">{{ ('%+.1fR'|format(h.result_r)) if h.result_r is defined else '–' }}</td></tr>
-      {% endfor %}
-      </tbody>
-    </table>
-    {% else %}<div class="empty">No suggestions logged yet. Results appear here as targets or stops are hit.</div>{% endif %}
+    <!-- SOURCES -->
+    <section class="panel-tab" id="p-src">
+      <div class="tbl"><table class="data"><tbody>
+        {% for name, status in health.items() %}<tr><td class="l">{{ name }}</td><td class="l {{ 'down' if status.startswith('failed') else '' }}">{{ status }}</td></tr>{% endfor %}
+        {% if trending %}<tr><td class="l">Trending on CoinGecko</td><td class="l">{{ trending|join(', ') }}</td></tr>{% endif %}
+      </tbody></table></div>
+    </section>
   </div>
 
-  <h2>Data sources</h2>
-  <div class="panel">
-    <table><tbody>
-      {% for name, status in health.items() %}<tr><td class="l">{{ name }}</td><td class="l">{{ status }}</td></tr>{% endfor %}
-      {% if trending %}<tr><td class="l">Trending on CoinGecko</td><td class="l">{{ trending|join(', ') }}</td></tr>{% endif %}
-    </tbody></table>
-  </div>
-
-  <p class="note">Ideas only, not financial advice. The bot never places trades. Spot only: crypto futures are not available to UK retail traders. "R" is the amount risked per trade: +1.5R means the first target was hit, −1R means the stop was hit.</p>
+  <p class="note">Ideas only, not financial advice. The bot never places trades. Spot only: crypto futures are not available to UK retail traders.</p>
 </main>
 </body>
 </html>

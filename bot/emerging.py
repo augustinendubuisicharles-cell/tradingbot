@@ -590,6 +590,7 @@ def build_token(base: dict, c4h: list, c1d: list, bitget_volume: float, cfg: dic
         "risk_score": risk, "risk_rating": rating, "risk_notes": risk_notes,
         "potential": pot, "potential_notes": pot_notes, "plan": plan,
         "scenarios": scenarios(cg, plan),
+        "spark": [c[4] for c in c4h[-42:]],  # last 7 days of 4h closes, for the dashboard chart
         # Inputs saved with each logged pick, so the bot can later learn which ones predicted wins.
         "features": {"potential": pot, "risk_score": risk, "trend": trend, "atr_pct": atr_pct,
                      "change_7d": cg.get("price_change_percentage_7d_in_currency"),
