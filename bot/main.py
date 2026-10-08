@@ -129,11 +129,16 @@ def cmd_run(args) -> None:
             try:
                 tokens, narratives, report["source_health"]["emerging scanner"] = emerging.scan(
                     cfg, mkt, [p.text for p in posts], report.get("trending", []))
-                report["emerging"] = {"tokens": tokens, "narratives": narratives}
+                report["emerging"] = {"tokens": tokens, "narratives": narratives, "as_of": now.isoformat()}
                 new_token_alerts = emerging.status_alerts(tokens, state)
             except Exception as e:  # noqa: BLE001
                 log.error("emerging scan failed: %s", e)
-                report["source_health"]["emerging scanner"] = f"failed: {type(e).__name__}"
+                # Keep showing the last good scan (CoinGecko's free tier sometimes rate-limits).
+                prev = load_json(DATA_DIR / "latest.json", {}).get("emerging")
+                if prev:
+                    report["emerging"] = {**prev, "stale_since": prev.get("as_of", "earlier")}
+                report["source_health"]["emerging scanner"] = (
+                    f"failed: {type(e).__name__}" + ("; showing the last good scan" if prev else ""))
         publish(report, candles, state, now)
         if args.digest:
             alerts.send_telegram(alerts.digest_text(report, os.environ.get("DASHBOARD_URL")))

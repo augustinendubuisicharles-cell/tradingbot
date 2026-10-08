@@ -117,6 +117,7 @@ tr:last-child td { border-bottom: 0; }
 
   {% if emerging %}
   <h2>Emerging tokens: AI and real-world assets</h2>
+  {% if emerging.stale_since %}<p class="muted" style="font-size:13px">The token data source was busy this round, so this is the scan from {{ emerging.stale_since[:16]|replace('T', ' ') }} UTC.</p>{% endif %}
   <div class="nar">{% for name, n in emerging.narratives.items() %}<span><b>{{ name }}</b> narrative
     {% if n.change_24h is not none %}<span class="{{ 'up' if n.change_24h > 0 else 'down' }}">{{ '%+.1f'|format(n.change_24h) }}%</span> today{% else %}–{% endif %}</span>{% endfor %}</div>
   {% set live = emerging.tokens|rejectattr('plan.status', 'in', ['Avoid', 'Not enough history'])|list %}
