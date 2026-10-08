@@ -609,3 +609,26 @@ def test_trend_guard_pauses_buys_but_not_sells():
     state = {"announced": {"BTC": 0.10}}
     assert trend.signals({"BTC": d}, state, 1000, buys_allowed=False) == []
     assert trend.signals({"BTC": dict(d, target=0.0)}, state, 1000, buys_allowed=False)  # sells still go
+
+
+def test_alt_sleeve_gate_funding_and_daily_summary():
+    import math
+    from bot import altsleeve
+    from datetime import date, timedelta
+    d0 = date(2025, 1, 1)
+    days = [(d0 + timedelta(days=i)).isoformat() for i in range(400)]
+    up = [10 * math.exp(0.003 * i + 0.03 * math.sin(i)) for i in range(400)]
+    cache = {"coins": {f"C{k}": [[d, p * (1 + k / 10), 5e6] for d, p in zip(days, up)] for k in range(3)},
+             "first": {f"C{k}": "2024-01-01" for k in range(3)}}
+    btc_up, btc_down = up, list(reversed(up))
+    w = altsleeve.weights(cache, btc_up, days[-1])
+    assert w["gate"] and 0 < w["total"] <= altsleeve.SLEEVE
+    assert all(d["target"] <= altsleeve.CAP * altsleeve.SLEEVE + 1e-9 for d in w["coins"].values())
+    assert altsleeve.weights(cache, btc_down, days[-1])["total"] == 0          # BTC downtrend: cash
+    hot = altsleeve.weights(cache, btc_up, days[-1], {c: 0.002 for c in cache["coins"]})
+    assert abs(hot["total"] - w["total"] / 2) < 1e-9                          # crowded longs: halved
+    state = {}
+    assert "now live" in altsleeve.changes(w, state, 1000)
+    assert altsleeve.changes(w, state, 1000) is None                         # nothing new
+    msg = altsleeve.changes(altsleeve.weights(cache, btc_down, days[-1]), state, 1000)
+    assert "SELL all" in msg and "200-day" in msg

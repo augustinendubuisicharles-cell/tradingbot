@@ -72,6 +72,16 @@ class Market:
         return out
 
 
+    def funding_daily(self, coin: str, days: int = 7) -> float | None:
+        """Average daily funding (sum of each day's payments) over the last
+        `days` days on the perpetual market, or None if unavailable."""
+        import time
+        since = int(time.time() * 1000) - days * 86400_000
+        rows = self.perp.fetch_funding_rate_history(self.perp_symbol(coin), since=since, limit=200)
+        rates = [float(r["fundingRate"]) for r in rows if r.get("timestamp", 0) >= since and r.get("fundingRate") is not None]
+        return sum(rates) / days if rates else None
+
+
 def fear_greed() -> dict | None:
     """Crypto Fear & Greed index (0 = extreme fear, 100 = extreme greed)."""
     try:

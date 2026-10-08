@@ -199,6 +199,16 @@ table.data tr:last-child td { border-bottom: 0; }
       </div></details>
     </article>{% endif %}
   </div>
+  {% if trend.guard and not trend.guard.buys_allowed %}<div class="banner" style="margin-top:12px">⏸ <b>New buys are paused.</b> {{ trend.guard.reasons|join('; ') }}. Sell signals still apply.</div>{% endif %}
+  {% if trend.alts %}{% set al = trend.alts %}{% set held_alts = al.coins.items()|selectattr('1.target')|sort(attribute='1.target', reverse=True)|list %}
+  <h2>Altcoin trend portion <span class="small muted" style="font-weight:400">25% of the account · {{ '%.0f'|format(al.total * 100) }}% invested now</span></h2>
+  <div class="tbl"><table class="data">
+    <thead><tr><th>Coin</th><th>Hold</th><th>USDT</th><th>Close</th><th>Sell all below</th><th>Trend checks</th></tr></thead><tbody>
+    {% for c, d in held_alts %}<tr><td><b>{{ c }}</b></td><td>{{ '%.1f'|format(d.target * 100) }}%</td><td>{{ '{:,.0f}'.format(d.target * trend.account) }}</td><td>{{ fp(d.close) }}</td><td class="down">{{ fp(d.full_exit) if d.full_exit else '–' }}</td><td>{{ d.votes_on }}/8</td></tr>
+    {% else %}<tr><td class="l" colspan="6">No altcoin held right now: {{ 'Bitcoin is below its 200-day average' if not al.gate else 'none is in an uptrend' }}.</td></tr>{% endfor %}
+  </tbody></table></div>
+  <p class="small muted">Top 20 altcoins by volume, sized by trend strength and calmness. In cash when Bitcoin is below its 200-day average{% if al.funding_hot %}; <b>halved now</b> because traders pay a lot to be long{% else %}; halved when traders pay a lot to be long{% endif %}. Live since {{ al.live.start }}: {{ '%+.1f'|format(al.live.total) }}%.</p>
+  {% endif %}
   {% endif %}
 
   <h2>Watchlist ideas <span class="small muted" style="font-weight:400">not proven by testing, so check before acting</span></h2>

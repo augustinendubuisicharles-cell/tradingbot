@@ -11,7 +11,7 @@ import os
 import uuid
 from datetime import datetime, timezone
 
-from . import ai, alerts, analysis, dashboard, emerging, market, social, trend
+from . import ai, alerts, altsleeve, analysis, dashboard, emerging, market, social, trend
 from .config import DATA_DIR, ROOT, load_config
 from .sentiment import aggregate
 from .storage import load_json, load_jsonl, save_json, save_jsonl
@@ -147,6 +147,11 @@ def run_trend(cfg: dict, mkt, report: dict, now: datetime) -> list[str]:
     w = trend.weights(hist)
     if not w:
         return []
+    sleeve_on = cfg.get("alt_sleeve", {}).get("enabled", False)
+    if sleeve_on:                       # BTC/ETH share the account with the altcoin portion
+        for d in w.values():
+            d["series"] = [x * (1 - altsleeve.SLEEVE) for x in d["series"]]
+            d["target"] = d["series"][-1]
     account = float(cfg["risk"]["account_size"])
     first = "start" not in state
     state.setdefault("start", max(d["as_of"] for d in w.values()))
@@ -159,6 +164,12 @@ def run_trend(cfg: dict, mkt, report: dict, now: datetime) -> list[str]:
     if g["buys_allowed"] == state.get("paused", False):        # pause state changed
         msgs.append(trend.resume_text() if g["buys_allowed"] else trend.pause_text(g["reasons"]))
         state["paused"] = not g["buys_allowed"]
+    core_note = None
+    if sleeve_on and not state.get("alt_started") and state.get("announced"):
+        # switching on the altcoin portion resizes BTC/ETH: say so once, in the intro
+        core_note = ", ".join(f"{c} {d['target'] * 100:.0f}%" for c, d in w.items())
+        for c, d in w.items():
+            state["announced"][c] = d["target"]
     msgs += trend.signals(w, state, account, g["buys_allowed"])
     if first:
         msgs.append(trend.intro_text(w, account))
@@ -166,7 +177,49 @@ def run_trend(cfg: dict, mkt, report: dict, now: datetime) -> list[str]:
     health.setdefault("trend signals", (f"ok (prices to {as_of})" if g["buys_allowed"]
                                         else "buys paused: " + "; ".join(g["reasons"])))
     report["trend"] = trend_view(hist, w, live, state["start"], account) | {"guard": g}
+    if sleeve_on:
+        alt_msgs = run_alt_sleeve(mkt, report, now, [r[2] for r in hist["BTC"]], as_of, account, g, state_path)
+        if core_note and alt_msgs:
+            alt_msgs[0] += (f"\n\nBitcoin and Ethereum now share the other 75%, so their positions shrink to: "
+                            f"{core_note} of your account.")
+        msgs += alt_msgs
     return msgs
+
+
+def run_alt_sleeve(mkt, report: dict, now: datetime, btc: list[float], as_of: str, account: float,
+                   g: dict, state_path) -> list[str]:
+    health = report["source_health"]
+    path = DATA_DIR / "alt_daily.json"
+    cache, state = load_json(path, {}), load_json(state_path, {})
+    try:
+        cache = altsleeve.update_history(cache, mkt, now)
+        save_json(path, cache)
+    except Exception as e:  # noqa: BLE001
+        log.error("altcoin prices failed: %s", e)
+        health["altcoin portion"] = f"prices failed: {type(e).__name__}; using saved prices"
+    pre = altsleeve.weights(cache, btc, as_of)
+    funding = state.get("alt_funding", {})
+    if funding.get("date") != as_of:              # once a day is enough
+        rates = {}
+        for coin, d in pre["coins"].items():
+            if d["raw"] > 0:
+                try:
+                    rates[coin] = mkt.funding_daily(coin)
+                except Exception:  # noqa: BLE001 - not every alt has a perpetual
+                    rates[coin] = None
+        funding = {"date": as_of, "rates": rates}
+        state["alt_funding"] = funding
+    w = altsleeve.weights(cache, btc, as_of, funding["rates"])
+    if not g["buys_allowed"]:                    # safety pause: hold back increases
+        sent = state.get("alt_announced", {})
+        for c, d in w["coins"].items():
+            d["target"] = min(d["target"], sent.get(c, 0.0))
+    msg = altsleeve.changes(w, state, account)
+    rec = altsleeve.paper(state, w, cache)
+    save_json(state_path, state)
+    health.setdefault("altcoin portion", f"ok ({len(w['coins'])} coins checked, {sum(d['target'] > 0 for d in w['coins'].values())} held)")
+    report["trend"]["alts"] = w | {"live": rec}
+    return [msg] if msg else []
 
 
 def trend_view(hist: dict, w: dict, live: dict, start: str, account: float) -> dict:
@@ -273,6 +326,10 @@ def cmd_demo(_args) -> None:
     if w:
         start = sorted(hist["BTC"])[-30][0]
         report["trend"] = trend_view(hist, w, trend.simulate(hist, w, start=start), start, 1000.0)
+        cache = load_json(DATA_DIR / "alt_daily.json", {})
+        if cache:
+            aw = altsleeve.weights(cache, [r[2] for r in hist["BTC"]], hist["BTC"][-1][0])
+            report["trend"]["alts"] = aw | {"live": {"start": start, "total": 0.0, "drawdown": 0.0}}
         print(trend.intro_text(w, 1000) + "\n")
     publish(report, candles, {}, now, site_dir=ROOT / "demo", persist=False)
     print(alerts.digest_text(report, "https://example.pages.dev"))
