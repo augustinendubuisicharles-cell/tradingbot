@@ -24,6 +24,7 @@ GRID = {
     "stop_atr": [1.5, 2.5, 3.5],
     "tp": [(1.5, 3.0), (2.0, 4.0), (3.0, 6.0)],
     "exit_on_ema20": [True, False],
+    "btc_filter": [False, True],
 }
 
 
@@ -122,11 +123,19 @@ def trend_at(ind: dict, i: int) -> float:
     return s
 
 
-def signal_at(c4h: list, ind: dict, i: int, p: dict) -> dict | None:
+def btc_regime(btc: list) -> dict[float, bool]:
+    """For each 4h candle time: is Bitcoin itself in an uptrend (trend score 50+)?"""
+    ind = indicators(btc)
+    return {c[0]: trend_at(ind, i) >= 50 for i, c in enumerate(btc) if i >= 60}
+
+
+def signal_at(c4h: list, ind: dict, i: int, p: dict, regime: dict | None = None) -> dict | None:
     """The live timing rules (emerging.timing_plan) at candle i: a market buy ("Enter zone")
     or a limit buy ("Wait for pullback", including after spikes and extended months)."""
     a, e20, e50, r = ind["atr"][i], ind["e20"][i], ind["e50"][i], ind["rsi"][i]
     if a is None or e20 is None or e50 is None or r is None or i < 180:
+        return None
+    if p.get("btc_filter") and regime is not None and not regime.get(c4h[i][0], False):
         return None
     closes = ind["closes"]
     price, trend = closes[i], trend_at(ind, i)
@@ -170,10 +179,10 @@ def signal_at(c4h: list, ind: dict, i: int, p: dict) -> dict | None:
 
 # ---------- simulation ----------
 
-def run_symbol(c4h: list, ind: dict, p: dict) -> list[dict]:
+def run_symbol(c4h: list, ind: dict, p: dict, regime: dict | None = None) -> list[dict]:
     trades, i, n = [], 60, len(c4h)
     while i < n - 1:
-        s = signal_at(c4h, ind, i, p)
+        s = signal_at(c4h, ind, i, p, regime)
         if not s:
             i += 1
             continue
@@ -217,13 +226,14 @@ def variants() -> list[dict]:
     return out
 
 
-def evaluate(data: dict[str, tuple[list, dict, float]], split_ts: float, small_names: set[str]) -> dict:
+def evaluate(data: dict[str, tuple[list, dict, float]], split_ts: float, small_names: set[str],
+             regime: dict | None = None) -> dict:
     """Runs every variant; returns stats on the tuning months (train) and the recent months (test)."""
     results = []
     for p in [DEFAULT_TIMING] + variants():
         train, test, small = [], [], []
         for coin, (c4h, ind, _vol) in data.items():
-            for t in run_symbol(c4h, ind, p):
+            for t in run_symbol(c4h, ind, p, regime):
                 (train if t["ts"] < split_ts else test).append(t)
                 if coin in small_names:
                     small.append(t)
@@ -264,7 +274,8 @@ def run(cfg: dict, mkt, extra: list[str], days: int = 365, test_days: int = 90) 
     by_vol = sorted(data, key=lambda c: data[c][2], reverse=True)
     small = set(by_vol[30:])  # outside the 30 most-traded: closest to "gem" size
     split = (datetime.now(timezone.utc) - timedelta(days=test_days)).timestamp() * 1000
-    ev = evaluate(data, split, small)
+    regime = btc_regime(data["BTC"][0]) if "BTC" in data else None
+    ev = evaluate(data, split, small, regime)
     choice = choose(ev)
     top = sorted((v for v in ev["variants"] if v["train"]["trades"] >= 40),
                  key=lambda v: v["train"]["avg_r"], reverse=True)[:5]
@@ -304,6 +315,7 @@ def summary_text(report: dict) -> str:
                   f"(was {t.get('avg_r', 0):+.2f}R).",
                   f"Stop {p['stop_atr']}× the average 4h move, targets at {p['tp1_r']}R and {p['tp2_r']}R, "
                   f"trend score at least {p['trend_min']}, RSI at most {p['rsi_max']}"
+                  + (", only buying while Bitcoin is in an uptrend" if p.get("btc_filter") else "")
                   + (", exit on a close below the 20-period average." if p["exit_on_ema20"] else ".")]
     else:
         lines.append(f"Settings unchanged: {c['reason']}.")

@@ -292,7 +292,7 @@ RISK_PCT = {"Low": 1.0, "Medium": 0.75, "High": 0.5, "Very high": 0.25}
 # Timing settings. The weekly backtest may replace these with better-tested values
 # (data/tuned.json), but only if they also beat these on recent months it didn't tune on.
 DEFAULT_TIMING = {"trend_min": 55, "rsi_max": 70, "stretch_atr": 1.0, "stop_atr": 2.5,
-                  "tp1_r": 2.0, "tp2_r": 4.0, "exit_on_ema20": True}
+                  "tp1_r": 2.0, "tp2_r": 4.0, "exit_on_ema20": True, "btc_filter": False}
 
 
 def timing_params(cfg: dict) -> dict:
@@ -301,7 +301,7 @@ def timing_params(cfg: dict) -> dict:
 
 def timing_plan(c4h: list[list[float]], c1d: list[list[float]], trend: float, rating: str,
                 risk_cfg: dict, max_position_pct: float, params: dict | None = None,
-                ath: float | None = None) -> dict:
+                ath: float | None = None, btc_up: bool | None = None) -> dict:
     """When to get in, where the stop goes, and when to get out."""
     tp = {**DEFAULT_TIMING, **(params or {})}
     spike = spike_info(c4h)
@@ -319,6 +319,9 @@ def timing_plan(c4h: list[list[float]], c1d: list[list[float]], trend: float, ra
 
     if a is None or e20 is None or e50 is None:
         return {**plan, "status": "Not enough history", "action": "Too new to judge; check back later."}
+    if tp["btc_filter"] and btc_up is False:
+        return {**plan, "status": "Avoid", "action": "Bitcoin is in a downtrend, and small coins rarely rise "
+                                                     "against it. Wait for Bitcoin to turn up."}
 
     downtrend = price < e50 and (d50 is None or d_closes[-1] < d50)
     if downtrend and trend < 30:
@@ -552,7 +555,7 @@ def build_token(base: dict, c4h: list, c1d: list, bitget_volume: float, cfg: dic
     pot, pot_notes = potential_score(cg, base, trend, volume_surge(c4h), mentions, sym in trending, ecfg, spike)
 
     plan = timing_plan(c4h, c1d, trend, rating, cfg["risk"], ecfg.get("max_position_pct", 10),
-                       timing_params(cfg), ath=cg.get("ath"))
+                       timing_params(cfg), ath=cg.get("ath"), btc_up=base.get("btc_up"))
     surge = volume_surge(c4h)
     failed = [c["name"] for c in checks if c["ok"] is False]
     return {
@@ -589,8 +592,18 @@ def _bitget_price_matches(cg: dict, ticker: dict) -> bool:
     return not p or abs(ticker["price"] / p - 1) <= 0.15
 
 
+def btc_uptrend(mkt) -> bool | None:
+    try:
+        trend, _ = analysis.trend_score(mkt.candles("BTC", "4h", 200), mkt.candles("BTC", "1d", 120))
+        return trend >= 50
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def _rate_bases(bases: list[dict], mkt, cfg: dict, posts_text: list[str], trending: list[str]) -> list[dict]:
     tickers = mkt.tickers([b["symbol"] for b in bases])
+    btc_up = btc_uptrend(mkt) if timing_params(cfg)["btc_filter"] else None
+    bases = [{**b, "btc_up": btc_up} for b in bases]
     out = []
     for b in bases:
         t = tickers.get(b["symbol"])

@@ -477,7 +477,7 @@ def test_backtest_runs_end_to_end_on_made_up_prices():
         data[f"C{k}"] = (c4h, backtest.indicators(c4h), 1e6 * k)
     split = (NOW - timedelta(days=60)).timestamp() * 1000
     ev = backtest.evaluate(data, split, {"C0", "C1"})
-    assert len(ev["variants"]) == 72 and ev["default"]["train"]["trades"] > 0
+    assert len(ev["variants"]) == 144 and ev["default"]["train"]["trades"] > 0
     report = {"coins": 6, "days": 150, "test_days": 60, "default": ev["default"], "choice": backtest.choose(ev)}
     assert "Weekly accuracy check" in backtest.summary_text(report)
 
