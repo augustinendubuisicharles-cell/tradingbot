@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crypto Signals</title>
+<style>
+:root {
+  --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #6f6d68;
+  --grid: #e1e0d9; --track: #ecebe6; --border: rgba(11,11,11,0.10);
+  --bar: #2a78d6; --up: #006300; --down: #b42828;
+  --good: #0ca30c; --warn: #fab219; --crit: #d03b3b;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #9a9890;
+    --grid: #2c2c2a; --track: #2c2c2a; --border: rgba(255,255,255,0.10);
+    --bar: #3987e5; --up: #0ca30c; --down: #f07a7a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #9a9890;
+  --grid: #2c2c2a; --track: #2c2c2a; --border: rgba(255,255,255,0.10);
+  --bar: #3987e5; --up: #0ca30c; --down: #f07a7a; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 1120px; margin: 0 auto; padding: 24px 16px 48px; }
+h1 { font-size: 24px; margin: 0; }
+h2 { font-size: 17px; margin: 32px 0 12px; }
+.sub { color: var(--ink-2); margin: 4px 0 0; }
+.muted { color: var(--muted); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-top: 20px; }
+.tile, .card, .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+.tile { padding: 14px 16px; }
+.tile .k { color: var(--ink-2); font-size: 13px; }
+.tile .v { font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.tile .n { color: var(--muted); font-size: 13px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+.card { padding: 16px; }
+.card h3 { margin: 0 0 4px; font-size: 18px; display: flex; justify-content: space-between; gap: 8px; }
+.card dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; margin: 10px 0; font-variant-numeric: tabular-nums; }
+.card dt { color: var(--ink-2); } .card dd { margin: 0; text-align: right; }
+.card ul { margin: 8px 0 0; padding-left: 18px; color: var(--ink-2); font-size: 13px; }
+.pill { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border); white-space: nowrap; }
+.panel { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th, td { padding: 9px 12px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--grid); }
+th { color: var(--ink-2); font-weight: 500; font-size: 13px; }
+th:first-child, td:first-child, td.l { text-align: left; }
+tr:last-child td { border-bottom: 0; }
+.up { color: var(--up); } .down { color: var(--down); }
+.score { display: inline-flex; align-items: center; gap: 8px; }
+.track { width: 80px; height: 8px; background: var(--track); border-radius: 4px; overflow: hidden; }
+.fill { height: 100%; background: var(--bar); border-radius: 0 4px 4px 0; }
+.status { display: inline-flex; align-items: center; gap: 6px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.s-Bullish .dot { background: var(--good); } .s-Neutral .dot { background: var(--warn); } .s-Weak .dot { background: var(--crit); }
+.posts { list-style: none; margin: 0; padding: 0; }
+.posts li { padding: 12px 16px; border-bottom: 1px solid var(--grid); }
+.posts li:last-child { border-bottom: 0; }
+.posts .meta { font-size: 13px; color: var(--muted); }
+.posts a { color: inherit; }
+.note { font-size: 13px; color: var(--muted); margin-top: 32px; }
+.empty { padding: 16px; color: var(--ink-2); }
+</style>
+</head>
+<body>
+<main>
+  
+  <h1>Crypto Signals</h1>
+  <p class="sub">Spot ideas for Bitget · updated 08 Oct 13:59 UTC · next update around 17:59 UTC</p>
+
+  <div class="tiles">
+    <div class="tile"><div class="k">Fear &amp; Greed</div>
+      <div class="v">64</div><div class="n">Greed</div>
+      </div>
+    <div class="tile"><div class="k">Social mood</div>
+      <div class="v down">-0.07</div>
+      <div class="n">71 posts, last 24h</div></div>
+    <div class="tile"><div class="k">Spot ideas now</div>
+      <div class="v">0</div><div class="n">of 11 coins scanned</div></div>
+    <div class="tile"><div class="k">Track record</div>
+      <div class="v">–</div><div class="n">0 open, none closed yet</div></div>
+  </div>
+
+  <h2>Spot trade ideas</h2>
+  
+  <div class="panel empty">No coin passes the low-risk filters right now. The bot only suggests a trade when trend, sentiment and volatility line up.</div>
+  
+
+  <h2>All coins</h2>
+  <div class="panel">
+    <table>
+      <thead><tr><th>Coin</th><th>Price</th><th>24h</th><th>Score</th><th class="l">Signal</th><th>RSI</th><th>Volatility</th><th>Funding / 8h</th><th>OI change</th><th>Sentiment</th><th>Mentions</th><th>Bullish posts</th></tr></thead>
+      <tbody>
+      
+        <tr>
+          <td><b>AVAX</b></td>
+          <td>10.59</td>
+          <td class="down">-6.1%</td>
+          <td title="trend 55.0 · momentum 40 · sentiment 50.0 · positioning 60 · low volatility 75.3">
+            <span class="score"><span class="track"><span class="fill" style="width:55.1%; display:block"></span></span>55</span></td>
+          <td class="l"><span class="status s-Neutral"><span class="dot"></span>Neutral</span></td>
+          <td>37.7</td>
+          <td>2.6%</td>
+          <td>0.005%</td>
+          <td>–</td>
+          <td class="">+0.00</td>
+          <td>0</td>
+          <td>–</td>
+        </tr>
+      
+        <tr>
+          <td><b>ADA</b></td>
+          <td>0.24780</td>
+          <td class="down">-2.4%</td>
+          <td title="trend 55.0 · momentum 40 · sentiment 50.0 · positioning 60 · low volatility 73.3">
+            <span class="score"><span class="track"><span class="fill" style="width:54.7%; display:block"></span></span>55</span></td>
+          <td class="l"><span class="status s-Neutral"><span class="dot"></span>Neutral</span></td>
+          <td>39.9</td>
+          <td>2.7%</td>
+          <td>0.009%</td>
+          <td>–</td>
+          <td class="">+0.00</td>
+          <td>0</td>
+          <td>–</td>
+        </tr>
+      
+        <tr>
+          <td><b>BNB</b></td>
+          <td>756.88</td>
+          <td class="down">-1.4%</td>
+          <td title="trend 30.0 · momentum 40 · sentiment 50.0 · positioning 60 · low volatility 100.0">
+            <span class="score"><span class="track"><span class="fill" style="width:50.0%; display:block"></span></span>50</span></td>
+          <td class="l"><span class="status s-Neutral"><span class="dot"></span>Neutral</span></td>
+          <td>31.5</td>
+          <td>1.0%</td>
+          <td>0.002%</td>
+          <td>–</td>
+          <td class="">+0.00</td>
+          <td>0</td>
+          <td>–</td>
+        </tr>
+      
+        <tr>
+          <td><b>SOL</b></td>
+          <td>112.30</td>
+          <td class="down">-3.4%</td>
+          <td title="trend 30.0 · momentum 20 · sentiment 51.4 · positioning 60 · low volatility 100.0">
+            <span class="score"><span class="track"><span class="fill" style="width:47.4%; display:block"></span></span>47</span></td>
+          <td class="l"><span class="status s-Neutral"><span class="dot"></span>Neutral</span></td>
+          <td>23.2</td>
+          <td>1.5%</td>
+          <td>0.010%</td>
+          <td>–</td>
+          <td class="up">+0.10</td>
+          <td>2</td>
+          <td>0%</td>
+        </tr>
+      
+        <tr>
+          <td><b>XRP</b></td>
+          <td>1.40</td>
+          <td class="down">-2.3%</td>
+          <td title="trend 30.0 · momentum 20 · sentiment 51.7 · positioning 60 · low volatility 97.4">
+            <span class="score"><span class="track"><span class="fill" style="width:47.0%; display:block"></span></span>47</span></td>
+          <td class="l"><span class="status s-Neutral"><span class="dot"></span>Neutral</span></td>
+          <td>25.3</td>
+          <td>1.6%</td>
+          <td>0.010%</td>
+          <td>–</td>
+          <td class="up">+0.20</td>
+          <td>1</td>
+          <td>0%</td>
+        </tr>
+      
+        <tr>
+          <td><b>DOT</b></td>
+          <td>1.11</td>
+          <td class="up">+0.4%</td>
+          <td title="trend 30.0 · momentum 40 · sentiment 50.0 · positioning 60 · low volatility 74.0">
+            <span class="score"><span class="track"><span class="fill" style="width:46.1%; display:block"></span></span>46</span></td>
+          <td class="l"><span class="status s-Neutral"><span class="dot"></span>Neutral</span></td>
+          <td>37.2</td>
+          <td>2.7%</td>
+          <td>0.010%</td>
+          <td>–</td>
+          <td class="">+0.00</td>
+          <td>0</td>
+          <td>–</td>
+        </tr>
+      
+        <tr>
+          <td><b>LINK</b></td>
+          <td>12.95</td>
+          <td class="down">-3.5%</td>
+          <td title="trend 30.0 · momentum 20 · sentiment 50.0 · positioning 60 · low volatility 90.0">
+            <span class="score"><span class="track"><span class="fill" style="width:45.5%; display:block"></span></span>46</span></td>
+          <td class="l"><span class="status s-Neutral"><span class="dot"></span>Neutral</span></td>
+          <td>27.4</td>
+          <td>1.9%</td>
+          <td>0.010%</td>
+          <td>–</td>
+          <td class="">+0.00</td>
+          <td>0</td>
+          <td>–</td>
+        </tr>
+      
+        <tr>
+          <td><b>ETH</b></td>
+          <td>2,522</td>
+          <td class="down">-1.8%</td>
+          <td title="trend 30.0 · momentum 20 · sentiment 43.8 · positioning 60 · low volatility 100.0">
+            <span class="score"><span class="track"><span class="fill" style="width:45.4%; display:block"></span></span>45</span></td>
+          <td class="l"><span class="status s-Neutral"><span class="dot"></span>Neutral</span></td>
+          <td>20.9</td>
+          <td>1.3%</td>
+          <td>0.010%</td>
+          <td>–</td>
+          <td class="down">-0.19</td>
+          <td>10</td>
+          <td>30%</td>
+        </tr>
+      
+        <tr>
+          <td><b>BTC</b></td>
+          <td>82,191</td>
+          <td class="down">-1.2%</td>
+          <td title="trend 30.0 · momentum 20 · sentiment 42.5 · positioning 60 · low volatility 100.0">
+            <span class="score"><span class="track"><span class="fill" style="width:45.1%; display:block"></span></span>45</span></td>
+          <td class="l"><span class="status s-Neutral"><span class="dot"></span>Neutral</span></td>
+          <td>27.1</td>
+          <td>1.0%</td>
+          <td>0.010%</td>
+          <td>–</td>
+          <td class="down">-0.19</td>
+          <td>20</td>
+          <td>20%</td>
+        </tr>
+      
+        <tr>
+          <td><b>SUI</b></td>
+          <td>1.10</td>
+          <td class="down">-2.0%</td>
+          <td title="trend 30.0 · momentum 40 · sentiment 45.4 · positioning 60 · low volatility 75.2">
+            <span class="score"><span class="track"><span class="fill" style="width:45.1%; display:block"></span></span>45</span></td>
+          <td class="l"><span class="status s-Neutral"><span class="dot"></span>Neutral</span></td>
+          <td>34.0</td>
+          <td>2.6%</td>
+          <td>0.010%</td>
+          <td>–</td>
+          <td class="down">-0.25</td>
+          <td>3</td>
+          <td>33%</td>
+        </tr>
+      
+        <tr>
+          <td><b>DOGE</b></td>
+          <td>0.08704</td>
+          <td class="down">-1.8%</td>
+          <td title="trend 0.0 · momentum 20 · sentiment 50.0 · positioning 60 · low volatility 89.3">
+            <span class="score"><span class="track"><span class="fill" style="width:34.9%; display:block"></span></span>35</span></td>
+          <td class="l"><span class="status s-Weak"><span class="dot"></span>Weak</span></td>
+          <td>27.2</td>
+          <td>2.0%</td>
+          <td>0.010%</td>
+          <td>–</td>
+          <td class="">+0.00</td>
+          <td>0</td>
+          <td>–</td>
+        </tr>
+      
+      </tbody>
+    </table>
+  </div>
+  <p class="muted" style="font-size:13px">Hover a score to see its parts. Volatility is the average 4h candle range (ATR) as a share of price. Funding and open interest come from the futures market and are read only as a crowd gauge.</p>
+
+  <h2>What traders and news are saying</h2>
+  <div class="panel">
+    
+    <ul class="posts">
+      
+      <li><div>🔴 SHORT $ZEC/USDT | Cross 30X ✅ Entry: 1340 🎯 TP: 1310 - 1280 - 1240 🛑 SL: 1410</div>
+        <div class="meta">gorilla_crypto · telegram · 2026-10-08 06:02 UTC ·
+          <span class="down">sentiment -0.70</span>
+          
+          · <a href="https://t.me/gorilla_crypto/79736" rel="noopener noreferrer" target="_blank">source</a></div></li>
+      
+      <li><div>CRYPTO FEAR AND GREED INDEX &#34;59&#34; Neutral - Market is waiting for the next major move as we remain in this range i have talked about on Bitcoin. Until we break, market is waiting.</div>
+        <div class="meta">cryptoinnercycles · telegram · 2026-10-08 08:00 UTC ·
+          <span class="down">sentiment -0.81</span>
+          · BTC
+          · <a href="https://t.me/Cryptoinnercycles/10107" rel="noopener noreferrer" target="_blank">source</a></div></li>
+      
+      <li><div>ETH/USDT SHORT 🚫 Entry Zone - Target 👇 ⚡️ https://t.me/+UoPySxz3ic42ZDNk Join Fast | Targets ☝️</div>
+        <div class="meta">gorilla_crypto · telegram · 2026-10-07 19:16 UTC ·
+          <span class="down">sentiment -0.70</span>
+          · ETH
+          · <a href="https://t.me/gorilla_crypto/79733" rel="noopener noreferrer" target="_blank">source</a></div></li>
+      
+      <li><div>#SUI Market Analysis SUI is at 1.1238 on the 8h, sliding out of the 1.16 to 1.25 range that held since late September. Price is now testing the steep ascending trendline from the mid September lows near 0.68. Bull case: hold the trendline near 1.11 and reclaim 1.16, opening a pat</div>
+        <div class="meta">BitcoinBullets · telegram · 2026-10-07 19:37 UTC ·
+          <span class="down">sentiment -0.48</span>
+          · BTC, SUI
+          · <a href="https://t.me/BitcoinBullets/17315" rel="noopener noreferrer" target="_blank">source</a></div></li>
+      
+      <li><div>‘No going back’ for institutions moving toward tokenized onchain future, says Fidelity. Tokenization offers structural advantages to financial institutions and helps asset managers reach new markets, according to Fidelity’s head of digital asset strategists.</div>
+        <div class="meta">Cointelegraph.com News · news · 2026-10-08 13:42 UTC ·
+          <span class="up">sentiment +0.85</span>
+          
+          · <a href="https://cointelegraph.com/news/institutions-tokenized-onchain-future-no-going-back-fidelity?utm_source=rss_feed&amp;utm_medium=rss&amp;utm_campaign=rss_partner_inbound" rel="noopener noreferrer" target="_blank">source</a></div></li>
+      
+      <li><div>#ETH Market Analysis ETH is at 2,566.81 on the 8h. A sharp flush knocked it out of the 2,680 to 2,760 range that held since late September, and price is now sitting right on the lower trendline of the rising channel from August. Bull case: hold the channel support near 2,550 and </div>
+        <div class="meta">BitcoinBullets · telegram · 2026-10-08 03:38 UTC ·
+          <span class="down">sentiment -0.27</span>
+          · BTC, ETH
+          · <a href="https://t.me/BitcoinBullets/17316" rel="noopener noreferrer" target="_blank">source</a></div></li>
+      
+      <li><div>💰 $BTC Keep an eye on these two trendlines.  A breakdown could trigger the start of a 5–10% correction.</div>
+        <div class="meta">gorilla_crypto · telegram · 2026-10-07 17:53 UTC ·
+          <span class="down">sentiment -0.46</span>
+          · BTC
+          · <a href="https://t.me/gorilla_crypto/79732" rel="noopener noreferrer" target="_blank">source</a></div></li>
+      
+      <li><div>Uranium Finance Hacker Who Bought Pokémon and Magic Cards Convicted Over $50M Theft. Jonathan Spalletta also spent stolen crypto on a Roman coin marking Julius Caesar&#39;s assassination and moon-flown Wright brothers fabric.</div>
+        <div class="meta">Decrypt · news · 2026-10-08 11:37 UTC ·
+          <span class="down">sentiment -0.80</span>
+          
+          · <a href="https://decrypt.co/380401/uranium-finance-hacker-who-bought-pokemon-and-magic-cards-convicted-over-50m-theft" rel="noopener noreferrer" target="_blank">source</a></div></li>
+      
+      <li><div>Former PlayStation Exec Slams Sony&#39;s Move to Kill Discs: &#39;What Are You Buying?&#39;. Sony plans to cease physical disc production in 2028. A former PlayStation exec claims it has caused reputational damage.</div>
+        <div class="meta">Decrypt · news · 2026-10-08 10:45 UTC ·
+          <span class="down">sentiment -0.84</span>
+          
+          · <a href="https://decrypt.co/380387/former-playstation-exec-slams-sonys-move-to-kill-discs-what-are-you-buying" rel="noopener noreferrer" target="_blank">source</a></div></li>
+      
+      <li><div>EU lawmakers push crypto onto anti-corruption agenda. MEPs also called for stronger asset recovery, while the Commission plans to adopt its first anti-corruption strategy by the end of this year.</div>
+        <div class="meta">Cointelegraph.com News · news · 2026-10-08 12:54 UTC ·
+          <span class="up">sentiment +0.70</span>
+          
+          · <a href="https://cointelegraph.com/news/eu-lawmakers-crypto-anti-corruption?utm_source=rss_feed&amp;utm_medium=rss&amp;utm_campaign=rss_partner_inbound" rel="noopener noreferrer" target="_blank">source</a></div></li>
+      
+      <li><div>$1000PEPEUSDT is looking bearish after that breakdown. Expect a drop soon, track it.</div>
+        <div class="meta">theanalystcrypto · telegram · 2026-10-07 16:07 UTC ·
+          <span class="down">sentiment -0.82</span>
+          
+          · <a href="https://t.me/TheAnalystCrypto/3968" rel="noopener noreferrer" target="_blank">source</a></div></li>
+      
+      <li><div>💰 $BTC Keep an eye on these two trendlines.  A breakdown could trigger the start of a 5–10% correction.</div>
+        <div class="meta">gorilla_crypto · telegram · 2026-10-07 14:22 UTC ·
+          <span class="down">sentiment -0.46</span>
+          · BTC
+          · <a href="https://t.me/gorilla_crypto/79731" rel="noopener noreferrer" target="_blank">source</a></div></li>
+      
+    </ul>
+    
+  </div>
+
+  <h2>Recent suggestions and results</h2>
+  <div class="panel">
+    <div class="empty">No suggestions logged yet. Results appear here as targets or stops are hit.</div>
+  </div>
+
+  <h2>Data sources</h2>
+  <div class="panel">
+    <table><tbody>
+      <tr><td class="l">telegram:gorilla_crypto</td><td class="l">ok (9 posts)</td></tr><tr><td class="l">telegram:learn2tradectypto</td><td class="l">ok (1 posts)</td></tr><tr><td class="l">telegram:BitcoinBullets</td><td class="l">ok (2 posts)</td></tr><tr><td class="l">telegram:theanalystcrypto</td><td class="l">ok (1 posts)</td></tr><tr><td class="l">telegram:cryptoinnercycles</td><td class="l">ok (2 posts)</td></tr><tr><td class="l">reddit:CryptoCurrency</td><td class="l">failed: HTTPError</td></tr><tr><td class="l">reddit:CryptoMarkets</td><td class="l">failed: HTTPError</td></tr><tr><td class="l">reddit:Bitcoin</td><td class="l">failed: HTTPError</td></tr><tr><td class="l">reddit:ethtrader</td><td class="l">failed: HTTPError</td></tr><tr><td class="l">news:https://www.coindesk.com/arc/outboundfeeds/rss/</td><td class="l">ok (21 posts)</td></tr><tr><td class="l">news:https://cointelegraph.com/rss</td><td class="l">ok (23 posts)</td></tr><tr><td class="l">news:https://decrypt.co/feed</td><td class="l">ok (16 posts)</td></tr><tr><td class="l">exchange</td><td class="l">ok (11 markets); not listed: TON</td></tr>
+      <tr><td class="l">Trending on CoinGecko</td><td class="l">SIMD, TRUMP, QTC, PRL, PENGU, MET, OGN, NEAR, STRK, VVV, BTC, ZEC, SOL, PONS, RAY</td></tr>
+    </tbody></table>
+  </div>
+
+  <p class="note">Ideas only, not financial advice. The bot never places trades. Spot only: crypto futures are not available to UK retail traders. "R" is the amount risked per trade: +1.5R means the first target was hit, −1R means the stop was hit.</p>
+</main>
+</body>
+</html>
