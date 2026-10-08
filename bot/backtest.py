@@ -147,7 +147,7 @@ def signal_at(c4h: list, ind: dict, i: int, p: dict, regime: dict | None = None)
     if e20 > e50 and price < e20 and prev_r is not None and r < 50 and r < prev_r:
         return None
     datr = ind["datr"][d] if d is not None and d >= 0 else None
-    min_dist = 0.8 * datr if datr else 0.0
+    min_dist = datr if datr else 0.0
     if closes[i - 6] and closes[i] / closes[i - 6] >= 1.15:
         spike = spike_info(c4h[i - 35:i + 1])
         if spike and spike["base_high"] < price:

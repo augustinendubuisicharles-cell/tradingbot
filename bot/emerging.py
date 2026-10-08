@@ -138,6 +138,8 @@ def contract_check(platforms: dict | None) -> tuple[bool | None, str, list[str]]
     if flag("hidden_owner"): fails.append("hidden owner")
     if flag("selfdestruct"): fails.append("can self-destruct")
     if str(info.get("is_open_source", "1")) == "0": fails.append("code not public")
+    if flag("slippage_modifiable") or flag("personal_slippage_modifiable"):
+        fails.append("owner can change the trading fees")
     if tax("buy_tax") > 0.05 or tax("sell_tax") > 0.05:
         fails.append(f"high tax (buy {tax('buy_tax'):.0%}, sell {tax('sell_tax'):.0%})")
     warns = []
@@ -339,24 +341,28 @@ def timing_plan(c4h: list[list[float]], c1d: list[list[float]], trend: float, ra
                           "and momentum is fading. If you hold it, this is the time to leave."}
 
     datr = analysis.atr(c1d) if len(c1d) > 15 else None
-    min_dist = 0.8 * datr if datr else 0.0
+    min_dist = datr if datr else 0.0
     month = closes[-1] / closes[-181] - 1 if len(closes) > 180 and closes[-181] else None
     if spike and spike["base_high"] < price:
         return spike_plan(plan, spike, price, rating, risk_cfg, max_position_pct, ath, tp, min_dist)
     low7 = min(c[3] for c in c4h[-42:])
     if month is not None and month > 1.0 and trend >= tp["trend_min"]:
         status, entry = "Wait for pullback", low7 * 1.02
+        entry_why = "just above this week's low, a level that actually traded"
         action = (f"Up {month:.0%} in a month, so too stretched to buy now. Only buy a pullback to about "
                   f"{fmt_price(entry)}, near this week's low.")
     elif trend >= tp["trend_min"] and r is not None and r <= tp["rsi_max"] and price - e20 <= tp["stretch_atr"] * a:
         status, entry = "Enter zone", price
+        entry_why = "today's price, close to its 20-period average, so not chasing"
         action = "Uptrend confirmed and not overextended. A good time to position, at today's price."
     elif trend >= tp["trend_min"]:
         status, entry = "Wait for pullback", e20
+        entry_why = "its 20-period average, where pullbacks in this uptrend have been bought"
         action = (f"Uptrend, but price is stretched. Set a buy around {fmt_price(e20)} "
                   "(its 20-period average) instead of chasing.")
     else:
         status, entry = "Watch for breakout", high20 * 1.005
+        entry_why = "just above the recent high; only on a 4h close above it"
         action = (f"Not trending yet. Buy only if a 4h candle closes above {fmt_price(high20)} "
                   "(the recent high) on rising volume.")
 
@@ -364,21 +370,34 @@ def timing_plan(c4h: list[list[float]], c1d: list[list[float]], trend: float, ra
     risk_per_unit = entry - stop
     if risk_per_unit <= 0:
         return {**plan, "status": "Avoid", "action": "No sensible stop-loss level right now."}
+    why: list[str] = []
     tp1, tp2 = chart_targets(max(c[2] for c in c4h[-42:]), max(c[2] for c in c4h[-180:]),
-                             entry, risk_per_unit, tp, ath)
+                             entry, risk_per_unit, tp, ath, why)
+    day_pct = f"{100 * min_dist / entry:.0f}%" if min_dist else None
+    stop_why = ("below the recent swing low" if status == "Enter zone" else f"{tp['stop_atr']:g}× the average 4h move below entry")
+    if day_pct:
+        stop_why += f", and at least one normal day's swing away (about {day_pct})"
     return {**plan, **_sizing(entry, stop, rating, risk_cfg, max_position_pct),
             "status": status, "action": action, "entry": entry, "stop": stop, "tp1": tp1, "tp2": tp2,
+            "why": {"entry": entry_why, "stop": stop_why, "tp1": why[0], "tp2": why[1]},
             "exit_rule": _exit_rule(entry, tp)}
 
 
 def chart_targets(high7: float, high30: float, entry: float, risk: float, tp: dict,
-                  ath: float | None) -> tuple[float, float]:
+                  ath: float | None, why: list | None = None) -> tuple[float, float]:
     """Targets at real chart levels (this week's high, then this month's high) when they
     are far enough away; otherwise fixed multiples of the risk. Never above the old high."""
-    tp1 = high7 if high7 >= entry + 1.0 * risk else entry + tp["tp1_r"] * risk
-    tp2 = high30 if high30 >= tp1 + 0.5 * risk else max(entry + tp["tp2_r"] * risk, tp1 + risk)
-    if ath and tp1 < ath < tp2:
+    on_level1 = high7 >= entry + 1.0 * risk
+    tp1 = high7 if on_level1 else entry + tp["tp1_r"] * risk
+    on_level2 = high30 >= tp1 + 0.5 * risk
+    tp2 = high30 if on_level2 else max(entry + tp["tp2_r"] * risk, tp1 + risk)
+    capped = bool(ath and tp1 < ath < tp2)
+    if capped:
         tp2 = ath
+    if why is not None:
+        why += ["this week's high" if on_level1 else f"{tp['tp1_r']:g}× the risk (no chart level close enough)",
+                "the old all-time high" if capped else "this month's high" if on_level2
+                else "a multiple of the risk (no chart level above; treat as a stretch)"]
     return tp1, tp2
 
 
@@ -416,6 +435,10 @@ def spike_plan(plan: dict, spike: dict, price: float, rating: str, risk_cfg: dic
                        f"{fmt_price(entry)}, the top of the range it broke out of. "
                        f"Skip it if price is still above {fmt_price(skip_above)} after a day or two."),
             "entry": entry, "stop": stop, "tp1": tp1, "tp2": tp2,
+            "why": {"entry": "the top of the range it traded in before the spike",
+                    "stop": "below that pre-spike range: a close under it means the breakout failed",
+                    "tp1": "the spike high", "tp2": "the old all-time high" if ath and tp2 == ath
+                    else "the spike high plus the same distance again (a stretch)"},
             "exit_rule": (f"Stop below the pre-spike range at {fmt_price(stop)}: a close under it means the "
                           f"breakout failed. Sell half at {fmt_price(tp1)} (the spike high) and move the stop "
                           "to your buy price; sell the rest at "
@@ -772,33 +795,33 @@ def _plan_line(t: dict) -> str:
 
 
 def _pick_message(i: int, t: dict) -> str:
+    """A trade first (level, stop, two exits, each with its reason), then the checks,
+    then the story, which is context and never a reason to buy on its own."""
     import html
     esc = lambda x: html.escape(str(x), quote=False)  # noqa: E731
     p = t["plan"]
+    why = p.get("why", {})
     passed, total = sum(1 for c in t["safety"] if c["ok"]), len(t["safety"])
     nums = "1️⃣ 2️⃣ 3️⃣ 4️⃣ 5️⃣ 6️⃣ 7️⃣ 8️⃣ 9️⃣".split()
     lines = [f"{nums[i - 1] if i <= 9 else str(i) + '.'} <b>{t['symbol']}</b> ({esc(t['name'])})",
-             f"{esc(t['narrative'])} · market cap {_mcap(t['market_cap'])}",
-             "",
-             _plan_line(t),
-             "",
-             f"📈 Growth score: <b>{t['potential']:.0f}/100</b>",
-             f"⚠️ Risk: <b>{RISK_WORDS[t['risk_rating']]}</b>",
-             f"🛡 Safety: passed <b>{passed} of {total}</b> checks"
-             + (f" ({esc(', '.join(t['unknown_checks']).lower())} couldn't be verified)" if t["unknown_checks"] else "")]
-    if t["potential_notes"]:
-        lines += ["", "<b>Why it could grow</b>"] + [f"• {esc(n)}" for n in t["potential_notes"][:4]]
+             f"{esc(t['narrative'])} · market cap {_mcap(t['market_cap'])} · now {fmt_price(p['price'])}",
+             "", _plan_line(t)]
     if t["scenarios"]:
         sc = {s["case"]: s for s in t["scenarios"]}
-        lines += ["", "<b>The plan</b>",
-                  f"• Buy: {fmt_price(p['entry'])} with about {p['notional']:,.0f} USDT",
-                  f"• Stop-loss: {fmt_price(p['stop'])} ({sc['Bear']['pct']:+.0f}%). If it falls here, sell. "
-                  f"You'd lose about {p['max_loss']:,.0f} USDT.",
-                  f"• Target 1: {fmt_price(p['tp1'])} ({sc['Base']['pct']:+.0f}%). Sell half, move your stop to the buy price.",
-                  f"• Target 2: {fmt_price(p['tp2'])} ({sc['Stretch']['pct']:+.0f}%). Sell the rest."]
-        if "Old high" in sc:
-            lines.append(f"• Old high: {fmt_price(sc['Old high']['price'])} ({sc['Old high']['pct']:+.0f}%), "
-                         "for reference only, not a target")
+        lines += ["", "<b>The trade</b>",
+                  f"• Buy at {fmt_price(p['entry'])}: {esc(why.get('entry', ''))}",
+                  f"• Stop {fmt_price(p['stop'])} ({sc['Bear']['pct']:+.0f}%): {esc(why.get('stop', ''))}",
+                  f"• Sell half at {fmt_price(p['tp1'])} ({sc['Base']['pct']:+.0f}%): {esc(why.get('tp1', ''))}. "
+                  "Then move the stop to your buy price.",
+                  f"• Sell the rest at {fmt_price(p['tp2'])} ({sc['Stretch']['pct']:+.0f}%): {esc(why.get('tp2', ''))}",
+                  f"• Size: about {p['notional']:,.0f} USDT, so the stop costs about {p['max_loss']:,.0f} USDT"]
+    flags = [c for c in t["safety"] if not c["ok"]]
+    lines += ["", f"🛡 <b>Checks: {passed} of {total} passed</b> · risk {RISK_WORDS[t['risk_rating']].lower()}"]
+    lines += [f"{'❌' if c['ok'] is False else '❔'} {esc(c['name'])}: {esc(c['detail'])}" for c in flags]
+    lines += [f"⚠️ {esc(w)}" for w in t["risk_notes"] if "unlocked" in w or "mint" in w or "upgradeable" in w]
+    if t["potential_notes"]:
+        lines += ["", f"<i>Context, not a reason to buy (growth score {t['potential']:.0f}/100)</i>"]
+        lines += [f"• {esc(n)}" for n in t["potential_notes"][:4]]
     return "\n".join(lines)
 
 
@@ -820,7 +843,9 @@ def morning_messages(tokens: list[dict], hot: list[dict], n: int, dashboard_url:
             f"• {html.escape(h['name'], quote=False)} {h['change_24h']:+.1f}%" for h in hot[:4]]
     msgs = ["\n".join(intro)] + [_pick_message(i, t) for i, t in enumerate(picks, 1)]
     guide = ["📘 <b>How to read this</b>",
-             "• <b>Growth score</b>: how much room and momentum a token has. Higher is better.",
+             "• <b>The trade</b> is what to act on: a buy at a level that actually traded, a stop past "
+             "normal daily noise, and two exits at chart levels.",
+             "• <b>Context</b> (growth score, weekly gains, sector moves) is the story. It is never a reason to buy on its own.",
              "• <b>Risk</b>: how wildly the price swings. Riskier tokens get smaller amounts, "
              "so a stop-loss never costs more than 0.25–1% of your account.",
              "• <b>Stop-loss</b>: the price where you sell to keep a loss small.",
