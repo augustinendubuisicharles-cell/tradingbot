@@ -254,3 +254,29 @@ def test_openai_compatible_provider(monkeypatch):
     assert seen == {"url": "https://api.z.ai/api/paas/v4/chat/completions", "auth": "Bearer k",
                     "model": "glm-4.7-flash"}
     assert status.startswith("ok") and labels[0]["stance"] == "bearish"
+
+
+def test_local_model_labels():
+    from bot import local_model
+
+    posts = [
+        social.Post("telegram", "a", "Free signal: TP1 hit +80% profit! Join VIP", NOW, ""),
+        social.Post("telegram", "b", "#SOL/USDT #SHORT Entry 140 Targets 130 SL 146", NOW, ""),
+        social.Post("news", "c", "Bitcoin looks ready to fly, accumulate", NOW, ""),
+    ]
+
+    def fake(texts, batch_size):
+        assert len(texts) == 3
+        return [{"label": "Bullish", "score": 0.9}, {"label": "Bullish", "score": 0.6},
+                {"label": "Bullish", "score": 0.8}]
+
+    labels, status = local_model.label_posts(posts, CFG["watchlist"], classify=fake)
+    assert status.startswith("ok")
+    assert labels[0]["advert"] is True
+    assert labels[1]["stance"] == "bearish" and labels[1]["coins"] == ["SOL"]  # explicit SHORT wins
+    assert labels[2]["stance"] == "bullish" and labels[2]["coins"] == ["BTC"]
+
+    def broken(texts, batch_size):
+        raise OSError("no model")
+    labels, status = local_model.label_posts(posts, CFG["watchlist"], classify=broken)
+    assert labels is None and status.startswith("failed")

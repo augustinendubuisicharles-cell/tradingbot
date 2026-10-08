@@ -51,16 +51,18 @@ sources:
     reddit: 1.0
     news: 1.2
 
-# AI reading of posts. Without a key the bot uses word scoring.
-# Option A (default): Google Gemini, free tier. Secret: GEMINI_API_KEY.
-# Option B: Zhipu (Z.ai) GLM-4.7-Flash, free. Secret: AI_API_KEY. Use:
-#   provider: openai_compatible
-#   base_url: https://api.z.ai/api/paas/v4
-#   model: glm-4.7-flash
+# AI reading of posts, every 4 hours.
+# Default "local": the free CryptoBERT model runs inside the bot. No account,
+# key or bill.
+# Optional alternatives with an API key (they have free tiers, with limits):
+#   provider: gemini                   secret GEMINI_API_KEY, model: gemini-flash-latest
+#   provider: openai_compatible        secret AI_API_KEY, e.g. Zhipu:
+#     base_url: https://api.z.ai/api/paas/v4
+#     model: glm-4.7-flash
 ai:
   enabled: true
-  provider: gemini
-  model: gemini-flash-latest
+  provider: local
+  model: ""
   base_url: ""
 
 risk:

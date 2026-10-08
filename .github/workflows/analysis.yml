@@ -22,7 +22,11 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-      - run: pip install -r requirements.txt
+      - run: pip install -r requirements.txt -r requirements-ai.txt
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-cryptobert-v1
       - name: Analyse, update dashboard, send Telegram digest
         run: python -m bot.main run --publish --digest
         env:

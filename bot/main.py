@@ -102,13 +102,17 @@ def cmd_run(args) -> None:
     mkt = market.Market(cfg["exchange"], cfg["quote"])
     posts, health = social.collect(cfg, now)
     labels = None
-    # AI reading runs on the 4-hourly publish only, which keeps well inside the
-    # free API quota; the 30-minute alert checks use word scoring.
+    # AI reading runs on the 4-hourly publish only (it's the slow part, and
+    # keeps paid-API options inside free quotas); 30-minute alert checks use
+    # word scoring.
     if args.publish and cfg.get("ai", {}).get("enabled", True):
         acfg = cfg.get("ai", {})
-        labels, health["ai post reading"] = ai.label_posts(
-            posts, acfg.get("model", "gemini-flash-latest"),
-            acfg.get("provider", "gemini"), acfg.get("base_url", ""))
+        if acfg.get("provider", "local") == "local":
+            from . import local_model
+            labels, health["ai post reading"] = local_model.label_posts(posts, cfg["watchlist"])
+        else:
+            labels, health["ai post reading"] = ai.label_posts(
+                posts, acfg.get("model", ""), acfg["provider"], acfg.get("base_url", ""))
     report, candles = build_report(cfg, mkt, posts, health, market.fear_greed(),
                                    market.trending_coins(), state, now, ai_labels=labels)
     log.info("scored %d coins, %d ideas, %d posts", len(report["coins"]),
