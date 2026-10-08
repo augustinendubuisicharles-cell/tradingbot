@@ -126,7 +126,7 @@ tr:last-child td { border-bottom: 0; }
     <div class="card">
       <h3><span>{{ t.symbol }} <span class="muted" style="font-weight:400;font-size:14px">{{ t.name }}</span></span>
         <span class="pill {{ 'st-go' if p.status == 'Enter zone' else ('st-out' if p.status in ['Exit signal', 'Take profit', 'Avoid'] else '') }}">{{ p.status }}</span></h3>
-      <div class="muted" style="font-size:13px">{{ t.narrative }} · cap ${{ '{:,.0f}'.format((t.market_cap or 0) / 1e6) }}M{% if t.age_days is not none and t.age_days < 365 %} · on Bitget {{ t.age_days }} days{% endif %} ·
+      <div class="muted" style="font-size:13px">{{ t.narrative }} · cap ${{ '{:,.0f}'.format((t.market_cap or 0) / 1e6) }}M{% if t.age_days is not none and t.age_days < 300 %} · on Bitget {{ t.age_days }} days{% endif %} ·
         7d <span class="{{ 'up' if (t.change_7d or 0) > 0 else 'down' }}">{{ '%+.0f'|format(t.change_7d or 0) }}%</span></div>
       <div style="margin-top:6px;font-size:14px">Potential <b>{{ '%.0f'|format(t.potential) }}/100</b> · risk <b>{{ t.risk_rating }}</b></div>
       <p class="act">{{ p.action }}</p>

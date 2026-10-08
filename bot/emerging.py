@@ -449,7 +449,7 @@ def morning_scan(cfg: dict, mkt, posts_text: list[str], trending: list[str]) -> 
             continue
         try:
             det = details(cg["id"])
-            daily = mkt.candles(cg["symbol"], "1d", 400)
+            daily = mkt.candles(cg["symbol"], "1d", 300)  # Bitget returns at most 300 days
         except Exception as e:  # noqa: BLE001
             log.warning("details unavailable for %s: %s", cg["symbol"], e)
             continue
@@ -459,7 +459,7 @@ def morning_scan(cfg: dict, mkt, posts_text: list[str], trending: list[str]) -> 
             "symbol": cg["symbol"], "cg": cg, "narrative": narrative,
             "narrative_change": cat_change.get(narrative),
             "watchers": det["watchers"], "homepage": det["homepage"], "commits_4w": det["commits_4w"],
-            "age_days": len(daily), "age_capped": len(daily) >= 365,
+            "age_days": len(daily), "age_capped": len(daily) >= 300,
             "contract_ok": ok, "contract_note": note, "contract_warnings": warns,
         })
     scan = {"as_of": datetime.now(timezone.utc).isoformat(), "bases": bases,
