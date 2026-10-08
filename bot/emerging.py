@@ -203,7 +203,8 @@ def timing_plan(c4h: list[list[float]], c1d: list[list[float]], trend: float, ra
         action = (f"Not trending yet. Buy only if a 4h candle closes above {fmt_price(high20)} "
                   "(the recent high) on rising volume.")
 
-    stop = min(swing_low, entry - 2.5 * a) if status == "Enter zone" else entry - 2.5 * a
+    # Stop under the recent swing low, but never closer than 1 or further than 2.5 average 4h ranges.
+    stop = max(min(swing_low, entry - a), entry - 2.5 * a) if status == "Enter zone" else entry - 2.5 * a
     risk_per_unit = entry - stop
     if risk_per_unit <= 0:
         return {**plan, "status": "Avoid", "action": "No sensible stop-loss level right now."}
