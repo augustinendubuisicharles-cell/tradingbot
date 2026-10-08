@@ -16,10 +16,28 @@ def fmt_price(p: float | None) -> str:
         return f"{p:,.0f}"
     if p >= 1:
         return f"{p:,.2f}"
-    return f"{p:.5f}"
+    if p <= 0:
+        return "0"
+    import math
+    return f"{p:.{max(5, 3 - math.floor(math.log10(p)))}f}"   # 4 significant digits for tiny prices
+
+
+def _chunks(text: str, limit: int = 3900) -> list[str]:
+    """Telegram allows 4096 characters per message: split long ones at blank lines."""
+    out, cur = [], ""
+    for part in text.split("\n\n"):
+        if cur and len(cur) + len(part) + 2 > limit:
+            out.append(cur)
+            cur = part
+        else:
+            cur = f"{cur}\n\n{part}" if cur else part
+    out.append(cur)
+    return [c[i:i + limit] for c in out for i in range(0, len(c), limit)]
 
 
 def send_telegram(text: str) -> bool:
+    if len(text) > 3900:
+        return all([send_telegram(c) for c in _chunks(text)])
     token, chat_id = os.environ.get("TELEGRAM_BOT_TOKEN"), os.environ.get("TELEGRAM_CHAT_ID")
     if not token or not chat_id:
         log.warning("TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID not set; printing instead:\n%s", text)

@@ -110,8 +110,12 @@ def weights(cache: dict, btc_closes: list[float], as_of: str, funding: dict[str,
         share = v["share"][-1]
         w = min(1.0, share * min(1.0, trend.VOL_TARGET / vol)) * CAP if vol else 0.0
         on = [s for s in v["state"] if s["on"]]
+        off = [s for s in v["state"] if not s["on"] and s["trigger"]]
         coins[coin] = {"raw": w, "votes_on": len(on), "close": closes[-1],
-                       "full_exit": min((s["stop"] for s in on), default=None)}
+                       "full_exit": min((s["stop"] for s in on), default=None),
+                       "next_trim": max((s["stop"] for s in on), default=None),
+                       "next_add": min((s["trigger"] for s in off), default=None),
+                       "spark": closes[-90:]}
     held = [c for c, d in coins.items() if d["raw"] > 0]
     rates = [funding.get(c) for c in held if funding and funding.get(c) is not None] if funding else []
     hot = bool(rates) and _median(rates) > FUNDING_HOT
@@ -139,8 +143,14 @@ def changes(w: dict, state: dict, account: float) -> str | None:
         if first:
             continue
         verb = "BUY" if new > old else ("SELL all" if new == 0 else "SELL some")
-        lines.append(f"• {verb} {coin}: hold {new * 100:.1f}% (was {old * 100:.1f}%) "
-                     f"= {new * account:,.0f} USDT")
+        d = w["coins"].get(coin, {})
+        if new == 0:
+            lines.append(f"🔴 SELL all {coin} (was {old * 100:.1f}% = {old * account:,.0f} USDT). "
+                         f"Its trend broke{': closed at ' + trend._p(d['close']) if d.get('close') else ''}."
+                         + (f" Buy again on a daily close above {trend._p(d['next_add'])}." if d.get("next_add") else ""))
+        else:
+            lines.append(("🟢 " if new > old else "🟠 ") + f"{verb} {coin}: now hold {new * 100:.1f}% "
+                         f"(was {old * 100:.1f}%)\n" + plan_text(coin, d, account))
     if first:
         return intro_text(w, account)
     if not lines:
@@ -155,6 +165,50 @@ def changes(w: dict, state: dict, account: float) -> str | None:
                      ["", "Buy or sell at market on Bitget spot. Tested rule, not advice."])
 
 
+def plan(d: dict, account: float) -> dict:
+    """Plain trade plan for one coin from the trend rule's own levels."""
+    usdt = d["target"] * account
+    out = {"usdt": usdt, "buy": d["close"], "buy_max": d["close"] * 1.03}
+    if d.get("full_exit"):
+        drop = 1 - d["full_exit"] / d["close"]
+        out |= {"exit": d["full_exit"], "exit_pct": -drop * 100, "max_loss": usdt * drop}
+    if d.get("next_trim") and d.get("next_trim") != d.get("full_exit"):
+        out["trim"] = d["next_trim"]
+    if d.get("next_add"):
+        out["add"] = d["next_add"]
+    return out
+
+
+def plan_text(coin: str, d: dict, account: float) -> str:
+    p, f = plan(d, account), trend._p
+    lines = [f"   Buy {p['usdt']:,.0f} USDT at market (last close {f(p['buy'])})"
+             + (f" · add above {f(p['add'])}" if "add" in p else "")]
+    sells = []
+    if "trim" in p:
+        sells.append(f"sell some below {f(p['trim'])}")
+    if "exit" in p:
+        sells.append(f"sell all below {f(p['exit'])} ({p['exit_pct']:.0f}%, ~{p['max_loss']:,.0f} USDT risk)")
+    if sells:
+        lines.append("   " + sells[0][0].upper() + "; ".join(sells)[1:])
+    return "\n".join(lines)
+
+
+def plans_text(w: dict, account: float, title: str) -> str:
+    held = sorted(((d["target"], c) for c, d in w["coins"].items() if d["target"] > 0), reverse=True)
+    lines = [title, ""]
+    for t, c in held:
+        lines.append(f"🪙 {c}: hold {t * 100:.1f}% of your account ({w['coins'][c]['votes_on']} of 8 trend checks up)")
+        lines.append(plan_text(c, w["coins"][c], account))
+        lines.append("")
+    watch = sorted((c for c, d in w["coins"].items() if d["target"] == 0 and d.get("next_add")))
+    if watch:
+        lines.append("Not held yet, buy on a daily close above: " +
+                     ", ".join(f"{c} {trend._p(w['coins'][c]['next_add'])}" for c in watch))
+    lines += ["", "Levels are daily closes (00:00 UTC, 1am UK). No fixed profit target: the sell levels "
+              "rise as the price rises, so winners can run. Bitget spot only. Tested rule, not advice."]
+    return "\n".join(lines)
+
+
 def intro_text(w: dict, account: float) -> str:
     held = sorted(((d["target"], c) for c, d in w["coins"].items() if d["target"] > 0), reverse=True)
     lines = ["🪙 Altcoin trend portion is now live (25% of your account)", ""]
@@ -164,7 +218,8 @@ def intro_text(w: dict, account: float) -> str:
         lines.append("No altcoin is in an uptrend right now, so this portion stays in cash.")
     else:
         lines.append(f"Hold {w['total'] * 100:.0f}% of your account across {len(held)} altcoins:")
-        lines += [f"• {c}: {t * 100:.1f}% = {t * account:,.0f} USDT" for t, c in held]
+        return plans_text(w, account, "🪙 Altcoin trend portion is now live (25% of your account)") + \
+            "\nYou'll get one daily summary when a coin should change by 1% of your account or more."
     lines += ["", "You'll get one daily summary when a coin should change by 1% of your account or more."]
     return "\n".join(lines)
 

@@ -215,6 +215,10 @@ def run_alt_sleeve(mkt, report: dict, now: datetime, btc: list[float], as_of: st
         for c, d in w["coins"].items():
             d["target"] = min(d["target"], sent.get(c, 0.0))
     msg = altsleeve.changes(w, state, account)
+    if state.get("alt_started") and not state.get("alt_plans_sent") and w["total"] > 0:
+        # one-off: full buy/sell plan for every coin already held
+        msg = (msg + "\n\n" if msg else "") + altsleeve.plans_text(w, account, "🪙 Your altcoin trade plans")
+        state["alt_plans_sent"] = True
     rec = altsleeve.paper(state, w, cache)
     save_json(state_path, state)
     health.setdefault("altcoin portion", f"ok ({len(w['coins'])} coins checked, {sum(d['target'] > 0 for d in w['coins'].values())} held)")

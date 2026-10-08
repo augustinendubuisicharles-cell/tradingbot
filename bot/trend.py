@@ -203,9 +203,10 @@ def signals(w: dict[str, dict], state: dict, account: float, buys_allowed: bool 
 
 
 def _p(x: float | None) -> str:
+    from .alerts import fmt_price
     if x is None:
         return "-"
-    return f"{x:,.0f}" if x >= 100 else f"{x:,.2f}"
+    return f"{x:,.0f}" if x >= 100 else fmt_price(x)
 
 
 def signal_text(coin: str, d: dict, old: float, account: float) -> str:
