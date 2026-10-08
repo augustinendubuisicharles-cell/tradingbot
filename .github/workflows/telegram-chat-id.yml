@@ -1,0 +1,24 @@
+name: Find my Telegram chat id
+
+# Run this once from the Actions tab after sending any message to your bot.
+# The chat id appears in the "Print chat id" step's log.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  chat-id:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Print chat id
+        run: python -m bot.main telegram-chat-id
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}

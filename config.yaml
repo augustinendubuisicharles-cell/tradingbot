@@ -1,0 +1,67 @@
+# TradingBot settings. Edit this file to change what the bot watches.
+# Secrets (Telegram bot token, chat id) never go here: they live in
+# GitHub repository secrets and are read from environment variables.
+
+exchange: bitget          # any CCXT exchange id works (e.g. kraken, coinbase)
+quote: USDT
+timeframe: 4h             # candle size used for trend and stop-loss maths
+
+# Coins the bot analyses. Keys are tickers; values are the words that count
+# as a mention in a post. Ambiguous English words (ton, link, dot) are left
+# out on purpose: those coins only count when written as $TON, $LINK, $DOT.
+watchlist:
+  BTC: [bitcoin, btc]
+  ETH: [ethereum, eth, ether]
+  SOL: [solana, sol]
+  XRP: [xrp, ripple]
+  BNB: [bnb]
+  DOGE: [dogecoin, doge]
+  ADA: [cardano, ada]
+  AVAX: [avalanche, avax]
+  LINK: [chainlink]
+  TON: [toncoin]
+  SUI: [sui]
+  DOT: [polkadot]
+
+sources:
+  lookback_hours: 24
+  # Public Telegram channels run by traders you trust, by their t.me name
+  # (for https://t.me/example the name is "example"). Read from Telegram's
+  # public web preview, so no login or API key is needed.
+  # weight = how much each channel counts, set from your track-record table:
+  # 1.5 strong edge, 1.0 decent or unproven, 0.5 too few trades, 0.3 losing.
+  # These channels mostly post leveraged futures calls; the bot reads them only
+  # as bullish/bearish opinion on a coin, never as trades to copy.
+  telegram_channels:
+    - {name: gorilla_crypto, weight: 1.5}       # Gorilla Crypto: +2.1%/trade, 48 signals
+    - {name: learn2tradectypto, weight: 1.5}    # Learn 2 Trade Crypto: +1.1%, 433 signals
+    - {name: BitcoinBullets, weight: 1.5}       # Bitcoin Bullets: +0.6%, 646 signals
+    - {name: theanalystcrypto, weight: 1.0}     # The Analyst CRYPTO: +1.4%, only 28 signals
+    - {name: cryptoinnercycles, weight: 1.0}    # Crypto Inner Circle: no profit data yet
+    # Not added yet (no links): Altcoin Daily Signals, CRYPTO PROOF,
+    # Fed. Russian Insiders, GoBox Crypto Tarder, CryptoNinjas Trading
+  subreddits: [CryptoCurrency, CryptoMarkets, Bitcoin, ethtrader]
+  rss_feeds:
+    - https://www.coindesk.com/arc/outboundfeeds/rss/
+    - https://cointelegraph.com/rss
+    - https://decrypt.co/feed
+  # How much each source counts towards sentiment.
+  weights:
+    telegram: 1.5
+    reddit: 1.0
+    news: 1.2
+
+risk:
+  account_size: 1000          # in USDT; used only to size suggestions
+  risk_per_trade_pct: 1.0     # max loss per trade if the stop is hit
+  max_position_pct: 25        # never suggest more than this share of the account
+  atr_stop_multiplier: 2.0    # stop-loss distance in ATRs below entry
+  min_24h_volume: 20000000    # skip illiquid markets (USDT volume)
+  min_score_to_suggest: 65
+  max_suggestions: 5
+
+alerts:
+  strong_score: 72            # alert when a coin's score reaches this
+  price_move_pct: 5           # alert on a move this big since the last check
+  sentiment_shift: 0.35       # alert on a sentiment swing this big (-1..1 scale)
+  cooldown_hours: 6           # don't repeat the same alert sooner than this

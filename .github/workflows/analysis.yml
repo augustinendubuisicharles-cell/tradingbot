@@ -1,0 +1,39 @@
+name: 4-hour analysis
+
+on:
+  schedule:
+    - cron: "7 */4 * * *"   # every 4 hours (GitHub may start it a few minutes late)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  analyse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Analyse, update dashboard, send Telegram digest
+        run: python -m bot.main run --publish --digest
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          DASHBOARD_URL: ${{ vars.DASHBOARD_URL }}
+      - name: Save dashboard and track record
+        run: |
+          git config user.name "tradingbot"
+          git config user.email "tradingbot@users.noreply.github.com"
+          git add data/latest.json data/history.jsonl data/state.json site
+          git diff --cached --quiet || git commit -m "Dashboard update $(date -u +'%Y-%m-%d %H:%M') UTC"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push

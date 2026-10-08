@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crypto Signals</title>
+<style>
+:root {
+  --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #6f6d68;
+  --grid: #e1e0d9; --track: #ecebe6; --border: rgba(11,11,11,0.10);
+  --bar: #2a78d6; --up: #006300; --down: #b42828;
+  --good: #0ca30c; --warn: #fab219; --crit: #d03b3b;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #9a9890;
+    --grid: #2c2c2a; --track: #2c2c2a; --border: rgba(255,255,255,0.10);
+    --bar: #3987e5; --up: #0ca30c; --down: #f07a7a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #9a9890;
+  --grid: #2c2c2a; --track: #2c2c2a; --border: rgba(255,255,255,0.10);
+  --bar: #3987e5; --up: #0ca30c; --down: #f07a7a; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 1120px; margin: 0 auto; padding: 24px 16px 48px; }
+h1 { font-size: 24px; margin: 0; }
+h2 { font-size: 17px; margin: 32px 0 12px; }
+.sub { color: var(--ink-2); margin: 4px 0 0; }
+.muted { color: var(--muted); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-top: 20px; }
+.tile, .card, .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+.tile { padding: 14px 16px; }
+.tile .k { color: var(--ink-2); font-size: 13px; }
+.tile .v { font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.tile .n { color: var(--muted); font-size: 13px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+.card { padding: 16px; }
+.card h3 { margin: 0 0 4px; font-size: 18px; display: flex; justify-content: space-between; gap: 8px; }
+.card dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; margin: 10px 0; font-variant-numeric: tabular-nums; }
+.card dt { color: var(--ink-2); } .card dd { margin: 0; text-align: right; }
+.card ul { margin: 8px 0 0; padding-left: 18px; color: var(--ink-2); font-size: 13px; }
+.pill { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border); white-space: nowrap; }
+.panel { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th, td { padding: 9px 12px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--grid); }
+th { color: var(--ink-2); font-weight: 500; font-size: 13px; }
+th:first-child, td:first-child, td.l { text-align: left; }
+tr:last-child td { border-bottom: 0; }
+.up { color: var(--up); } .down { color: var(--down); }
+.score { display: inline-flex; align-items: center; gap: 8px; }
+.track { width: 80px; height: 8px; background: var(--track); border-radius: 4px; overflow: hidden; }
+.fill { height: 100%; background: var(--bar); border-radius: 0 4px 4px 0; }
+.status { display: inline-flex; align-items: center; gap: 6px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.s-Bullish .dot { background: var(--good); } .s-Neutral .dot { background: var(--warn); } .s-Weak .dot { background: var(--crit); }
+.posts { list-style: none; margin: 0; padding: 0; }
+.posts li { padding: 12px 16px; border-bottom: 1px solid var(--grid); }
+.posts li:last-child { border-bottom: 0; }
+.posts .meta { font-size: 13px; color: var(--muted); }
+.posts a { color: inherit; }
+.note { font-size: 13px; color: var(--muted); margin-top: 32px; }
+.empty { padding: 16px; color: var(--ink-2); }
+</style>
+</head>
+<body>
+<main>
+  {% if demo %}<div class="panel empty" style="margin-bottom:16px"><b>Preview with made-up data.</b> Prices, posts and ideas on this page are invented to show the layout. They are not real signals.</div>{% endif %}
+  <h1>Crypto Signals</h1>
+  <p class="sub">Spot ideas for {{ exchange|title }} · updated {{ generated_label }} UTC · next update around {{ next_label }} UTC</p>
+
+  <div class="tiles">
+    <div class="tile"><div class="k">Fear &amp; Greed</div>
+      {% if fng %}<div class="v">{{ fng.value }}</div><div class="n">{{ fng.label }}</div>
+      {% else %}<div class="v">–</div><div class="n">unavailable</div>{% endif %}</div>
+    <div class="tile"><div class="k">Social mood</div>
+      <div class="v {{ 'up' if mood.score > 0.05 else ('down' if mood.score < -0.05 else '') }}">{{ '%+.2f'|format(mood.score) }}</div>
+      <div class="n">{{ mood.mentions }} posts, last {{ lookback }}h</div></div>
+    <div class="tile"><div class="k">Spot ideas now</div>
+      <div class="v">{{ suggestions|length }}</div><div class="n">of {{ coins|length }} coins scanned</div></div>
+    <div class="tile"><div class="k">Track record</div>
+      {% if record.closed %}<div class="v">{{ record.win_rate }}%</div><div class="n">win rate, {{ record.closed }} closed, {{ '%+.1f'|format(record.total_r) }}R</div>
+      {% else %}<div class="v">–</div><div class="n">{{ record.open }} open, none closed yet</div>{% endif %}</div>
+  </div>
+
+  <h2>Spot trade ideas</h2>
+  {% if suggestions %}
+  <div class="cards">
+    {% for a in suggestions %}{% set s = a.suggestion %}
+    <div class="card">
+      <h3><span>{{ a.coin }} <span class="muted" style="font-weight:400;font-size:14px">{{ s.side }}</span></span>
+        <span class="pill">score {{ '%.0f'|format(a.score) }} · {{ s.confidence }}</span></h3>
+      <dl>
+        <dt>Entry</dt><dd>{{ fp(s.entry) }} <span class="muted">{{ s.order }}</span></dd>
+        <dt>Stop-loss</dt><dd class="down">{{ fp(s.stop) }}</dd>
+        <dt>Target 1</dt><dd class="up">{{ fp(s.tp1) }}</dd>
+        <dt>Target 2</dt><dd class="up">{{ fp(s.tp2) }}</dd>
+        <dt>Size</dt><dd>{{ '{:,.0f}'.format(s.notional) }} USDT</dd>
+        <dt>Max loss</dt><dd>{{ '{:,.0f}'.format(s.max_loss) }} USDT</dd>
+      </dl>
+      <ul>{% for r in s.reasons %}<li>{{ r }}</li>{% endfor %}</ul>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="panel empty">No coin passes the low-risk filters right now. The bot only suggests a trade when trend, sentiment and volatility line up.</div>
+  {% endif %}
+
+  <h2>All coins</h2>
+  <div class="panel">
+    <table>
+      <thead><tr><th>Coin</th><th>Price</th><th>24h</th><th>Score</th><th class="l">Signal</th><th>RSI</th><th>Volatility</th><th>Funding / 8h</th><th>OI change</th><th>Sentiment</th><th>Mentions</th><th>Bullish posts</th></tr></thead>
+      <tbody>
+      {% for a in coins %}
+        <tr>
+          <td><b>{{ a.coin }}</b></td>
+          <td>{{ fp(a.price) }}</td>
+          <td class="{{ 'up' if a.change_24h > 0 else 'down' }}">{{ '%+.1f'|format(a.change_24h) }}%</td>
+          <td title="trend {{ a.components.trend }} · momentum {{ a.components.momentum }} · sentiment {{ a.components.sentiment }} · positioning {{ a.components.positioning }} · low volatility {{ a.components.risk }}">
+            <span class="score"><span class="track"><span class="fill" style="width:{{ [[a.score, 0]|max, 100]|min }}%; display:block"></span></span>{{ '%.0f'|format(a.score) }}</span></td>
+          <td class="l"><span class="status s-{{ a.label }}"><span class="dot"></span>{{ a.label }}</span></td>
+          <td>{{ a.rsi if a.rsi is not none else '–' }}</td>
+          <td>{{ ('%.1f%%'|format(a.atr_pct)) if a.atr_pct is not none else '–' }}</td>
+          <td>{{ ('%.3f%%'|format(a.funding_rate * 100)) if a.funding_rate is not none else '–' }}</td>
+          <td>{{ ('%+.1f%%'|format(a.oi_change_pct)) if a.oi_change_pct is not none else '–' }}</td>
+          <td class="{{ 'up' if a.sentiment.score > 0.05 else ('down' if a.sentiment.score < -0.05 else '') }}">{{ '%+.2f'|format(a.sentiment.score) }}</td>
+          <td>{{ a.sentiment.mentions }}</td>
+          <td>{{ (a.sentiment.bullish_pct ~ '%') if a.sentiment.bullish_pct is not none else '–' }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="muted" style="font-size:13px">Hover a score to see its parts. Volatility is the average 4h candle range (ATR) as a share of price. Funding and open interest come from the futures market and are read only as a crowd gauge.</p>
+
+  <h2>What traders and news are saying</h2>
+  <div class="panel">
+    {% if top_posts %}
+    <ul class="posts">
+      {% for p in top_posts %}
+      <li><div>{{ p.text }}</div>
+        <div class="meta">{{ p.author }} · {{ p.source }} · {{ p.ts[:16]|replace('T', ' ') }} UTC ·
+          <span class="{{ 'up' if p.sentiment > 0.05 else ('down' if p.sentiment < -0.05 else '') }}">sentiment {{ '%+.2f'|format(p.sentiment) }}</span>
+          {% if p.coins %}· {{ p.coins|join(', ') }}{% endif %}
+          {% if p.url|safe_url %}· <a href="{{ p.url|safe_url }}" rel="noopener noreferrer" target="_blank">source</a>{% endif %}</div></li>
+      {% endfor %}
+    </ul>
+    {% else %}<div class="empty">No posts collected in this window.</div>{% endif %}
+  </div>
+
+  <h2>Recent suggestions and results</h2>
+  <div class="panel">
+    {% if history %}
+    <table>
+      <thead><tr><th>Coin</th><th>Suggested</th><th>Entry</th><th>Stop</th><th>Target 1</th><th class="l">Status</th><th>Result</th></tr></thead>
+      <tbody>
+      {% for h in history %}
+        <tr><td><b>{{ h.coin }}</b></td><td>{{ h.created[:16]|replace('T', ' ') }}</td><td>{{ fp(h.entry) }}</td><td>{{ fp(h.stop) }}</td><td>{{ fp(h.tp1) }}</td>
+          <td class="l">{{ h.status }}</td>
+          <td class="{{ 'up' if (h.result_r or 0) > 0 else ('down' if (h.result_r or 0) < 0 else '') }}">{{ ('%+.1fR'|format(h.result_r)) if h.result_r is defined else '–' }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}<div class="empty">No suggestions logged yet. Results appear here as targets or stops are hit.</div>{% endif %}
+  </div>
+
+  <h2>Data sources</h2>
+  <div class="panel">
+    <table><tbody>
+      {% for name, status in health.items() %}<tr><td class="l">{{ name }}</td><td class="l">{{ status }}</td></tr>{% endfor %}
+      {% if trending %}<tr><td class="l">Trending on CoinGecko</td><td class="l">{{ trending|join(', ') }}</td></tr>{% endif %}
+    </tbody></table>
+  </div>
+
+  <p class="note">Ideas only, not financial advice. The bot never places trades. Spot only: crypto futures are not available to UK retail traders. "R" is the amount risked per trade: +1.5R means the first target was hit, −1R means the stop was hit.</p>
+</main>
+</body>
+</html>
