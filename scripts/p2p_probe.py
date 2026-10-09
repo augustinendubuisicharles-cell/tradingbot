@@ -61,6 +61,30 @@ def bitget():
             show("bitget", label, [], f"failed: {type(e).__name__} {str(e)[:120]}")
 
 
+def raw():
+    """Prints one full ad per exchange, to learn the field names."""
+    try:
+        r = requests.post("https://api2.bybit.com/fiat/otc/item/online", headers=H, timeout=20, json={
+            "userId": "", "tokenId": "USDT", "currencyId": "NGN", "payment": [], "side": "1",
+            "size": "3", "page": "1", "amount": "", "authMaker": False, "canTrade": False})
+        print("RAW bybit", json.dumps(r.json()["result"]["items"][0])[:1500])
+    except Exception as e:
+        print("RAW bybit failed", e)
+    try:
+        r = requests.get("https://www.okx.com/v3/c2c/tradingOrders/books", headers=H, timeout=20, params={
+            "quoteCurrency": "NGN", "baseCurrency": "USDT", "side": "sell", "paymentMethod": "all", "userType": "all"})
+        print("RAW okx", json.dumps(r.json()["data"]["sell"][0])[:1500])
+    except Exception as e:
+        print("RAW okx failed", e)
+    try:
+        r = requests.post("https://www.bitget.com/v1/p2p/pub/adv/queryAdvList", headers=H, timeout=20, json={
+            "side": 1, "pageNo": 1, "pageSize": 3, "coinCode": "USDT", "fiatCode": "NGN", "languageType": 0})
+        print("RAW bitget", json.dumps(r.json()["data"]["dataList"][0])[:1500])
+    except Exception as e:
+        print("RAW bitget failed", e)
+
+
 if __name__ == "__main__":
+    raw()
     for f in (bybit, binance, okx, bitget):
         f()
