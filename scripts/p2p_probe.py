@@ -79,7 +79,9 @@ def raw():
     try:
         r = requests.post("https://www.bitget.com/v1/p2p/pub/adv/queryAdvList", headers=H, timeout=20, json={
             "side": 1, "pageNo": 1, "pageSize": 3, "coinCode": "USDT", "fiatCode": "NGN", "languageType": 0})
-        print("RAW bitget", json.dumps(r.json()["data"]["dataList"][0])[:1500])
+        ad = r.json()["data"]["dataList"][0]
+        print("RAW bitget keys", sorted(ad))
+        print("RAW bitget", {k: v for k, v in ad.items() if not isinstance(v, (list, dict))})
     except Exception as e:
         print("RAW bitget failed", e)
 
