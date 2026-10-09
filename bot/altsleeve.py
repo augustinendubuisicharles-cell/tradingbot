@@ -24,9 +24,17 @@ log = logging.getLogger(__name__)
 
 SLEEVE = 0.25
 TOP = 20
-CAP = 1 / 10
+MAX_COINS = 6                   # hold only the 6 strongest (tested 2026-10-09, research/grok_tests.py)
+CAP = 1 / MAX_COINS
+EXIT_SMA = 20                   # also out when the daily close is under the 20-day average
 MIN_AGE = 365
-MIN_VOL = 2e6
+MIN_VOL = 2e5                   # Bitget volume (about a tenth of Binance's, which the test used at $2M)
+RULE_VERSION = 2
+RULE_CHANGE_TITLE = "🪙 Altcoin portion: updated rule, here's exactly what to hold now"
+RULE_CHANGE_NOTE = ("What changed: at most 6 coins (the strongest), and a coin is sold when its daily close "
+                    "falls under its 20-day average, not just on the slower trend stop. Tested 2018-2026: "
+                    "better in both the design years and 2023-now. This morning's 'SELL all' was a price-data "
+                    "error, not a real signal; this list replaces it.")
 FUNDING_HOT = 0.0009
 BAND = 0.01                     # message when a coin moves 1% of the account or more
 NOT_ALTS = re.compile(r"^(BTC|ETH|USDC|USDE|FDUSD|DAI|TUSD|USDD|PYUSD|EUR\w*|GBP|BUSD|USD\w*|"
@@ -124,13 +132,25 @@ def weights(cache: dict, btc_closes: list[float], as_of: str, funding: dict[str,
         vol = trend.volatility(closes)[-1]
         share = v["share"][-1]
         w = min(1.0, share * min(1.0, trend.VOL_TARGET / vol)) * CAP if vol else 0.0
+        sma = sum(closes[-EXIT_SMA:]) / EXIT_SMA if len(closes) >= EXIT_SMA else None
         on = [s for s in v["state"] if s["on"]]
         off = [s for s in v["state"] if not s["on"] and s["trigger"]]
         coins[coin] = {"raw": w, "votes_on": len(on), "close": closes[-1],
                        "full_exit": min((s["stop"] for s in on), default=None),
                        "next_trim": max((s["stop"] for s in on), default=None),
                        "next_add": min((s["trigger"] for s in off), default=None),
-                       "spark": closes[-90:]}
+                       "sma20": sma, "spark": closes[-90:]}
+        d = coins[coin]
+        if sma and on:
+            # selling all happens at the higher of the trend stop and the 20-day average
+            d["full_exit"] = max(d["full_exit"], sma)
+            if d["next_trim"] is not None and d["next_trim"] <= d["full_exit"]:
+                d["next_trim"] = None
+    strongest = sorted((d["raw"], c) for c, d in coins.items() if d["raw"] > 0)[::-1][:MAX_COINS]
+    keep = {c for _, c in strongest}
+    for c, d in coins.items():
+        if c not in keep or (d["sma20"] and d["close"] <= d["sma20"]):
+            d["raw"] = 0.0
     held = [c for c, d in coins.items() if d["raw"] > 0]
     rates = [funding.get(c) for c in held if funding and funding.get(c) is not None] if funding else []
     hot = bool(rates) and _median(rates) > FUNDING_HOT

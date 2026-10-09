@@ -654,3 +654,19 @@ def test_stale_altcoin_prices_never_sell(tmp_path, monkeypatch):
                             "2026-10-08", 1000.0, {"buys_allowed": True}, tmp_path / "trend_state.json")
     assert msgs == [] and "nothing sold" in rep["source_health"]["altcoin portion"]
     assert json.loads((tmp_path / "trend_state.json").read_text())["alt_announced"] == state["alt_announced"]
+
+
+def test_scorecard_scores_sells_and_buys_against_doing_nothing():
+    from datetime import datetime, timezone
+    from bot import scorecard
+    log = []
+    scorecard.record(log, {"SOL": 0.02, "AVAX": 0.0}, {"SOL": 0.0, "AVAX": 0.03}, {"SOL": 100.0, "AVAX": 10.0},
+                     "2026-10-08", datetime(2026, 10, 9, tzinfo=timezone.utc), "alts")
+    closes = {"SOL": {"2026-10-09": 95.0, "2026-10-15": 90.0}, "AVAX": {"2026-10-09": 10.5, "2026-10-15": 9.0}}
+    scorecard.score(log, closes)
+    sol = next(r for r in log if r["coin"] == "SOL")
+    avax = next(r for r in log if r["coin"] == "AVAX")
+    assert sol["action"] == "sell" and sol["edge_7d"] == 9.9        # avoided a 10% drop, minus 0.1% fee
+    assert avax["action"] == "buy" and avax["edge_7d"] == -10.1
+    s = scorecard.summary(log)
+    assert s["scored"] == 2 and s["verdict"] == "not enough signals yet"

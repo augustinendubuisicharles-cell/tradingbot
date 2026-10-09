@@ -199,6 +199,10 @@ table.data tr:last-child td { border-bottom: 0; }
       </div></details>
     </article>{% endif %}
   </div>
+  {% if trend.scorecard %}{% set sc = trend.scorecard %}
+  <p class="small" style="margin-top:12px"><b>Signal scorecard:</b> {{ sc.signals }} signals sent, {{ sc.scored }} scored 7 days later.
+    {% if sc.scored %}Average result vs doing nothing: <span class="{{ 'up' if sc.avg_edge_7d > 0 else 'down' }}">{{ '%+.2f'|format(sc.avg_edge_7d) }}%</span> after fees, {{ sc.hit_rate }}% right ({{ sc.verdict }}).{% else %}Results appear a week after each signal; the rule earns more money only if it beats doing nothing over 30 signals.{% endif %}</p>
+  {% endif %}
   {% if trend.guard and not trend.guard.buys_allowed %}<div class="banner" style="margin-top:12px">⏸ <b>New buys are paused.</b> {{ trend.guard.reasons|join('; ') }}. Sell signals still apply.</div>{% endif %}
   {% if trend.alts %}{% set al = trend.alts %}{% set held_alts = al.coins.items()|selectattr('1.target')|sort(attribute='1.target', reverse=True)|list %}
   <h2>Altcoin trend portion <span class="small muted" style="font-weight:400">25% of the account · {{ '%.0f'|format(al.total * 100) }}% invested now</span></h2>

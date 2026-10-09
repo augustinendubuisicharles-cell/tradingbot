@@ -11,7 +11,7 @@ import os
 import uuid
 from datetime import datetime, timezone
 
-from . import ai, alerts, altsleeve, analysis, dashboard, emerging, market, social, trend
+from . import ai, alerts, altsleeve, analysis, dashboard, emerging, market, scorecard, social, trend
 from .config import DATA_DIR, ROOT, load_config
 from .sentiment import aggregate
 from .storage import load_json, load_jsonl, save_json, save_jsonl
@@ -170,7 +170,10 @@ def run_trend(cfg: dict, mkt, report: dict, now: datetime) -> list[str]:
         core_note = ", ".join(f"{c} {d['target'] * 100:.0f}%" for c, d in w.items())
         for c, d in w.items():
             state["announced"][c] = d["target"]
+    before = dict(state.get("announced", {}))
     msgs += trend.signals(w, state, account, g["buys_allowed"])
+    if not first:
+        _log_signals(before, state.get("announced", {}), {c: d["close"] for c, d in w.items()}, as_of, now, "core")
     if first:
         msgs.append(trend.intro_text(w, account))
     save_json(state_path, state)
@@ -183,6 +186,7 @@ def run_trend(cfg: dict, mkt, report: dict, now: datetime) -> list[str]:
             alt_msgs[0] += (f"\n\nBitcoin and Ethereum now share the other 75%, so their positions shrink to: "
                             f"{core_note} of your account.")
         msgs += alt_msgs
+    report["trend"]["scorecard"] = score_signals()
     return msgs
 
 
@@ -220,16 +224,44 @@ def run_alt_sleeve(mkt, report: dict, now: datetime, btc: list[float], as_of: st
         sent = state.get("alt_announced", {})
         for c, d in w["coins"].items():
             d["target"] = min(d["target"], sent.get(c, 0.0))
-    msg = altsleeve.changes(w, state, account)
-    if state.get("alt_started") and not state.get("alt_plans_sent") and w["total"] > 0:
-        # one-off: full buy/sell plan for every coin already held
-        msg = (msg + "\n\n" if msg else "") + altsleeve.plans_text(w, account, "🪙 Your altcoin trade plans")
-        state["alt_plans_sent"] = True
+    before = dict(state.get("alt_announced", {}))
+    if state.get("alt_started") and state.get("alt_rule") != altsleeve.RULE_VERSION:
+        # rule changed: restate every position from scratch instead of a list of differences
+        state["alt_rule"] = altsleeve.RULE_VERSION
+        state["alt_announced"] = {c: d["target"] for c, d in w["coins"].items() if d["target"] > 0}
+        msg = altsleeve.plans_text(w, account, altsleeve.RULE_CHANGE_TITLE) if w["total"] > 0 else \
+            altsleeve.RULE_CHANGE_TITLE + "\n\nNo altcoin qualifies today, so this portion is in cash: hold none."
+        msg += "\n\n" + altsleeve.RULE_CHANGE_NOTE
+    else:
+        state.setdefault("alt_rule", altsleeve.RULE_VERSION)
+        msg = altsleeve.changes(w, state, account)
+        _log_signals(before, state.get("alt_announced", {}), {c: d["close"] for c, d in w["coins"].items()},
+                     as_of, now, "alts")
     rec = altsleeve.paper(state, w, cache)
     save_json(state_path, state)
     health.setdefault("altcoin portion", f"ok ({len(w['coins'])} coins checked, {sum(d['target'] > 0 for d in w['coins'].values())} held)")
     report["trend"]["alts"] = w | {"live": rec}
     return [msg] if msg else []
+
+
+def _log_signals(before: dict, after: dict, prices: dict, as_of: str, now: datetime, portion: str) -> None:
+    path = DATA_DIR / "signal_log.jsonl"
+    rows = load_jsonl(path)
+    scorecard.record(rows, before, after, prices, as_of, now, portion)
+    save_jsonl(path, rows)
+
+
+def score_signals() -> dict:
+    """Scores logged signals with the latest daily closes (BTC/ETH and altcoins)."""
+    path = DATA_DIR / "signal_log.jsonl"
+    rows = load_jsonl(path)
+    if not rows:
+        return scorecard.summary(rows)
+    closes = {c: {r[0]: r[2] for r in v} for c, v in load_json(DATA_DIR / "trend_daily.json", {}).items()}
+    closes |= {c: {r[0]: r[1] for r in v} for c, v in load_json(DATA_DIR / "alt_daily.json", {}).get("coins", {}).items()}
+    scorecard.score(rows, closes)
+    save_jsonl(path, rows)
+    return scorecard.summary(rows) | {"recent": list(reversed(rows))[:12]}
 
 
 def trend_view(hist: dict, w: dict, live: dict, start: str, account: float) -> dict:
@@ -340,6 +372,7 @@ def cmd_demo(_args) -> None:
         if cache:
             aw = altsleeve.weights(cache, [r[2] for r in hist["BTC"]], hist["BTC"][-1][0])
             report["trend"]["alts"] = aw | {"live": {"start": start, "total": 0.0, "drawdown": 0.0}}
+        report["trend"]["scorecard"] = {"signals": 4, "scored": 0}
         print(trend.intro_text(w, 1000) + "\n")
     publish(report, candles, {}, now, site_dir=ROOT / "demo", persist=False)
     print(alerts.digest_text(report, "https://example.pages.dev"))
