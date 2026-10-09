@@ -1,0 +1,23 @@
+name: Remittance rate probe
+
+on:
+  push:
+    branches: [claude/project-thread-81vnzd]
+    paths: [scripts/remit_probe.py, .github/workflows/remit-probe.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - run: python scripts/remit_probe.py
+      - run: python -c "import json,bot.p2p as p; s=p.scan(); print(json.dumps({k:{s2:(v['price'] if v else None) for s2,v in d.items()} for k,d in s['best'].items()}))"
