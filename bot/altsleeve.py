@@ -13,11 +13,14 @@ Rule (same trend votes as bot/trend.py, applied to altcoins):
 Tested 2018-2026 (research/alts.py, alts2.py): as a 25% portion next to the
 BTC/ETH rule, 2023-now worst drop -18% instead of -23%, about +17%/yr.
 """
+import logging
 import re
 import time
 from datetime import datetime, timedelta, timezone
 
 from . import trend
+
+log = logging.getLogger(__name__)
 
 SLEEVE = 0.25
 TOP = 20
@@ -48,14 +51,20 @@ def update_history(cache: dict, mkt, now: datetime | None = None, candidates: in
         if not NOT_ALTS.search(coin):
             rows.append((coin, float(t.get("quoteVolume") or 0)))
     rows.sort(key=lambda r: r[1], reverse=True)
-    for coin, _ in rows[:candidates]:
+    # always refresh the coins we already track, plus today's most traded ones
+    tracked = [c for c in coins if any(c == r[0] for r in rows)]
+    wanted = list(dict.fromkeys([c for c, _ in rows[:candidates]] + tracked))
+    fetched, errors = 0, []
+    for coin in wanted:
         have = coins.get(coin, [])
         if have and have[-1][0] >= (now - timedelta(days=1)).strftime("%Y-%m-%d"):
             continue                                    # already has yesterday
         try:
             candles = mkt.candles(coin, "1d", 300)
-        except Exception:  # noqa: BLE001 - one coin shouldn't stop the rest
+        except Exception as e:  # noqa: BLE001 - one coin shouldn't stop the rest
+            errors.append(f"{coin}: {type(e).__name__} {e}"[:160])
             continue
+        fetched += 1
         merged = {r[0]: r for r in have}
         for c in candles:
             day = time.strftime("%Y-%m-%d", time.gmtime(c[0] / 1000))
@@ -63,7 +72,13 @@ def update_history(cache: dict, mkt, now: datetime | None = None, candidates: in
                 merged[day] = [day, float(c[4]), float(c[5]) * float(c[4])]
         coins[coin] = [merged[d] for d in sorted(merged)][-420:]
         first.setdefault(coin, coins[coin][0][0])
+    log.info("altcoin prices: %d tickers, %d wanted, %d fetched, %d failed%s", len(rows), len(wanted),
+             fetched, len(errors), f" (first: {errors[0]})" if errors else "")
     return cache
+
+
+def fresh_count(cache: dict, as_of: str) -> int:
+    return sum(1 for rows in cache.get("coins", {}).values() if rows and rows[-1][0] >= as_of)
 
 
 # ---------- signal ----------
@@ -131,6 +146,9 @@ def changes(w: dict, state: dict, account: float) -> str | None:
     sent = state.setdefault("alt_announced", {})
     first = not sent and not state.get("alt_started")
     state["alt_started"] = True
+    if first:
+        sent.update({c: d["target"] for c, d in w["coins"].items() if d["target"] > 0})
+        return intro_text(w, account)
     lines = []
     for coin in sorted(set(sent) | set(w["coins"])):
         new = w["coins"].get(coin, {}).get("target", 0.0)

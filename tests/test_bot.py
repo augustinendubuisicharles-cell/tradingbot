@@ -632,3 +632,25 @@ def test_alt_sleeve_gate_funding_and_daily_summary():
     assert altsleeve.changes(w, state, 1000) is None                         # nothing new
     msg = altsleeve.changes(altsleeve.weights(cache, btc_down, days[-1]), state, 1000)
     assert "SELL all" in msg and "200-day" in msg
+
+
+def test_stale_altcoin_prices_never_sell(tmp_path, monkeypatch):
+    import json
+    from datetime import datetime, timezone
+    import bot.main as m
+    monkeypatch.setattr(m, "DATA_DIR", tmp_path)
+    cache = {"coins": {f"C{k}": [["2026-10-07", 1.0, 5e6]] for k in range(30)}, "first": {}}
+    (tmp_path / "alt_daily.json").write_text(json.dumps(cache))
+    state = {"alt_started": True, "alt_announced": {"C1": 0.02, "C2": 0.015}}
+    (tmp_path / "trend_state.json").write_text(json.dumps(state))
+
+    class Spot:
+        def load_markets(self): pass
+        def fetch_tickers(self): return {}
+    class Mk:
+        quote, spot = "USDT", Spot()
+    rep = {"source_health": {}, "trend": {}}
+    msgs = m.run_alt_sleeve(Mk(), rep, datetime(2026, 10, 9, 6, tzinfo=timezone.utc), [1.0] * 300,
+                            "2026-10-08", 1000.0, {"buys_allowed": True}, tmp_path / "trend_state.json")
+    assert msgs == [] and "nothing sold" in rep["source_health"]["altcoin portion"]
+    assert json.loads((tmp_path / "trend_state.json").read_text())["alt_announced"] == state["alt_announced"]

@@ -197,6 +197,12 @@ def run_alt_sleeve(mkt, report: dict, now: datetime, btc: list[float], as_of: st
     except Exception as e:  # noqa: BLE001
         log.error("altcoin prices failed: %s", e)
         health["altcoin portion"] = f"prices failed: {type(e).__name__}; using saved prices"
+    fresh = altsleeve.fresh_count(cache, as_of)
+    if fresh < 15:
+        # Missing prices must never look like trends breaking: hold everything as it is.
+        log.error("altcoin prices stale: only %d coins have %s prices; no altcoin signals", fresh, as_of)
+        health["altcoin portion"] = f"prices missing for {as_of} ({fresh} coins fresh); signals on hold, nothing sold"
+        return []
     pre = altsleeve.weights(cache, btc, as_of)
     funding = state.get("alt_funding", {})
     if funding.get("date") != as_of:              # once a day is enough
