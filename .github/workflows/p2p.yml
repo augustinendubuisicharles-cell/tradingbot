@@ -1,0 +1,44 @@
+name: P2P naira scanner
+
+on:
+  schedule:
+    - cron: "15,45 * * * *"   # every 30 min, offset from the price alerts
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: p2p
+  cancel-in-progress: true
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      # What was already alerted, and the price log, live in the Actions cache (not git).
+      - uses: actions/cache@v4
+        with:
+          path: |
+            data/p2p_state.json
+            data/p2p_log.jsonl
+          key: p2p-${{ github.run_id }}
+          restore-keys: p2p-
+      - name: Scan naira P2P prices
+        run: python -m bot.p2p --send
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: p2p-log
+          path: data/p2p_log.jsonl
+          retention-days: 14
+          overwrite: true

@@ -670,3 +670,17 @@ def test_scorecard_scores_sells_and_buys_against_doing_nothing():
     assert avax["action"] == "buy" and avax["edge_7d"] == -10.1
     s = scorecard.summary(log)
     assert s["scored"] == 2 and s["verdict"] == "not enough signals yet"
+
+
+def test_p2p_routes_skip_small_or_new_traders_and_charge_transfer():
+    from bot import p2p
+    assert p2p.usable(p2p._ad("Bybit", "ask", 1350, 1000, 1e6, 500, 0.99, "x", "bank"))
+    assert not p2p.usable(p2p._ad("Bybit", "ask", 1350, 1000, 5000, 500, 0.99, "x", "bank"))     # too small
+    assert not p2p.usable(p2p._ad("Bybit", "ask", 1350, 1000, 1e6, 12, 1.0, "x", "bank"))        # too new
+    ask = {"price": 1350.0}
+    best = {"Bybit": {"ask": ask, "bid": {"price": 1340.0}}, "OKX": {"ask": None, "bid": {"price": 1377.0}}}
+    r = p2p.routes(best)
+    top = r[0]
+    assert (top["buy"], top["sell"]) == ("Bybit", "OKX")
+    assert 0.9 < top["gap"] < 2.0                    # 2% gap minus about 1% transfer cost on a small ticket
+    assert r[-1]["gap"] < 0                          # same exchange: best bid below best ask
