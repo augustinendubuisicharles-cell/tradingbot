@@ -713,6 +713,14 @@ def test_cars_focus_enugu_corolla():
     a = mk(id=1, year=2008, price=6e6, city="Enugu")
     b = mk(id=2, year=2008, price=6.5e6, city="Lagos")
     c = mk(id=3, year=2012, price=8e6, city="Enugu")
-    assert cars.in_focus(a) and not cars.in_focus(b) and not cars.in_focus(c)
-    t = cars.focus_text([a, b, c])
-    assert "in Enugu: 1 listed" in t and "2008: usual" in t
+    old = cars.FOCUS["area"]
+    try:
+        cars.FOCUS["area"] = "Enugu"
+        assert cars.in_focus(a) and not cars.in_focus(b) and not cars.in_focus(c)
+        assert "in Enugu: 1 listed" in cars.focus_text([a, b, c])
+        cars.FOCUS["area"] = None
+        assert cars.in_focus(b) and not cars.in_focus(c)
+        t = cars.focus_text([a, b, c])
+        assert "in Nigeria: 2 listed" in t and "2008: usual" in t
+    finally:
+        cars.FOCUS["area"] = old

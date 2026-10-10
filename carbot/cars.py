@@ -70,10 +70,10 @@ def year_of(title: str, year=None) -> int | None:
 
 # ---------- sources ----------
 
-def autochek(max_pages: int = 60) -> list[dict]:
+def autochek(max_pages: int = 60, base: str = "https://autochek.africa/ng/cars-for-sale") -> list[dict]:
     out, seen = [], set()
     for page in range(1, max_pages + 1):
-        r = requests.get(f"https://autochek.africa/ng/cars-for-sale?page_number={page}", headers=H, timeout=30)
+        r = requests.get(f"{base}?page_number={page}", headers=H, timeout=30)
         m = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', r.text, re.S)
         cars = (json.loads(m.group(1))["props"]["pageProps"].get("cars") or {}).get("result") if m else None
         if not cars or all(c["id"] in seen for c in cars):
@@ -253,19 +253,28 @@ def deal_text(ds: list[dict], total: int, health: dict) -> str:
 
 # ---------- focus: one model, years and area ----------
 
-FOCUS = {"model": ("toyota", "corolla"), "years": (2006, 2010), "area": "Enugu",
+# area None = all of Nigeria (user's choice 2026-10-10); "Enugu" etc. narrows to one area
+FOCUS = {"model": ("toyota", "corolla"), "years": (2006, 2010), "area": None,
          "places": ("enugu", "nsukka", "abakpa", "trans-ekulu", "trans ekulu", "independence layout",
                     "new haven", "ogui", "emene", "agbani", "9th mile", "awkunanaw", "uwani", "achara")}
 
 
 def focus_extra() -> list[dict]:
-    """Area pages, so listings deeper than the national pages aren't missed."""
-    area = FOCUS["area"].lower()
+    """The model's own pages (and the area's, if one is set), so cars deeper than
+    the national pages aren't missed."""
+    mk, md = FOCUS["model"]
+    jobs = [("Autochek", lambda: autochek(15, f"https://autochek.africa/ng/cars-for-sale/{mk}/{md}")),
+            ("Cars.ng", lambda: carsng(30, f"https://cars.ng/{mk}/{mk}-{md}/for-sale"))]
+    if FOCUS["area"]:
+        area = FOCUS["area"].lower()
+        jobs += [("Cars.ng area", lambda: carsng(20, f"https://cars.ng/for-sale/cars-in-{area}")),
+                 ("Carlots area", lambda: carlots_region(area))]
     out = []
-    for name, fn in (("Cars.ng", lambda: carsng(20, f"https://cars.ng/for-sale/cars-in-{area}")),
-                     ("Carlots", lambda: carlots_region(area))):
+    for name, fn in jobs:
         try:
-            out += fn()
+            got = fn()
+            log.info("focus %s: %d", name, len(got))
+            out += got
         except Exception as e:
             log.warning("focus %s failed: %s", name, e)
     return out
@@ -275,7 +284,7 @@ def in_focus(c: dict, area: bool = True) -> bool:
     mk, md = FOCUS["model"]
     y0, y1 = FOCUS["years"]
     ok = c["make"] == mk and c["model"] == md and c["year"] and y0 <= c["year"] <= y1
-    if area:
+    if area and FOCUS["area"]:
         where = f"{c['city']} {c['title']} {c['url']}".lower()
         ok = ok and any(p in where for p in FOCUS["places"])
     return bool(ok)
@@ -287,7 +296,8 @@ def focus_text(cars: list[dict]) -> str:
     name = f"{mk.title()} {md.title()} {y0}-{y1}"
     local = sorted((c for c in cars if in_focus(c)), key=lambda c: (-(c["below"] or -99), c["price"] or 0))
     allng = [c for c in cars if in_focus(c, area=False) and c["price"]]
-    lines = [f"🚗 {name} in {FOCUS['area']}: {len(local)} listed today", ""]
+    where = FOCUS["area"] or "Nigeria"
+    lines = [f"🚗 {name} in {where}: {len(local)} listed today, best value first", ""]
     for i, c in enumerate(local[:15], 1):
         verdict = (f"{c['below']:.0f}% under the usual ₦{c['fair']:,.0f}" if c["below"] and c["below"] > 0 else
                    f"{-c['below']:.0f}% over the usual ₦{c['fair']:,.0f}" if c["below"] else "not enough similar cars to judge")
@@ -296,7 +306,7 @@ def focus_text(cars: list[dict]) -> str:
                      + (f"\n   {html.escape(extra)}" if extra else "") + f"\n   {c['url']}")
     if not local:
         lines.append(f"None on the sites the bot can read today (Autochek, cars.ng, Carlots). "
-                     f"Most {FOCUS['area']} cars are sold on Jiji, Facebook and WhatsApp, which block bots.")
+                     f"Most {where} cars are sold on Jiji, Facebook and WhatsApp, which block bots.")
     lines += ["", f"Price guide, {name}, all Nigeria today ({len(allng)} listed):"]
     for y in range(y0, y1 + 1):
         ps = sorted(c["price"] for c in allng if c["year"] == y)
@@ -304,7 +314,7 @@ def focus_text(cars: list[dict]) -> str:
             lo, hi = ps[len(ps) // 4], ps[(3 * len(ps)) // 4]
             lines.append(f"• {y}: usual ₦{statistics.median(ps) / 1e6:.1f}M (most between ₦{lo / 1e6:.1f}M and "
                          f"₦{hi / 1e6:.1f}M, {len(ps)} cars)")
-    best = deals([c for c in allng if c not in local], top=3)
+    best = deals([c for c in allng if c not in local], top=3) if FOCUS["area"] else []
     if best:
         lines += ["", "Best value elsewhere in Nigeria:"]
         lines += [f"• {html.escape(c['title'])} ({c['year']}), {html.escape(c['city'] or '?')}: ₦{c['price']:,.0f}, "
