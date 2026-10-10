@@ -299,7 +299,9 @@ def focus_text(cars: list[dict]) -> str:
     where = FOCUS["area"] or "Nigeria"
     lines = [f"🚗 {name} in {where}: {len(local)} listed today, best value first", ""]
     for i, c in enumerate(local[:15], 1):
-        verdict = (f"{c['below']:.0f}% under the usual ₦{c['fair']:,.0f}" if c["below"] and c["below"] > 0 else
+        verdict = (f"{c['below']:.0f}% under the usual ₦{c['fair']:,.0f}"
+                   + (" ⚠️ suspiciously cheap: could be a deposit price, scam or damaged car" if c["below"] > MAX_BELOW else "")
+                   if c["below"] and c["below"] > 0 else
                    f"{-c['below']:.0f}% over the usual ₦{c['fair']:,.0f}" if c["below"] else "not enough similar cars to judge")
         extra = ", ".join(x for x in (f"{real_km(c):,.0f} km" if real_km(c) else "", c["condition"], c["city"]) if x)
         lines.append(f"{i}. {html.escape(c['title'])} ({c['year']}): ₦{c['price']:,.0f}, {verdict}"
