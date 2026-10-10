@@ -684,3 +684,22 @@ def test_p2p_routes_skip_small_or_new_traders_and_charge_transfer():
     assert (top["buy"], top["sell"]) == ("Bybit", "OKX")
     assert 0.9 < top["gap"] < 2.0                    # 2% gap minus about 1% transfer cost on a small ticket
     assert r[-1]["gap"] < 0                          # same exchange: best bid below best ask
+
+
+def test_cars_fair_value_and_deals():
+    from carbot import cars
+    assert cars.make_model("Clean standard 2005 Toyota Rav4") == ("toyota", "rav4")
+    assert cars.make_model("Mercedes-Benz GLK 350 2012")[0] == "mercedes-benz"
+    assert cars.year_of("Clean standard 2005 Toyota Rav4") == 2005
+    base = dict(source="t", make="toyota", model="camry", condition="Foreign Used", mileage=None,
+                inspected=False, accident=False, city="", url="u")
+    pool = [base | dict(id=i, title="Toyota Camry", year=2012, price=p)
+            for i, p in enumerate([10e6, 10.5e6, 11e6, 9.8e6, 10.2e6, 10.4e6])]
+    cheap = base | dict(id=99, title="Toyota Camry", year=2013, price=8e6)
+    scam = base | dict(id=98, title="Toyota Camry", year=2012, price=3e6)
+    crash = base | dict(id=97, title="Toyota Camry", year=2012, price=8.5e6, accident=True)
+    allc = pool + [cheap, scam, crash]
+    cars.fair_values(allc)
+    assert 20 < cheap["below"] < 25
+    ds = cars.deals(allc)
+    assert ds[0] is cheap and scam not in ds and crash not in ds

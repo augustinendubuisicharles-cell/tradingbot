@@ -1,0 +1,42 @@
+name: Car deals (Nigeria)
+
+on:
+  schedule:
+    - cron: "30 6 * * *"   # 07:30 in Nigeria, every day
+  workflow_dispatch:
+    inputs:
+      send:
+        description: "Send the Telegram message"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cars
+  cancel-in-progress: false
+
+jobs:
+  cars:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Collect listings and pick deals
+        run: python -m carbot.cars ${{ (github.event_name == 'schedule' || inputs.send) && '--send' || '' }}
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      - name: Save results
+        run: |
+          git config user.name tradingbot
+          git config user.email tradingbot@users.noreply.github.com
+          git add data/cars
+          git diff --cached --quiet || git commit -m "Car listings $(date -u +%F)"
+          for i in 1 2 3; do git pull --rebase -q origin main && git push -q && break; sleep 5; done
