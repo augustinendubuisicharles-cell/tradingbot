@@ -703,3 +703,16 @@ def test_cars_fair_value_and_deals():
     assert 20 < cheap["below"] < 25
     ds = cars.deals(allc)
     assert ds[0] is cheap and scam not in ds and crash not in ds
+
+
+def test_cars_focus_enugu_corolla():
+    from carbot import cars
+    mk = lambda **k: dict(source="t", id=k.get("id", 0), title="Toyota Corolla", make="toyota", model="corolla",
+                          condition="", mileage=None, inspected=False, accident=False, url="u",
+                          fair=None, below=None, comps=0) | k
+    a = mk(id=1, year=2008, price=6e6, city="Enugu")
+    b = mk(id=2, year=2008, price=6.5e6, city="Lagos")
+    c = mk(id=3, year=2012, price=8e6, city="Enugu")
+    assert cars.in_focus(a) and not cars.in_focus(b) and not cars.in_focus(c)
+    t = cars.focus_text([a, b, c])
+    assert "in Enugu: 1 listed" in t and "2008: usual" in t

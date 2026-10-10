@@ -119,6 +119,17 @@ def _carlots_page(url: str, seen: set) -> list[dict]:
     return out
 
 
+def carlots_region(word: str) -> list[dict]:
+    """Carlots' own page for one state or city, if it has one."""
+    r = requests.get("https://carlots.ng/", headers=H, timeout=30)
+    links = sorted(set(re.findall(rf'href="(https://carlots\.ng/{word}[a-z\-]*-[rc]\d+)"', r.text)))
+    out, seen = [], set()
+    for u in links:
+        time.sleep(PAUSE)
+        out += _carlots_page(u, seen)
+    return out
+
+
 def carlots() -> list[dict]:
     """carlots.ng (also carmart.ng): the main list plus one page per brand (about 52 cars each)."""
     seen: set = set()
@@ -134,11 +145,13 @@ def carlots() -> list[dict]:
     return out
 
 
-def carsng(max_pages: int = 60) -> list[dict]:
+def carsng(max_pages: int = 60, base: str = "https://cars.ng/for-sale") -> list[dict]:
     """cars.ng: 16 cars a page, title like 'Kia Sorento 2014 for Sale in Lagos'."""
     out, seen = [], set()
     for page in range(1, max_pages + 1):
-        r = requests.get(f"https://cars.ng/for-sale?page={page}", headers=H, timeout=30)
+        r = requests.get(f"{base}?page={page}", headers=H, timeout=30)
+        if r.status_code != 200:
+            break
         new = 0
         for chunk in r.text.split('class="offer-name')[1:]:
             t = re.search(r'title="([^"]+)"', chunk)
@@ -238,6 +251,69 @@ def deal_text(ds: list[dict], total: int, health: dict) -> str:
     return "\n".join(lines)
 
 
+# ---------- focus: one model, years and area ----------
+
+FOCUS = {"model": ("toyota", "corolla"), "years": (2006, 2010), "area": "Enugu",
+         "places": ("enugu", "nsukka", "abakpa", "trans-ekulu", "trans ekulu", "independence layout",
+                    "new haven", "ogui", "emene", "agbani", "9th mile", "awkunanaw", "uwani", "achara")}
+
+
+def focus_extra() -> list[dict]:
+    """Area pages, so listings deeper than the national pages aren't missed."""
+    area = FOCUS["area"].lower()
+    out = []
+    for name, fn in (("Cars.ng", lambda: carsng(20, f"https://cars.ng/for-sale/cars-in-{area}")),
+                     ("Carlots", lambda: carlots_region(area))):
+        try:
+            out += fn()
+        except Exception as e:
+            log.warning("focus %s failed: %s", name, e)
+    return out
+
+
+def in_focus(c: dict, area: bool = True) -> bool:
+    mk, md = FOCUS["model"]
+    y0, y1 = FOCUS["years"]
+    ok = c["make"] == mk and c["model"] == md and c["year"] and y0 <= c["year"] <= y1
+    if area:
+        where = f"{c['city']} {c['title']} {c['url']}".lower()
+        ok = ok and any(p in where for p in FOCUS["places"])
+    return bool(ok)
+
+
+def focus_text(cars: list[dict]) -> str:
+    mk, md = FOCUS["model"]
+    y0, y1 = FOCUS["years"]
+    name = f"{mk.title()} {md.title()} {y0}-{y1}"
+    local = sorted((c for c in cars if in_focus(c)), key=lambda c: (-(c["below"] or -99), c["price"] or 0))
+    allng = [c for c in cars if in_focus(c, area=False) and c["price"]]
+    lines = [f"🚗 {name} in {FOCUS['area']}: {len(local)} listed today", ""]
+    for i, c in enumerate(local[:15], 1):
+        verdict = (f"{c['below']:.0f}% under the usual ₦{c['fair']:,.0f}" if c["below"] and c["below"] > 0 else
+                   f"{-c['below']:.0f}% over the usual ₦{c['fair']:,.0f}" if c["below"] else "not enough similar cars to judge")
+        extra = ", ".join(x for x in (f"{real_km(c):,.0f} km" if real_km(c) else "", c["condition"], c["city"]) if x)
+        lines.append(f"{i}. {html.escape(c['title'])} ({c['year']}): ₦{c['price']:,.0f}, {verdict}"
+                     + (f"\n   {html.escape(extra)}" if extra else "") + f"\n   {c['url']}")
+    if not local:
+        lines.append(f"None on the sites the bot can read today (Autochek, cars.ng, Carlots). "
+                     f"Most {FOCUS['area']} cars are sold on Jiji, Facebook and WhatsApp, which block bots.")
+    lines += ["", f"Price guide, {name}, all Nigeria today ({len(allng)} listed):"]
+    for y in range(y0, y1 + 1):
+        ps = sorted(c["price"] for c in allng if c["year"] == y)
+        if ps:
+            lo, hi = ps[len(ps) // 4], ps[(3 * len(ps)) // 4]
+            lines.append(f"• {y}: usual ₦{statistics.median(ps) / 1e6:.1f}M (most between ₦{lo / 1e6:.1f}M and "
+                         f"₦{hi / 1e6:.1f}M, {len(ps)} cars)")
+    best = deals([c for c in allng if c not in local], top=3)
+    if best:
+        lines += ["", "Best value elsewhere in Nigeria:"]
+        lines += [f"• {html.escape(c['title'])} ({c['year']}), {html.escape(c['city'] or '?')}: ₦{c['price']:,.0f}, "
+                  f"{c['below']:.0f}% under usual\n   {c['url']}" for c in best]
+    lines += ["", "Use the guide to haggle on Jiji or in person. Foreign-used (tokunbo) usually costs more than "
+              "Nigerian-used. Inspect, check customs papers and VIN, never pay before seeing the car."]
+    return "\n".join(lines)
+
+
 # ---------- run ----------
 
 FIELDS = ["source", "id", "title", "make", "model", "year", "price", "fair", "below", "comps", "mileage",
@@ -267,13 +343,16 @@ def main() -> None:
         except Exception as e:  # one site failing shouldn't stop the others
             health[name] = f"failed ({type(e).__name__})"
             log.warning("%s failed: %s", name, e)
+    seen = {(c["source"], c["id"]) for c in cars}
+    cars += [c for c in focus_extra() if (c["source"], c["id"]) not in seen]
     budget = next((float(a.split("=")[1]) for a in sys.argv if a.startswith("--budget=")), None)
     fair_values(cars)
     ds = deals(cars, budget=budget)
     save(cars, ds, health, now)
-    text = deal_text(ds, len(cars), health)
+    print(deal_text(ds, len(cars), health) + "\n")
+    text = focus_text(cars)    # the Telegram message: the user's chosen model, years and area
     print(text)
-    if "--send" in sys.argv and ds:
+    if "--send" in sys.argv:
         sys.path.insert(0, str(ROOT))
         from bot.alerts import send_telegram
         send_telegram(text)
