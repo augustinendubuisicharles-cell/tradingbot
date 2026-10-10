@@ -112,7 +112,7 @@ def _carlots_page(url: str, seen: set) -> list[dict]:
         make, model = make_model(t)
         out.append({"source": "Carlots", "id": u.rsplit("_", 1)[-1].split(".")[0], "title": t,
                     "make": make, "model": model, "year": year_of(t), "price": _num(p),
-                    "mileage": (_num(km.group(1)) * (1000 if km.group(2) else 1)) if km else None,
+                    "mileage": (_num(km.group(1)) or 0) * (1000 if km.group(2) else 1) or None if km else None,
                     "condition": "foreign" if re.search(r"tokunbo|foreign", t, re.I) else "",
                     "city": loc.group(1).strip() if loc else "", "transmission": "", "fuel": "",
                     "inspected": False, "grade": None, "accident": False, "url": u})
@@ -127,7 +127,10 @@ def carlots() -> list[dict]:
     out = _carlots_page("https://carlots.ng/cars", seen)
     for b in brands:
         time.sleep(PAUSE)
-        out += _carlots_page(b, seen)
+        try:
+            out += _carlots_page(b, seen)
+        except Exception as e:
+            log.warning("carlots %s failed: %s", b, e)
     return out
 
 
@@ -209,7 +212,14 @@ def deals(cars: list[dict], top: int = 15, budget: float | None = None) -> list[
     Anything more than MAX_BELOW% under is dropped as probably a fake or a part-payment price."""
     ok = [c for c in cars if c["below"] is not None and 5 <= c["below"] <= MAX_BELOW and not c["accident"]
           and (not budget or c["price"] <= budget)]
-    return sorted(ok, key=lambda c: (-(c["below"] + (5 if c["inspected"] else 0)), c["price"]))[:top]
+    ok.sort(key=lambda c: (-(c["below"] + (5 if c["inspected"] else 0)), c["price"]))
+    out, seen = [], set()
+    for c in ok:                                  # same car posted twice (or on two sites)
+        k = (c["make"], c["model"], c["year"], c["price"])
+        if k not in seen:
+            seen.add(k)
+            out.append(c)
+    return out[:top]
 
 
 def deal_text(ds: list[dict], total: int, health: dict) -> str:
