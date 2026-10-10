@@ -28,6 +28,8 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "data" / "cars"
 PAUSE = 1.5            # seconds between page requests, to be polite
 MIN_COMPS = 5          # similar cars needed before calling something a deal
+MAX_SPREAD = 0.35      # skip models whose middle-half prices differ by more than this (mixed trims)
+MAX_BELOW = 35         # further under than this is more likely a fake or a part-payment price
 TWO_WORD = {"land cruiser", "range rover", "grand cherokee", "rav 4", "c class", "e class", "glk 350",
             "highlander hybrid", "santa fe", "grand vitara"}
 MAKES = ["toyota", "lexus", "honda", "mercedes-benz", "mercedes", "benz", "bmw", "ford", "hyundai", "kia",
@@ -125,6 +127,14 @@ def _key(c: dict) -> str:
     return f"{c['make']} {c['model']}".strip()
 
 
+def real_km(c: dict) -> float | None:
+    """Mileage, unless it's an obvious placeholder (under 20,000 km on a car over 3 years old)."""
+    km = c.get("mileage")
+    if not km or (c.get("year") and c["year"] <= datetime.now().year - 3 and km < 20_000):
+        return None
+    return km
+
+
 def fair_values(cars: list[dict]) -> None:
     """Adds the usual price for similar cars (same make, model, year +-1,
     same foreign/local condition when known) and how far below it each car is."""
@@ -138,11 +148,15 @@ def fair_values(cars: list[dict]) -> None:
                 and (not c["condition"] or not o["condition"] or o["condition"] == c["condition"])]
         if len(pool) < MIN_COMPS or not c["price"]:
             continue
-        fair = statistics.median(o["price"] for o in pool)
-        miles = [o["mileage"] for o in pool if o["mileage"]]
-        if c["mileage"] and len(miles) >= MIN_COMPS:
+        prices = sorted(o["price"] for o in pool)
+        fair = statistics.median(prices)
+        q1, q3 = prices[len(prices) // 4], prices[(3 * len(prices)) // 4]
+        if (q3 - q1) / fair > MAX_SPREAD:
+            continue                              # prices too mixed (trims vary), can't judge
+        miles = [o["mileage"] for o in pool if real_km(o)]
+        if real_km(c) and len(miles) >= MIN_COMPS:
             # about 1% of value per 10,000 km above or below the usual mileage, capped at +-15%
-            adj = max(-0.15, min(0.15, (statistics.median(miles) - c["mileage"]) / 10_000 * 0.01))
+            adj = max(-0.15, min(0.15, (statistics.median(miles) - real_km(c)) / 10_000 * 0.01))
             fair *= 1 + adj
         c["fair"], c["comps"] = round(fair, -3), len(pool)
         c["below"] = round((1 - c["price"] / fair) * 100, 1)
@@ -150,8 +164,8 @@ def fair_values(cars: list[dict]) -> None:
 
 def deals(cars: list[dict], top: int = 15, budget: float | None = None) -> list[dict]:
     """Best value: priced under the usual price for similar cars, not accident-flagged.
-    Anything more than 40% under is dropped as probably a fake or a part-payment price."""
-    ok = [c for c in cars if c["below"] is not None and 5 <= c["below"] <= 40 and not c["accident"]
+    Anything more than MAX_BELOW% under is dropped as probably a fake or a part-payment price."""
+    ok = [c for c in cars if c["below"] is not None and 5 <= c["below"] <= MAX_BELOW and not c["accident"]
           and (not budget or c["price"] <= budget)]
     return sorted(ok, key=lambda c: (-(c["below"] + (5 if c["inspected"] else 0)), c["price"]))[:top]
 
@@ -160,7 +174,7 @@ def deal_text(ds: list[dict], total: int, health: dict) -> str:
     lines = [f"🚗 Car deals today: {len(ds)} best-value cars out of {total:,} listings", ""]
     for i, c in enumerate(ds, 1):
         extra = ", ".join(x for x in (
-            f"{c['mileage']:,.0f} km" if c["mileage"] else "", c["condition"], c["city"],
+            f"{real_km(c):,.0f} km" if real_km(c) else "", c["condition"], c["city"],
             "inspected ✓" if c["inspected"] else "") if x)
         lines.append(f"{i}. {html.escape(c['title'])} ({c['year']}): ₦{c['price']:,.0f}, "
                      f"{c['below']:.0f}% under the usual ₦{c['fair']:,.0f} ({c['comps']} similar cars)"
