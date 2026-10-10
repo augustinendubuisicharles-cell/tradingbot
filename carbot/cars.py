@@ -4,8 +4,9 @@ for each model and year, and picks the listings priced furthest below it.
 Sources (checked 2026-10-10 from GitHub's servers):
   * Autochek (autochek.africa): readable, structured data incl. mileage,
     inspection grade, accident flag. Main source.
-  * Carlots / Carmart (carlots.ng, carmart.ng): readable HTML listings.
-  * Jiji and Cars45 block GitHub's servers (403 / 405), so they're not used.
+  * Cars.ng: readable HTML, 16 cars a page.
+  * Carlots / Carmart (carlots.ng, carmart.ng): readable HTML, one page per brand.
+  * Jiji, Cars45, Jumia and Nairaland block GitHub's servers, so they're not used.
 A "deal" is only as good as the comparison: a car listed 30% under similar
 cars may have a reason (accident, flood, fake papers). Always inspect.
 """
@@ -96,29 +97,70 @@ def autochek(max_pages: int = 60) -> list[dict]:
     return out
 
 
-def carlots(max_pages: int = 30) -> list[dict]:
+def _carlots_page(url: str, seen: set) -> list[dict]:
+    r = requests.get(url, headers=H, timeout=30)
+    out = []
+    for chunk in r.text.split('<a class="title" href="')[1:]:
+        m = re.match(r'([^"]+)">(.*?)</a>.*?<div class="price"><span>([^<]+)</span>', chunk, re.S)
+        if not m or m.group(1) in seen:
+            continue
+        u, t, p = m.group(1), html.unescape(m.group(2)).strip(), m.group(3)
+        seen.add(u)
+        loc = re.search(r'class="location[^"]*">.*?<span>([^<]+)</span>', chunk, re.S)
+        desc = re.search(r'class="description[^"]*">([^<]*)<', chunk)
+        km = re.search(r"mileage[^\d]{0,20}([\d,]+)\s*(k|thousand)?", (desc.group(1) if desc else ""), re.I)
+        make, model = make_model(t)
+        out.append({"source": "Carlots", "id": u.rsplit("_", 1)[-1].split(".")[0], "title": t,
+                    "make": make, "model": model, "year": year_of(t), "price": _num(p),
+                    "mileage": (_num(km.group(1)) * (1000 if km.group(2) else 1)) if km else None,
+                    "condition": "foreign" if re.search(r"tokunbo|foreign", t, re.I) else "",
+                    "city": loc.group(1).strip() if loc else "", "transmission": "", "fuel": "",
+                    "inspected": False, "grade": None, "accident": False, "url": u})
+    return out
+
+
+def carlots() -> list[dict]:
+    """carlots.ng (also carmart.ng): the main list plus one page per brand (about 52 cars each)."""
+    seen: set = set()
+    r = requests.get("https://carlots.ng/cars", headers=H, timeout=30)
+    brands = sorted(set(re.findall(r'href="(https://carlots\.ng/cars/[a-z\-]+)"', r.text)))
+    out = _carlots_page("https://carlots.ng/cars", seen)
+    for b in brands:
+        time.sleep(PAUSE)
+        out += _carlots_page(b, seen)
+    return out
+
+
+def carsng(max_pages: int = 60) -> list[dict]:
+    """cars.ng: 16 cars a page, title like 'Kia Sorento 2014 for Sale in Lagos'."""
     out, seen = [], set()
     for page in range(1, max_pages + 1):
-        url = "https://carlots.ng/" if page == 1 else f"https://carlots.ng/search?page={page}"
-        r = requests.get(url, headers=H, timeout=30)
-        items = re.findall(r'<a class="title" href="([^"]+)">(.*?)</a>.*?<div class="price"><span>([^<]+)</span>',
-                           r.text, re.S)
-        new = [(u, t, p) for u, t, p in items if u not in seen]
+        r = requests.get(f"https://cars.ng/for-sale?page={page}", headers=H, timeout=30)
+        new = 0
+        for chunk in r.text.split('class="offer-name')[1:]:
+            t = re.search(r'title="([^"]+)"', chunk)
+            u = re.search(r'href="(https://cars\.ng/[^"]+/for-sale/[^"]+)"', chunk)
+            p = re.search(r'fw-bold">\s*₦\s*([\d,]+)', chunk)
+            if not (t and u and p) or u.group(1) in seen:
+                continue
+            seen.add(u.group(1))
+            new += 1
+            title = html.unescape(t.group(1)).replace(" for Sale", "").strip()
+            props = [x.strip() for x in re.findall(r'<h4 class="properties">([^<]+)</h4>', chunk)]
+            loc = re.search(r'fa-map-marker-alt"></i>\s*([^<]+)</a>', chunk)
+            make, model = make_model(title)
+            out.append({"source": "Cars.ng", "id": u.group(1).rsplit("/", 1)[-1], "title": title.split(" in ")[0],
+                        "make": make, "model": model, "year": year_of(title), "price": _num(p.group(1)),
+                        "mileage": None, "condition": "", "city": loc.group(1).strip() if loc else "",
+                        "transmission": "", "fuel": props[1] if len(props) > 1 else "", "inspected": False,
+                        "grade": None, "accident": False, "url": u.group(1)})
         if not new:
             break
-        for u, t, p in new:
-            seen.add(u)
-            t = html.unescape(t).strip()
-            make, model = make_model(t)
-            out.append({"source": "Carlots", "id": u.rsplit("_", 1)[-1].split(".")[0], "title": t,
-                        "make": make, "model": model, "year": year_of(t), "price": _num(p), "mileage": None,
-                        "condition": "", "city": "", "transmission": "", "fuel": "", "inspected": False,
-                        "grade": None, "accident": False, "url": u})
         time.sleep(PAUSE)
     return out
 
 
-SOURCES = {"Autochek": autochek, "Carlots": carlots}
+SOURCES = {"Autochek": autochek, "Cars.ng": carsng, "Carlots": carlots}
 
 
 # ---------- pricing ----------
