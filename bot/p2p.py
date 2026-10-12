@@ -176,6 +176,13 @@ def main() -> None:
     sp.write_text(json.dumps(state))
     with lp.open("a") as f:
         f.write(json.dumps(row) + "\n")
+    rows = [json.loads(x) for x in lp.read_text().splitlines() if x.strip()]
+    best = sorted(r["routes"][0]["gap"] for r in rows if r.get("routes"))
+    if best:
+        print(f"LOG SUMMARY since {rows[0]['time']}: {len(rows)} scans, "
+              f"{sum(g >= ALERT_GAP for g in best)} with a usable gap of {ALERT_GAP}%+, "
+              f"median best gap {best[len(best) // 2]:.2f}%, max {best[-1]:.2f}%, "
+              f"alerts sent so far {len(state.get('p2p_sent', {}))} routes")
 
 
 if __name__ == "__main__":
