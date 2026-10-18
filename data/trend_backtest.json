@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-11T08:03:10.695286+00:00",
+  "generated_at": "2026-10-18T06:46:15.549805+00:00",
   "data": "Binance daily prices Aug 2017 to Oct 2026, 0.15% cost per side",
   "periods": [
     {
@@ -20,31 +20,31 @@
     {
       "name": "Never seen (2023-now)",
       "trend": {
-        "cagr": 19.3,
-        "sharpe": 0.87,
+        "cagr": 18.8,
+        "sharpe": 0.86,
         "max_dd": -22.7,
-        "total": 94.7
+        "total": 92.5
       },
       "btc": {
-        "cagr": 53.1,
-        "sharpe": 1.15,
+        "cagr": 52.1,
+        "sharpe": 1.14,
         "max_dd": -53.0,
-        "total": 399.4
+        "total": 390.4
       }
     },
     {
       "name": "Last 12 months",
       "trend": {
-        "cagr": -4.5,
-        "sharpe": -0.34,
-        "max_dd": -12.7,
-        "total": -4.5
+        "cagr": -4.8,
+        "sharpe": -0.38,
+        "max_dd": -12.6,
+        "total": -4.8
       },
       "btc": {
-        "cagr": -26.4,
-        "sharpe": -0.47,
-        "max_dd": -49.1,
-        "total": -26.4
+        "cagr": -23.4,
+        "sharpe": -0.39,
+        "max_dd": -48.8,
+        "total": -23.4
       }
     }
   ],
@@ -91,15 +91,15 @@
     },
     {
       "year": 2026,
-      "trend": 0.6,
-      "btc": -6.6
+      "trend": -0.6,
+      "btc": -8.3
     }
   ],
   "trades_per_year": 9.8,
   "exposure_pct": 28.0,
   "health": {
-    "sharpe_2y": 0.65,
-    "return_2y": 23.8,
+    "sharpe_2y": 0.57,
+    "return_2y": 20.0,
     "status": "ok",
     "rule": "weak when the last 2 years' Sharpe ratio drops below 0"
   }
