@@ -1,45 +1,60 @@
 {
-  "generated_at": "2026-10-25T22:29:34.401602+00:00",
+  "generated_at": "2026-10-26T04:34:12.105649+00:00",
   "exchange": "bitget",
   "lookback_hours": 24,
   "fear_greed": {
-    "value": 54,
+    "value": 50,
     "label": "Neutral"
   },
   "trending": [
-    "PEPINA",
     "EVMZONE",
-    "DACITY",
-    "QNT",
-    "PEARL",
-    "PENGU",
-    "ENA",
-    "SUI",
-    "NEAR",
-    "XRP",
-    "INJ",
-    "BMT",
-    "ETH",
+    "BTC",
     "QTC",
-    "AERO"
+    "PEARL",
+    "NEAR",
+    "TIA",
+    "AERO",
+    "GRASS",
+    "HYPE",
+    "SOL",
+    "ZEC",
+    "LIT",
+    "PENGU",
+    "CARDS",
+    "ICP"
   ],
   "market_mood": {
-    "score": 0.293,
-    "adjusted": 0.23,
-    "mentions": 18,
-    "bullish_pct": 39,
-    "bearish_pct": 0,
+    "score": 0.113,
+    "adjusted": 0.094,
+    "mentions": 25,
+    "bullish_pct": 32,
+    "bearish_pct": 8,
     "top_posts": [
+      {
+        "source": "telegram",
+        "author": "cryptoinnercycles",
+        "text": "#BTC /USDT #Short \u2705 ENTRY ZONE\u00a0- 80200 - 80500 \u2611\ufe0f TARGETS:\u00a080100, 79800, 79500, 79100, 78000 LEVERAGE - cross 30x \ud83d\udeab STOPLOSS - 81500",
+        "ts": "2026-10-26T00:24:34+00:00",
+        "url": "https://t.me/Cryptoinnercycles/10273",
+        "engagement": 272.0,
+        "source_weight": 1.0,
+        "sentiment": -0.93,
+        "weight": 2.616,
+        "coins": [
+          "BTC"
+        ],
+        "read_by": "ai"
+      },
       {
         "source": "telegram",
         "author": "gorilla_crypto",
         "text": "#JCT let's go \ud83d\ude80",
         "ts": "2026-10-25T10:58:34+00:00",
         "url": "https://t.me/gorilla_crypto/79914",
-        "engagement": 3440.0,
+        "engagement": 3950.0,
         "source_weight": 1.5,
         "sentiment": 0.664,
-        "weight": 3.203,
+        "weight": 2.279,
         "coins": [],
         "read_by": "ai"
       },
@@ -49,10 +64,10 @@
         "text": "POLYXUSDT buy and hold big Move soon \ud83e\udd11 \ud83d\ude80",
         "ts": "2026-10-25T10:56:22+00:00",
         "url": "https://t.me/Cryptoinnercycles/10271",
-        "engagement": 603.0,
+        "engagement": 637.0,
         "source_weight": 1.0,
         "sentiment": 0.854,
-        "weight": 1.84,
+        "weight": 1.302,
         "coins": [],
         "read_by": "ai"
       },
@@ -62,10 +77,10 @@
         "text": "POLYXUSDT buy and hold big Move soon \ud83e\udd11 \ud83d\ude80",
         "ts": "2026-10-25T10:55:21+00:00",
         "url": "https://t.me/Cryptoinnercycles/10270",
-        "engagement": 603.0,
+        "engagement": 632.0,
         "source_weight": 1.0,
         "sentiment": 0.854,
-        "weight": 1.838,
+        "weight": 1.299,
         "coins": [],
         "read_by": "ai"
       },
@@ -75,10 +90,23 @@
         "text": "POLYXUSDT buy and hold big Move soon \ud83e\udd11 \ud83d\ude80",
         "ts": "2026-10-25T10:38:33+00:00",
         "url": "https://t.me/Cryptoinnercycles/10269",
-        "engagement": 547.0,
+        "engagement": 571.0,
         "source_weight": 1.0,
         "sentiment": 0.854,
-        "weight": 1.792,
+        "weight": 1.267,
+        "coins": [],
+        "read_by": "ai"
+      },
+      {
+        "source": "news",
+        "author": "Cointelegraph.com News",
+        "text": "Keystone says website breach exposed hardware wallet buyers\u2019 addresses. A security researcher warned that the leaked shipping details could expose crypto holders to targeted scams and physical attacks.",
+        "ts": "2026-10-26T02:24:04+00:00",
+        "url": "https://cointelegraph.com/news/keystone-says-website-breach-exposed-hardware-wallet-buyers-addresses?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+        "engagement": 0.0,
+        "source_weight": 1.0,
+        "sentiment": -0.786,
+        "weight": 1.059,
         "coins": [],
         "read_by": "ai"
       },
@@ -88,10 +116,10 @@
         "text": "#ETH is currently experiencing its worst \"UPtober\" in 8 YEARS!",
         "ts": "2026-10-25T10:38:32+00:00",
         "url": "https://t.me/Cryptoinnercycles/10268",
-        "engagement": 490.0,
+        "engagement": 503.0,
         "source_weight": 1.0,
         "sentiment": 0.65,
-        "weight": 1.774,
+        "weight": 1.252,
         "coins": [
           "ETH"
         ],
@@ -103,11 +131,27 @@
         "text": "\ud83c\udf99 Sam Altman says the internet can no longer be SECURED by patching bugs. \"I no longer think we're going to be able to just patch all the bugs,\" the OpenAI CEO said, warning smarter models can find \"hardware level insane stuff.\" He says OpenAI can't responsibly open source its be",
         "ts": "2026-10-25T06:08:26+00:00",
         "url": "https://t.me/Cryptoinnercycles/10266",
-        "engagement": 426.0,
+        "engagement": 432.0,
         "source_weight": 1.0,
         "sentiment": 0.774,
-        "weight": 1.35,
+        "weight": 0.952,
         "coins": [],
+        "read_by": "ai"
+      },
+      {
+        "source": "news",
+        "author": "Cointelegraph.com News",
+        "text": "AI agents help rescue ETH\u2019s Glamsterdam fork, \u2018Steal My Bitcoin\u2019 site: Hodler\u2019s Digest. Similar to the Hugging Face hack, Ethereum researchers have set up an AI Agent message board to help rescue the Glamsterdam fork. \u2018Steal My Bitcoin\u2019 site successfully hacked.",
+        "ts": "2026-10-25T22:48:40+00:00",
+        "url": "https://cointelegraph.com/magazine/ai-agents-help-rescue-eths-glamsterdam-fork-steal-my-bitcoin-site-hodlers-digest?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+        "engagement": 0.0,
+        "source_weight": 1.0,
+        "sentiment": 0.731,
+        "weight": 0.86,
+        "coins": [
+          "BTC",
+          "ETH"
+        ],
         "read_by": "ai"
       },
       {
@@ -119,7 +163,7 @@
         "engagement": 0.0,
         "source_weight": 1.0,
         "sentiment": 0.706,
-        "weight": 0.787,
+        "weight": 0.554,
         "coins": [],
         "read_by": "ai"
       },
@@ -129,10 +173,10 @@
         "text": "a huge volume with V shape recover to near ATH is telling a lot something A new cycle #JCT gets started.",
         "ts": "2026-10-25T06:36:44+00:00",
         "url": "https://t.me/gorilla_crypto/79905",
-        "engagement": 3430.0,
+        "engagement": 3630.0,
         "source_weight": 1.5,
         "sentiment": 0.0,
-        "weight": 2.488,
+        "weight": 1.76,
         "coins": [],
         "read_by": "ai"
       },
@@ -142,56 +186,11 @@
         "text": "a huge volume with V shape recover to near ATH is telling a lot something  A new cycle #JCT gets started.",
         "ts": "2026-10-25T07:08:29+00:00",
         "url": "https://t.me/gorilla_crypto/79908",
-        "engagement": 3510.0,
+        "engagement": 3830.0,
         "source_weight": 1.5,
         "sentiment": 0.0,
-        "weight": 2.57,
+        "weight": 1.822,
         "coins": [],
-        "read_by": "ai"
-      },
-      {
-        "source": "telegram",
-        "author": "gorilla_crypto",
-        "text": "#BTCUSDT Currently in a downtrend If $BTC breaks below 80k or closes weekly below 80k we could see a continuation of down move targetting 75k area during the next week.",
-        "ts": "2026-10-25T16:27:45+00:00",
-        "url": "https://t.me/gorilla_crypto/79915",
-        "engagement": 2240.0,
-        "source_weight": 1.5,
-        "sentiment": 0.0,
-        "weight": 4.249,
-        "coins": [
-          "BTC"
-        ],
-        "read_by": "ai"
-      },
-      {
-        "source": "telegram",
-        "author": "BitcoinBullets",
-        "text": "#ICP Market Analysis ICP is at 2.637 on the 8h, catching a bounce right at the rising trendline from the early September lows near 2.59 after a steady slide from the 3.58 highs. That same trendline launched the September rally, so buyers have a clear line to defend. Bull case: ho",
-        "ts": "2026-10-25T05:17:08+00:00",
-        "url": "https://t.me/BitcoinBullets/17349",
-        "engagement": 3730.0,
-        "source_weight": 1.5,
-        "sentiment": 0.0,
-        "weight": 2.32,
-        "coins": [
-          "BTC"
-        ],
-        "read_by": "ai"
-      },
-      {
-        "source": "telegram",
-        "author": "cryptoinnercycles",
-        "text": "#BTC /USDT ANALYSIS Bitcoin is rebounding from the support trendline of the falling wedge pattern but is still trading below the Ichimoku cloud, which is acting as a key resistance barrier. A solid breakout above both the Ichimoku cloud and the wedge resistance trendline could pr",
-        "ts": "2026-10-25T10:10:15+00:00",
-        "url": "https://t.me/Cryptoinnercycles/10267",
-        "engagement": 416.0,
-        "source_weight": 1.0,
-        "sentiment": 0.0,
-        "weight": 1.701,
-        "coins": [
-          "BTC"
-        ],
         "read_by": "ai"
       }
     ]
@@ -199,63 +198,64 @@
   "coins": [
     {
       "coin": "BTC",
-      "price": 80514.0,
-      "change_24h": 0.018,
-      "volume_24h": 123741918.166807,
-      "rsi": 39.8,
-      "atr": 686.0890526379034,
-      "atr_pct": 0.85,
-      "ema20": 81028.90104752127,
-      "funding_rate": 7.1e-05,
-      "open_interest": 36061.77049999998,
-      "oi_change_pct": -0.51,
+      "price": 80094.92,
+      "change_24h": -0.961,
+      "volume_24h": 194716510.413902,
+      "rsi": 39.1,
+      "atr": 717.4451365770594,
+      "atr_pct": 0.9,
+      "ema20": 80789.59085060224,
+      "funding_rate": 8.4e-05,
+      "open_interest": 37169.24269999997,
+      "oi_change_pct": 3.07,
       "sentiment": {
-        "score": 0.0,
-        "adjusted": 0.0,
-        "mentions": 4,
-        "bullish_pct": 0,
-        "bearish_pct": 0,
+        "score": -0.115,
+        "adjusted": -0.067,
+        "mentions": 7,
+        "bullish_pct": 14,
+        "bearish_pct": 14,
         "top_posts": [
+          {
+            "source": "telegram",
+            "author": "cryptoinnercycles",
+            "text": "#BTC /USDT #Short \u2705 ENTRY ZONE\u00a0- 80200 - 80500 \u2611\ufe0f TARGETS:\u00a080100, 79800, 79500, 79100, 78000 LEVERAGE - cross 30x \ud83d\udeab STOPLOSS - 81500",
+            "ts": "2026-10-26T00:24:34+00:00",
+            "url": "https://t.me/Cryptoinnercycles/10273",
+            "engagement": 272.0,
+            "source_weight": 1.0,
+            "sentiment": -0.93,
+            "weight": 2.616,
+            "coins": [
+              "BTC"
+            ],
+            "read_by": "ai"
+          },
+          {
+            "source": "news",
+            "author": "Cointelegraph.com News",
+            "text": "AI agents help rescue ETH\u2019s Glamsterdam fork, \u2018Steal My Bitcoin\u2019 site: Hodler\u2019s Digest. Similar to the Hugging Face hack, Ethereum researchers have set up an AI Agent message board to help rescue the Glamsterdam fork. \u2018Steal My Bitcoin\u2019 site successfully hacked.",
+            "ts": "2026-10-25T22:48:40+00:00",
+            "url": "https://cointelegraph.com/magazine/ai-agents-help-rescue-eths-glamsterdam-fork-steal-my-bitcoin-site-hodlers-digest?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+            "engagement": 0.0,
+            "source_weight": 1.0,
+            "sentiment": 0.731,
+            "weight": 0.86,
+            "coins": [
+              "BTC",
+              "ETH"
+            ],
+            "read_by": "ai"
+          },
           {
             "source": "telegram",
             "author": "gorilla_crypto",
             "text": "#BTCUSDT Currently in a downtrend If $BTC breaks below 80k or closes weekly below 80k we could see a continuation of down move targetting 75k area during the next week.",
             "ts": "2026-10-25T16:27:45+00:00",
             "url": "https://t.me/gorilla_crypto/79915",
-            "engagement": 2240.0,
+            "engagement": 3050.0,
             "source_weight": 1.5,
             "sentiment": 0.0,
-            "weight": 4.249,
-            "coins": [
-              "BTC"
-            ],
-            "read_by": "ai"
-          },
-          {
-            "source": "telegram",
-            "author": "BitcoinBullets",
-            "text": "#ICP Market Analysis ICP is at 2.637 on the 8h, catching a bounce right at the rising trendline from the early September lows near 2.59 after a steady slide from the 3.58 highs. That same trendline launched the September rally, so buyers have a clear line to defend. Bull case: ho",
-            "ts": "2026-10-25T05:17:08+00:00",
-            "url": "https://t.me/BitcoinBullets/17349",
-            "engagement": 3730.0,
-            "source_weight": 1.5,
-            "sentiment": 0.0,
-            "weight": 2.32,
-            "coins": [
-              "BTC"
-            ],
-            "read_by": "ai"
-          },
-          {
-            "source": "telegram",
-            "author": "cryptoinnercycles",
-            "text": "#BTC /USDT ANALYSIS Bitcoin is rebounding from the support trendline of the falling wedge pattern but is still trading below the Ichimoku cloud, which is acting as a key resistance barrier. A solid breakout above both the Ichimoku cloud and the wedge resistance trendline could pr",
-            "ts": "2026-10-25T10:10:15+00:00",
-            "url": "https://t.me/Cryptoinnercycles/10267",
-            "engagement": 416.0,
-            "source_weight": 1.0,
-            "sentiment": 0.0,
-            "weight": 1.701,
+            "weight": 3.066,
             "coins": [
               "BTC"
             ],
@@ -266,11 +266,11 @@
       "components": {
         "trend": 0.0,
         "momentum": 40,
-        "sentiment": 50.0,
+        "sentiment": 46.6,
         "positioning": 60,
         "risk": 100.0
       },
-      "score": 39.5,
+      "score": 38.7,
       "label": "Weak",
       "trend_notes": [],
       "eligible": true,
@@ -278,20 +278,20 @@
     },
     {
       "coin": "ETH",
-      "price": 2345.12,
-      "change_24h": 0.106,
-      "volume_24h": 84548987.8162,
-      "rsi": 40.8,
-      "atr": 31.87855987058978,
-      "atr_pct": 1.36,
-      "ema20": 2369.140229825514,
-      "funding_rate": 4.3e-05,
-      "open_interest": 759702.8399999993,
-      "oi_change_pct": -0.76,
+      "price": 2318.56,
+      "change_24h": -1.982,
+      "volume_24h": 123442618.7468,
+      "rsi": 37.7,
+      "atr": 32.859546131721125,
+      "atr_pct": 1.42,
+      "ema20": 2357.382457800121,
+      "funding_rate": 5.8e-05,
+      "open_interest": 776147.7299999993,
+      "oi_change_pct": 2.16,
       "sentiment": {
-        "score": 0.65,
-        "adjusted": 0.108,
-        "mentions": 1,
+        "score": 0.683,
+        "adjusted": 0.195,
+        "mentions": 2,
         "bullish_pct": 100,
         "bearish_pct": 0,
         "top_posts": [
@@ -301,11 +301,27 @@
             "text": "#ETH is currently experiencing its worst \"UPtober\" in 8 YEARS!",
             "ts": "2026-10-25T10:38:32+00:00",
             "url": "https://t.me/Cryptoinnercycles/10268",
-            "engagement": 490.0,
+            "engagement": 503.0,
             "source_weight": 1.0,
             "sentiment": 0.65,
-            "weight": 1.774,
+            "weight": 1.252,
             "coins": [
+              "ETH"
+            ],
+            "read_by": "ai"
+          },
+          {
+            "source": "news",
+            "author": "Cointelegraph.com News",
+            "text": "AI agents help rescue ETH\u2019s Glamsterdam fork, \u2018Steal My Bitcoin\u2019 site: Hodler\u2019s Digest. Similar to the Hugging Face hack, Ethereum researchers have set up an AI Agent message board to help rescue the Glamsterdam fork. \u2018Steal My Bitcoin\u2019 site successfully hacked.",
+            "ts": "2026-10-25T22:48:40+00:00",
+            "url": "https://cointelegraph.com/magazine/ai-agents-help-rescue-eths-glamsterdam-fork-steal-my-bitcoin-site-hodlers-digest?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+            "engagement": 0.0,
+            "source_weight": 1.0,
+            "sentiment": 0.731,
+            "weight": 0.86,
+            "coins": [
+              "BTC",
               "ETH"
             ],
             "read_by": "ai"
@@ -314,33 +330,33 @@
       },
       "components": {
         "trend": 0.0,
-        "momentum": 70,
-        "sentiment": 55.4,
+        "momentum": 40,
+        "sentiment": 59.8,
         "positioning": 60,
         "risk": 100.0
       },
-      "score": 45.4,
-      "label": "Neutral",
+      "score": 41.9,
+      "label": "Weak",
       "trend_notes": [],
       "eligible": true,
       "suggestion": null
     },
     {
       "coin": "SOL",
-      "price": 101.71,
-      "change_24h": 0.148,
-      "volume_24h": 34587579.5405,
-      "rsi": 42.0,
-      "atr": 1.4667388788855045,
-      "atr_pct": 1.44,
-      "ema20": 102.56690310049112,
-      "funding_rate": 2.1e-05,
-      "open_interest": 4110604.599999964,
-      "oi_change_pct": -0.43,
+      "price": 101.02,
+      "change_24h": -1.454,
+      "volume_24h": 49662700.7206,
+      "rsi": 40.6,
+      "atr": 1.4627020337217504,
+      "atr_pct": 1.45,
+      "ema20": 102.19109732770985,
+      "funding_rate": 7.4e-05,
+      "open_interest": 4130446.299999964,
+      "oi_change_pct": 0.48,
       "sentiment": {
         "score": 0.0,
         "adjusted": 0.0,
-        "mentions": 1,
+        "mentions": 2,
         "bullish_pct": 0,
         "bearish_pct": 0,
         "top_posts": [
@@ -350,10 +366,25 @@
             "text": "\ud83d\udea8 LATEST: Solana just added $22M in euro stablecoins in a week, more than every other chain on Token Terminal's list combined.",
             "ts": "2026-10-25T20:36:37+00:00",
             "url": "https://t.me/Cryptoinnercycles/10272",
-            "engagement": 272.0,
+            "engagement": 339.0,
             "source_weight": 1.0,
             "sentiment": 0.0,
-            "weight": 2.984,
+            "weight": 2.146,
+            "coins": [
+              "SOL"
+            ],
+            "read_by": "ai"
+          },
+          {
+            "source": "news",
+            "author": "Cointelegraph.com News",
+            "text": "Hong Kong names Nasdaq-listed Solana Company a strategic enterprise. The Nasdaq-listed firm said it plans to establish Solana validator operations in Hong Kong.",
+            "ts": "2026-10-26T03:21:26+00:00",
+            "url": "https://cointelegraph.com/news/hong-kong-names-nasdaq-listed-solana-company-a-strategic-enterprise?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+            "engagement": 0.0,
+            "source_weight": 1.0,
+            "sentiment": 0.0,
+            "weight": 1.119,
             "coins": [
               "SOL"
             ],
@@ -376,16 +407,16 @@
     },
     {
       "coin": "XRP",
-      "price": 1.3008,
-      "change_24h": 0.689,
-      "volume_24h": 8937170.1368,
-      "rsi": 47.0,
-      "atr": 0.01785826290890357,
-      "atr_pct": 1.37,
-      "ema20": 1.3037841262933827,
-      "funding_rate": 4.9e-05,
-      "open_interest": 176628946.0,
-      "oi_change_pct": -0.68,
+      "price": 1.287,
+      "change_24h": -1.726,
+      "volume_24h": 13354614.4486,
+      "rsi": 42.6,
+      "atr": 0.018371847441980456,
+      "atr_pct": 1.43,
+      "ema20": 1.299575041659805,
+      "funding_rate": 7.8e-05,
+      "open_interest": 179113387.0,
+      "oi_change_pct": 1.41,
       "sentiment": {
         "score": 0.0,
         "adjusted": 0.0,
@@ -409,16 +440,16 @@
     },
     {
       "coin": "BNB",
-      "price": 740.8,
-      "change_24h": 0.851,
-      "volume_24h": 589831.9661,
-      "rsi": 52.4,
-      "atr": 7.4713074337520995,
-      "atr_pct": 1.01,
-      "ema20": 739.3961468529398,
-      "funding_rate": 7.1e-05,
-      "open_interest": 90203.17000000007,
-      "oi_change_pct": 0.08,
+      "price": 742.01,
+      "change_24h": -0.623,
+      "volume_24h": 549132.6408,
+      "rsi": 53.6,
+      "atr": 7.577723788941649,
+      "atr_pct": 1.02,
+      "ema20": 739.2095312804748,
+      "funding_rate": 6e-06,
+      "open_interest": 90220.79000000008,
+      "oi_change_pct": 0.02,
       "sentiment": {
         "score": 0.0,
         "adjusted": 0.0,
@@ -447,16 +478,16 @@
     },
     {
       "coin": "DOGE",
-      "price": 0.07721,
-      "change_24h": -0.065,
-      "volume_24h": 8323799.567,
-      "rsi": 41.4,
-      "atr": 0.0012205680114855014,
-      "atr_pct": 1.58,
-      "ema20": 0.07808249127055568,
-      "funding_rate": -3.3e-05,
-      "open_interest": 1260092962.0,
-      "oi_change_pct": -0.18,
+      "price": 0.07689,
+      "change_24h": -1.233,
+      "volume_24h": 11274668.0849,
+      "rsi": 41.1,
+      "atr": 0.0012030371229913316,
+      "atr_pct": 1.56,
+      "ema20": 0.0777914940350789,
+      "funding_rate": -6e-06,
+      "open_interest": 1257579814.0,
+      "oi_change_pct": -0.2,
       "sentiment": {
         "score": 0.0,
         "adjusted": 0.0,
@@ -470,9 +501,9 @@
         "momentum": 70,
         "sentiment": 50.0,
         "positioning": 60,
-        "risk": 98.2
+        "risk": 98.6
       },
-      "score": 43.7,
+      "score": 43.8,
       "label": "Weak",
       "trend_notes": [],
       "eligible": false,
@@ -480,16 +511,16 @@
     },
     {
       "coin": "ADA",
-      "price": 0.2054,
-      "change_24h": -0.146,
-      "volume_24h": 936032.46,
-      "rsi": 35.6,
-      "atr": 0.003963486883911981,
-      "atr_pct": 1.93,
-      "ema20": 0.2097187433998075,
-      "funding_rate": -6e-06,
-      "open_interest": 195520305.0,
-      "oi_change_pct": 0.61,
+      "price": 0.2034,
+      "change_24h": -2.212,
+      "volume_24h": 898596.335,
+      "rsi": 35.4,
+      "atr": 0.003962539969815526,
+      "atr_pct": 1.95,
+      "ema20": 0.20831521364427613,
+      "funding_rate": -6.8e-05,
+      "open_interest": 196920705.0,
+      "oi_change_pct": 0.72,
       "sentiment": {
         "score": 0.0,
         "adjusted": 0.0,
@@ -503,9 +534,9 @@
         "momentum": 40,
         "sentiment": 50.0,
         "positioning": 60,
-        "risk": 90.5
+        "risk": 90.0
       },
-      "score": 38.1,
+      "score": 38.0,
       "label": "Weak",
       "trend_notes": [],
       "eligible": false,
@@ -513,16 +544,16 @@
     },
     {
       "coin": "AVAX",
-      "price": 8.942,
-      "change_24h": 0.337,
-      "volume_24h": 344222.2231,
-      "rsi": 39.6,
-      "atr": 0.1675373133560186,
+      "price": 8.866,
+      "change_24h": -1.093,
+      "volume_24h": 375901.4988,
+      "rsi": 38.1,
+      "atr": 0.16585468058917271,
       "atr_pct": 1.87,
-      "ema20": 9.048741576434159,
+      "ema20": 9.009035728420216,
       "funding_rate": 0.0001,
-      "open_interest": 2808988.0999999964,
-      "oi_change_pct": -0.35,
+      "open_interest": 2807263.0999999964,
+      "oi_change_pct": -0.06,
       "sentiment": {
         "score": 0.0,
         "adjusted": 0.0,
@@ -536,7 +567,7 @@
         "momentum": 40,
         "sentiment": 50.0,
         "positioning": 60,
-        "risk": 91.7
+        "risk": 91.8
       },
       "score": 38.3,
       "label": "Weak",
@@ -546,16 +577,16 @@
     },
     {
       "coin": "LINK",
-      "price": 11.504,
-      "change_24h": -0.312,
-      "volume_24h": 606158.6884,
-      "rsi": 38.1,
-      "atr": 0.2085716265168249,
+      "price": 11.406,
+      "change_24h": -1.503,
+      "volume_24h": 841747.3175,
+      "rsi": 36.9,
+      "atr": 0.2067173827355194,
       "atr_pct": 1.81,
-      "ema20": 11.69799242973941,
+      "ema20": 11.635587582159326,
       "funding_rate": 0.0001,
-      "open_interest": 3745143.0,
-      "oi_change_pct": 0.25,
+      "open_interest": 3748088.0,
+      "oi_change_pct": 0.08,
       "sentiment": {
         "score": 0.0,
         "adjusted": 0.0,
@@ -569,7 +600,7 @@
         "momentum": 40,
         "sentiment": 50.0,
         "positioning": 60,
-        "risk": 93.0
+        "risk": 93.1
       },
       "score": 38.5,
       "label": "Weak",
@@ -579,16 +610,16 @@
     },
     {
       "coin": "SUI",
-      "price": 0.924,
-      "change_24h": -0.805,
-      "volume_24h": 6650655.29,
-      "rsi": 34.4,
-      "atr": 0.020120331667111736,
-      "atr_pct": 2.18,
-      "ema20": 0.949506925977778,
-      "funding_rate": 4.5e-05,
-      "open_interest": 56423956.30000003,
-      "oi_change_pct": 0.03,
+      "price": 0.9126,
+      "change_24h": -2.249,
+      "volume_24h": 8858933.09,
+      "rsi": 33.6,
+      "atr": 0.019699601945911537,
+      "atr_pct": 2.16,
+      "ema20": 0.9418296301053292,
+      "funding_rate": 3.4e-05,
+      "open_interest": 55876622.700000025,
+      "oi_change_pct": -0.97,
       "sentiment": {
         "score": 0.0,
         "adjusted": 0.0,
@@ -602,9 +633,9 @@
         "momentum": 40,
         "sentiment": 50.0,
         "positioning": 60,
-        "risk": 84.9
+        "risk": 85.4
       },
-      "score": 37.2,
+      "score": 37.3,
       "label": "Weak",
       "trend_notes": [],
       "eligible": false,
@@ -612,16 +643,16 @@
     },
     {
       "coin": "DOT",
-      "price": 1.0328,
-      "change_24h": -0.328,
-      "volume_24h": 443733.5635,
-      "rsi": 35.1,
-      "atr": 0.02769768358927446,
-      "atr_pct": 2.68,
-      "ema20": 1.0706148535690656,
-      "funding_rate": 7.2e-05,
-      "open_interest": 19364496.0,
-      "oi_change_pct": 0.8,
+      "price": 1.0231,
+      "change_24h": -1.738,
+      "volume_24h": 539387.5819,
+      "rsi": 34.4,
+      "atr": 0.02624049386088273,
+      "atr_pct": 2.56,
+      "ema20": 1.0610931436845434,
+      "funding_rate": -9.6e-05,
+      "open_interest": 19075552.0,
+      "oi_change_pct": -1.49,
       "sentiment": {
         "score": 0.0,
         "adjusted": 0.0,
@@ -635,9 +666,9 @@
         "momentum": 40,
         "sentiment": 50.0,
         "positioning": 60,
-        "risk": 73.7
+        "risk": 76.3
       },
-      "score": 35.6,
+      "score": 36.0,
       "label": "Weak",
       "trend_notes": [],
       "eligible": false,
@@ -646,23 +677,23 @@
   ],
   "suggestions": [],
   "source_health": {
-    "telegram:gorilla_crypto": "ok (11 posts)",
+    "telegram:gorilla_crypto": "ok (8 posts)",
     "telegram:learn2tradectypto": "ok (0 posts)",
-    "telegram:BitcoinBullets": "ok (1 posts)",
+    "telegram:BitcoinBullets": "ok (2 posts)",
     "telegram:theanalystcrypto": "ok (0 posts)",
-    "telegram:cryptoinnercycles": "ok (7 posts)",
+    "telegram:cryptoinnercycles": "ok (8 posts)",
     "reddit:CryptoCurrency": "failed: HTTPError",
     "reddit:CryptoMarkets": "failed: HTTPError",
     "reddit:Bitcoin": "failed: HTTPError",
     "reddit:ethtrader": "failed: HTTPError",
-    "news:https://www.coindesk.com/arc/outboundfeeds/rss/": "ok (2 posts)",
-    "news:https://cointelegraph.com/rss": "ok (2 posts)",
+    "news:https://www.coindesk.com/arc/outboundfeeds/rss/": "ok (3 posts)",
+    "news:https://cointelegraph.com/rss": "ok (6 posts)",
     "news:https://decrypt.co/feed": "ok (2 posts)",
-    "ai post reading": "ok (25 posts read by CryptoBERT)",
+    "ai post reading": "ok (29 posts read by CryptoBERT)",
     "exchange": "ok (11 markets); not listed: TON",
-    "trend signals": "ok (prices to 2026-10-24)",
+    "trend signals": "ok (prices to 2026-10-25)",
     "altcoin portion": "ok (20 coins checked, 1 held)",
-    "hidden gems": "ok (18 checked, 0 passed safety; scan from 2026-10-25 10:34 UTC)"
+    "hidden gems": "ok (19 checked, 0 passed safety; scan from 2026-10-25 10:34 UTC)"
   },
   "trend": {
     "account": 1000.0,
@@ -671,14 +702,13 @@
         "target": 0.09375,
         "votes_on": 2,
         "votes": 8,
-        "close": 80882.0,
-        "as_of": "2026-10-24",
-        "volatility": 0.3867994233136973,
+        "close": 80163.32,
+        "as_of": "2026-10-25",
+        "volatility": 0.38342900423320403,
         "next_trim": 74721.26999999999,
         "full_exit": 72626.31,
         "next_add": 84101.19,
         "spark": [
-          63760.44,
           63926.48,
           63983.14,
           64778.88,
@@ -767,21 +797,21 @@
           84101.19,
           81419.55,
           81186.93,
-          80882.0
+          80882.0,
+          80163.32
         ]
       },
       "ETH": {
-        "target": 0.08708316084240822,
+        "target": 0.0876832332867655,
         "votes_on": 2,
         "votes": 8,
-        "close": 2358.79,
-        "as_of": "2026-10-24",
-        "volatility": 0.5382785781608028,
+        "close": 2329.74,
+        "as_of": "2026-10-25",
+        "volatility": 0.5345947935872376,
         "next_trim": 2310.57,
         "full_exit": 2171.95,
         "next_add": 2473.84,
         "spark": [
-          1892.43,
           1922.12,
           1910.68,
           1918.4,
@@ -870,16 +900,17 @@
           2473.84,
           2389.21,
           2387.57,
-          2358.79
+          2358.79,
+          2329.74
         ]
       }
     },
-    "total": 0.18083316084240822,
+    "total": 0.1814332332867655,
     "live": {
-      "total": -1.7,
-      "max_dd": -1.7,
-      "drawdown": -1.7,
-      "days": 17,
+      "total": -1.9,
+      "max_dd": -1.9,
+      "drawdown": -1.9,
+      "days": 18,
       "start": "2026-10-07"
     },
     "tested": {
@@ -997,13 +1028,12 @@
         "SOL": {
           "raw": 0.0,
           "votes_on": 2,
-          "close": 102.38,
-          "full_exit": 107.995,
+          "close": 101.4,
+          "full_exit": 107.02449999999999,
           "next_trim": null,
           "next_add": 106.96,
-          "sma20": 107.995,
+          "sma20": 107.02449999999999,
           "spark": [
-            74.21,
             73.83,
             73.69,
             74.51,
@@ -1092,20 +1122,20 @@
             106.96,
             103.68,
             102.85,
-            102.38
+            102.38,
+            101.4
           ],
           "target": 0.0
         },
         "ZEC": {
           "raw": 0.0,
           "votes_on": 4,
-          "close": 1207.96,
-          "full_exit": 1221.08,
+          "close": 1213.69,
+          "full_exit": 1214.889,
           "next_trim": null,
           "next_add": 1315.58,
-          "sma20": 1221.08,
+          "sma20": 1214.889,
           "spark": [
-            477.04,
             465.72,
             467.57,
             470.19,
@@ -1194,20 +1224,20 @@
             1315.58,
             1219.03,
             1183.19,
-            1207.96
+            1207.96,
+            1213.69
           ],
           "target": 0.0
         },
         "XRP": {
           "raw": 0.0,
           "votes_on": 2,
-          "close": 1.2996,
-          "full_exit": 1.3605800000000001,
+          "close": 1.2964,
+          "full_exit": 1.35001,
           "next_trim": null,
           "next_add": 1.3655,
-          "sma20": 1.3605800000000001,
+          "sma20": 1.35001,
           "spark": [
-            1.0662,
             1.069,
             1.0736,
             1.0829,
@@ -1296,20 +1326,20 @@
             1.3655,
             1.3093,
             1.295,
-            1.2996
+            1.2996,
+            1.2964
           ],
           "target": 0.0
         },
         "SUI": {
           "raw": 0.0,
           "votes_on": 0,
-          "close": 0.9388,
+          "close": 0.9205,
           "full_exit": null,
           "next_trim": null,
-          "next_add": 1.0368,
-          "sma20": 1.046775,
+          "next_add": 1.0304,
+          "sma20": 1.032105,
           "spark": [
-            0.6809,
             0.6926,
             0.6863,
             0.6922,
@@ -1398,20 +1428,20 @@
             1.0289,
             0.9725,
             0.9608,
-            0.9388
+            0.9388,
+            0.9205
           ],
           "target": 0.0
         },
         "WLD": {
           "raw": 0.0,
           "votes_on": 1,
-          "close": 0.4696,
-          "full_exit": 0.523235,
+          "close": 0.4506,
+          "full_exit": 0.5170049999999999,
           "next_trim": null,
           "next_add": 0.587,
-          "sma20": 0.523235,
+          "sma20": 0.5170049999999999,
           "spark": [
-            0.3271,
             0.3185,
             0.3106,
             0.3067,
@@ -1500,20 +1530,20 @@
             0.5838,
             0.5457,
             0.4823,
-            0.4696
+            0.4696,
+            0.4506
           ],
           "target": 0.0
         },
         "NEAR": {
           "raw": 0.0,
           "votes_on": 5,
-          "close": 4.499,
-          "full_exit": 5.0309,
+          "close": 4.595,
+          "full_exit": 4.996049999999999,
           "next_trim": null,
-          "next_add": 5.263,
-          "sma20": 5.0309,
+          "next_add": 5.258,
+          "sma20": 4.996049999999999,
           "spark": [
-            1.689,
             1.653,
             1.623,
             1.678,
@@ -1602,20 +1632,20 @@
             5.258,
             4.883,
             4.69,
-            4.499
+            4.499,
+            4.595
           ],
           "target": 0.0
         },
         "DOGE": {
           "raw": 0.0,
           "votes_on": 0,
-          "close": 0.07768,
+          "close": 0.07692,
           "full_exit": null,
           "next_trim": null,
           "next_add": 0.08195,
-          "sma20": 0.0834135,
+          "sma20": 0.08248799999999999,
           "spark": [
-            0.07038,
             0.07089,
             0.07014,
             0.07061,
@@ -1704,20 +1734,20 @@
             0.08195,
             0.07882,
             0.07862,
-            0.07768
+            0.07768,
+            0.07692
           ],
           "target": 0.0
         },
         "ENA": {
           "raw": 0.0,
           "votes_on": 3,
-          "close": 0.1955,
-          "full_exit": 0.2090435,
+          "close": 0.207,
+          "full_exit": 0.206921,
           "next_trim": null,
           "next_add": 0.2137,
-          "sma20": 0.2090435,
+          "sma20": 0.206921,
           "spark": [
-            0.08219,
             0.08348,
             0.0782,
             0.08119,
@@ -1806,20 +1836,20 @@
             0.2137,
             0.19828,
             0.1992,
-            0.1955
+            0.1955,
+            0.207
           ],
           "target": 0.0
         },
         "PUMP": {
           "raw": 0.0,
           "votes_on": 4,
-          "close": 0.004313,
-          "full_exit": 0.0050507,
+          "close": 0.00424,
+          "full_exit": 0.0049397,
           "next_trim": null,
           "next_add": 0.00513,
-          "sma20": 0.0050507,
+          "sma20": 0.0049397,
           "spark": [
-            0.002118,
             0.001967,
             0.001866,
             0.001985,
@@ -1908,122 +1938,20 @@
             0.00513,
             0.004555,
             0.004296,
-            0.004313
-          ],
-          "target": 0.0
-        },
-        "ONDO": {
-          "raw": 0.0,
-          "votes_on": 0,
-          "close": 0.41,
-          "full_exit": null,
-          "next_trim": null,
-          "next_add": 0.4687,
-          "sma20": 0.460935,
-          "spark": [
-            0.3943,
-            0.4062,
-            0.4039,
-            0.416,
-            0.3903,
-            0.3802,
-            0.3798,
-            0.3717,
-            0.3738,
-            0.3739,
-            0.3589,
-            0.348,
-            0.3521,
-            0.3484,
-            0.34,
-            0.3359,
-            0.3307,
-            0.335,
-            0.3273,
-            0.3236,
-            0.3304,
-            0.3363,
-            0.3265,
-            0.3472,
-            0.3557,
-            0.3969,
-            0.3636,
-            0.3829,
-            0.382,
-            0.3638,
-            0.3746,
-            0.377,
-            0.3563,
-            0.3533,
-            0.3441,
-            0.3461,
-            0.3406,
-            0.3485,
-            0.3631,
-            0.3574,
-            0.3699,
-            0.3876,
-            0.3839,
-            0.3748,
-            0.3598,
-            0.3426,
-            0.3507,
-            0.3487,
-            0.3429,
-            0.3545,
-            0.3283,
-            0.3474,
-            0.3725,
-            0.3986,
-            0.4204,
-            0.4326,
-            0.4579,
-            0.4413,
-            0.4126,
-            0.5218,
-            0.549,
-            0.5376,
-            0.5871,
-            0.519,
-            0.5017,
-            0.4998,
-            0.4972,
-            0.4927,
-            0.5018,
-            0.4984,
-            0.4994,
-            0.4913,
-            0.4703,
-            0.4705,
-            0.4824,
-            0.4957,
-            0.5219,
-            0.4698,
-            0.4684,
-            0.4456,
-            0.4687,
-            0.4542,
-            0.4389,
-            0.4346,
-            0.4356,
-            0.4536,
-            0.4603,
-            0.4288,
-            0.4187,
-            0.41
+            0.004313,
+            0.00424
           ],
           "target": 0.0
         },
         "ADA": {
           "raw": 0.0,
           "votes_on": 0,
-          "close": 0.2082,
+          "close": 0.2042,
           "full_exit": null,
           "next_trim": null,
-          "next_add": 0.23,
-          "sma20": 0.233085,
+          "next_add": 0.2257,
+          "sma20": 0.229775,
           "spark": [
-            0.1556,
             0.162,
             0.1622,
             0.1698,
@@ -2112,20 +2040,20 @@
             0.2252,
             0.2122,
             0.2109,
-            0.2082
+            0.2082,
+            0.2042
           ],
           "target": 0.0
         },
         "UNI": {
           "raw": 0.0,
           "votes_on": 4,
-          "close": 6.866,
-          "full_exit": 7.4634,
+          "close": 6.93,
+          "full_exit": 7.3556,
           "next_trim": null,
           "next_add": 7.45,
-          "sma20": 7.4634,
+          "sma20": 7.3556,
           "spark": [
-            3.704,
             3.89,
             3.992,
             4.434,
@@ -2214,20 +2142,122 @@
             7.45,
             7.011,
             6.97,
-            6.866
+            6.866,
+            6.93
+          ],
+          "target": 0.0
+        },
+        "ONDO": {
+          "raw": 0.0,
+          "votes_on": 0,
+          "close": 0.4077,
+          "full_exit": null,
+          "next_trim": null,
+          "next_add": 0.4603,
+          "sma20": 0.45635000000000003,
+          "spark": [
+            0.4062,
+            0.4039,
+            0.416,
+            0.3903,
+            0.3802,
+            0.3798,
+            0.3717,
+            0.3738,
+            0.3739,
+            0.3589,
+            0.348,
+            0.3521,
+            0.3484,
+            0.34,
+            0.3359,
+            0.3307,
+            0.335,
+            0.3273,
+            0.3236,
+            0.3304,
+            0.3363,
+            0.3265,
+            0.3472,
+            0.3557,
+            0.3969,
+            0.3636,
+            0.3829,
+            0.382,
+            0.3638,
+            0.3746,
+            0.377,
+            0.3563,
+            0.3533,
+            0.3441,
+            0.3461,
+            0.3406,
+            0.3485,
+            0.3631,
+            0.3574,
+            0.3699,
+            0.3876,
+            0.3839,
+            0.3748,
+            0.3598,
+            0.3426,
+            0.3507,
+            0.3487,
+            0.3429,
+            0.3545,
+            0.3283,
+            0.3474,
+            0.3725,
+            0.3986,
+            0.4204,
+            0.4326,
+            0.4579,
+            0.4413,
+            0.4126,
+            0.5218,
+            0.549,
+            0.5376,
+            0.5871,
+            0.519,
+            0.5017,
+            0.4998,
+            0.4972,
+            0.4927,
+            0.5018,
+            0.4984,
+            0.4994,
+            0.4913,
+            0.4703,
+            0.4705,
+            0.4824,
+            0.4957,
+            0.5219,
+            0.4698,
+            0.4684,
+            0.4456,
+            0.4687,
+            0.4542,
+            0.4389,
+            0.4346,
+            0.4356,
+            0.4536,
+            0.4603,
+            0.4288,
+            0.4187,
+            0.41,
+            0.4077
           ],
           "target": 0.0
         },
         "LINK": {
           "raw": 0.0,
           "votes_on": 2,
-          "close": 11.626,
-          "full_exit": 12.60595,
+          "close": 11.459,
+          "full_exit": 12.486149999999999,
           "next_trim": null,
           "next_add": 12.496,
-          "sma20": 12.60595,
+          "sma20": 12.486149999999999,
           "spark": [
-            8.382,
             8.446,
             8.335,
             8.453,
@@ -2316,20 +2346,20 @@
             12.496,
             11.959,
             11.831,
-            11.626
+            11.626,
+            11.459
           ],
           "target": 0.0
         },
         "PEPE": {
-          "raw": 0.03977728955476447,
+          "raw": 0.03978323903905239,
           "votes_on": 4,
-          "close": 4.51e-06,
-          "full_exit": 4.1889e-06,
+          "close": 4.28e-06,
+          "full_exit": 4.18355e-06,
           "next_trim": 4.2515e-06,
           "next_add": 4.633e-06,
-          "sma20": 4.1889e-06,
+          "sma20": 4.18355e-06,
           "spark": [
-            2.825e-06,
             2.808e-06,
             2.726e-06,
             2.763e-06,
@@ -2418,20 +2448,20 @@
             4.633e-06,
             4.391e-06,
             4.567e-06,
-            4.51e-06
+            4.51e-06,
+            4.28e-06
           ],
-          "target": 0.009944322388691118
+          "target": 0.009945809759763098
         },
         "TAO": {
           "raw": 0.0,
           "votes_on": 0,
-          "close": 251.2,
+          "close": 253.1,
           "full_exit": null,
           "next_trim": null,
-          "next_add": 279.0,
-          "sma20": 276.26,
+          "next_add": 276.1,
+          "sma20": 273.615,
           "spark": [
-            187.6,
             194.8,
             190.8,
             192.5,
@@ -2520,20 +2550,20 @@
             271.7,
             257.5,
             255.1,
-            251.2
+            251.2,
+            253.1
           ],
           "target": 0.0
         },
         "AVAX": {
           "raw": 0.0,
           "votes_on": 3,
-          "close": 8.999,
-          "full_exit": 10.08865,
+          "close": 8.929,
+          "full_exit": 9.97875,
           "next_trim": null,
-          "next_add": 10.044,
-          "sma20": 10.08865,
+          "next_add": 9.959,
+          "sma20": 9.97875,
           "spark": [
-            6.409,
             6.576,
             6.431,
             6.437,
@@ -2622,122 +2652,20 @@
             9.655,
             9.125,
             9.065,
-            8.999
-          ],
-          "target": 0.0
-        },
-        "BNB": {
-          "raw": 0.0,
-          "votes_on": 2,
-          "close": 739.93,
-          "full_exit": 742.5364999999999,
-          "next_trim": null,
-          "next_add": 746.05,
-          "sma20": 742.5364999999999,
-          "spark": [
-            566.2,
-            571.3,
-            572.0,
-            592.2,
-            586.9,
-            575.3,
-            588.5,
-            589.4,
-            593.3,
-            594.0,
-            592.3,
-            592.5,
-            600.8,
-            602.4,
-            599.2,
-            616.8,
-            610.4,
-            610.6,
-            608.0,
-            607.7,
-            602.9,
-            605.9,
-            603.9,
-            627.7,
-            654.9,
-            687.1,
-            695.5,
-            702.3,
-            704.4,
-            694.3,
-            707.6,
-            711.9,
-            691.4,
-            692.6,
-            684.8,
-            691.4,
-            683.1,
-            688.7,
-            725.1,
-            721.5,
-            766.3,
-            753.1,
-            740.0,
-            752.4,
-            722.6,
-            708.6,
-            726.8,
-            727.8,
-            716.5,
-            720.5,
-            712.05,
-            725.82,
-            738.51,
-            761.42,
-            761.94,
-            772.52,
-            799.46,
-            788.35,
-            767.47,
-            776.72,
-            776.65,
-            773.28,
-            778.06,
-            763.78,
-            758.48,
-            768.81,
-            771.56,
-            768.17,
-            786.74,
-            795.44,
-            786.58,
-            779.59,
-            772.4,
-            735.77,
-            742.34,
-            750.29,
-            754.27,
-            733.06,
-            741.77,
-            730.84,
-            729.75,
-            721.63,
-            718.29,
-            723.53,
-            732.09,
-            741.55,
-            746.05,
-            731.26,
-            739.74,
-            739.93
+            8.999,
+            8.929
           ],
           "target": 0.0
         },
         "TRX": {
           "raw": 0.0,
           "votes_on": 0,
-          "close": 0.32925,
+          "close": 0.33037,
           "full_exit": null,
           "next_trim": null,
           "next_add": 0.33557,
-          "sma20": 0.3319325,
+          "sma20": 0.3316465,
           "spark": [
-            0.32497,
             0.32481,
             0.32575,
             0.32856,
@@ -2826,122 +2754,122 @@
             0.33082,
             0.32863,
             0.33007,
-            0.32925
+            0.32925,
+            0.33037
           ],
           "target": 0.0
         },
-        "LTC": {
+        "BNB": {
           "raw": 0.0,
           "votes_on": 2,
-          "close": 57.04,
-          "full_exit": 61.842499999999994,
+          "close": 738.58,
+          "full_exit": 740.1365,
           "next_trim": null,
-          "next_add": 61.62,
-          "sma20": 61.842499999999994,
+          "next_add": 746.05,
+          "sma20": 740.1365,
           "spark": [
-            46.07,
-            46.21,
-            45.44,
-            45.58,
-            44.28,
-            44.23,
-            44.67,
-            44.28,
-            44.82,
-            45.3,
-            45.46,
-            45.6,
-            46.03,
-            45.46,
-            45.14,
-            45.51,
-            44.89,
-            44.83,
-            43.84,
-            44.13,
-            44.13,
-            44.57,
-            44.37,
-            46.76,
-            47.81,
-            53.17,
-            52.52,
-            52.34,
-            51.67,
-            49.95,
-            50.53,
-            49.92,
-            49.35,
-            49.04,
-            47.98,
-            48.57,
-            49.58,
-            49.64,
-            51.51,
-            50.77,
-            54.7,
-            54.98,
-            55.21,
-            54.29,
-            53.22,
-            52.14,
-            53.3,
-            53.72,
-            53.75,
-            53.14,
-            51.28,
-            51.7,
-            53.93,
-            58.14,
-            58.25,
-            58.72,
-            62.08,
-            62.93,
-            61.79,
-            71.9,
-            72.54,
-            72.59,
-            71.28,
-            69.25,
-            66.81,
-            67.22,
-            68.07,
-            69.91,
-            70.29,
-            70.75,
-            70.1,
-            68.98,
-            66.06,
-            63.18,
-            63.45,
-            64.04,
-            64.65,
-            61.03,
-            61.2,
-            59.31,
-            61.08,
-            59.75,
-            58.84,
-            59.13,
-            59.75,
-            61.62,
-            61.56,
-            58.83,
-            57.25,
-            57.04
+            571.3,
+            572.0,
+            592.2,
+            586.9,
+            575.3,
+            588.5,
+            589.4,
+            593.3,
+            594.0,
+            592.3,
+            592.5,
+            600.8,
+            602.4,
+            599.2,
+            616.8,
+            610.4,
+            610.6,
+            608.0,
+            607.7,
+            602.9,
+            605.9,
+            603.9,
+            627.7,
+            654.9,
+            687.1,
+            695.5,
+            702.3,
+            704.4,
+            694.3,
+            707.6,
+            711.9,
+            691.4,
+            692.6,
+            684.8,
+            691.4,
+            683.1,
+            688.7,
+            725.1,
+            721.5,
+            766.3,
+            753.1,
+            740.0,
+            752.4,
+            722.6,
+            708.6,
+            726.8,
+            727.8,
+            716.5,
+            720.5,
+            712.05,
+            725.82,
+            738.51,
+            761.42,
+            761.94,
+            772.52,
+            799.46,
+            788.35,
+            767.47,
+            776.72,
+            776.65,
+            773.28,
+            778.06,
+            763.78,
+            758.48,
+            768.81,
+            771.56,
+            768.17,
+            786.74,
+            795.44,
+            786.58,
+            779.59,
+            772.4,
+            735.77,
+            742.34,
+            750.29,
+            754.27,
+            733.06,
+            741.77,
+            730.84,
+            729.75,
+            721.63,
+            718.29,
+            723.53,
+            732.09,
+            741.55,
+            746.05,
+            731.26,
+            739.74,
+            739.93,
+            738.58
           ],
           "target": 0.0
         },
         "INJ": {
           "raw": 0.0,
           "votes_on": 4,
-          "close": 7.715,
-          "full_exit": 7.9794,
+          "close": 7.887,
+          "full_exit": 7.9898,
           "next_trim": null,
           "next_add": 8.945,
-          "sma20": 7.9794,
+          "sma20": 7.9898,
           "spark": [
-            4.728,
             4.635,
             4.608,
             5.02,
@@ -3030,20 +2958,123 @@
             8.606,
             7.915,
             7.787,
-            7.715
+            7.715,
+            7.887
+          ],
+          "target": 0.0
+        },
+        "LTC": {
+          "raw": 0.0,
+          "votes_on": 0,
+          "close": 56.73,
+          "full_exit": null,
+          "next_trim": null,
+          "next_add": 61.62,
+          "sma20": 61.174,
+          "spark": [
+            46.21,
+            45.44,
+            45.58,
+            44.28,
+            44.23,
+            44.67,
+            44.28,
+            44.82,
+            45.3,
+            45.46,
+            45.6,
+            46.03,
+            45.46,
+            45.14,
+            45.51,
+            44.89,
+            44.83,
+            43.84,
+            44.13,
+            44.13,
+            44.57,
+            44.37,
+            46.76,
+            47.81,
+            53.17,
+            52.52,
+            52.34,
+            51.67,
+            49.95,
+            50.53,
+            49.92,
+            49.35,
+            49.04,
+            47.98,
+            48.57,
+            49.58,
+            49.64,
+            51.51,
+            50.77,
+            54.7,
+            54.98,
+            55.21,
+            54.29,
+            53.22,
+            52.14,
+            53.3,
+            53.72,
+            53.75,
+            53.14,
+            51.28,
+            51.7,
+            53.93,
+            58.14,
+            58.25,
+            58.72,
+            62.08,
+            62.93,
+            61.79,
+            71.9,
+            72.54,
+            72.59,
+            71.28,
+            69.25,
+            66.81,
+            67.22,
+            68.07,
+            69.91,
+            70.29,
+            70.75,
+            70.1,
+            68.98,
+            66.06,
+            63.18,
+            63.45,
+            64.04,
+            64.65,
+            61.03,
+            61.2,
+            59.31,
+            61.08,
+            59.75,
+            58.84,
+            59.13,
+            59.75,
+            61.62,
+            61.56,
+            58.83,
+            57.25,
+            57.04,
+            56.73
           ],
           "target": 0.0
         }
       },
       "gate": true,
       "funding_hot": false,
-      "funding_median": 2.5428571428571427e-05,
-      "total": 0.009944322388691118,
-      "as_of": "2026-10-24",
+      "funding_median": -0.00010885714285714285,
+      "total": 0.009945809759763098,
+      "as_of": "2026-10-25",
       "live": {
         "start": "2026-10-07",
-        "total": -2.2,
-        "drawdown": -3.1
+        "total": -2.4,
+        "drawdown": -3.3
       }
     },
     "scorecard": {
@@ -3061,7 +3092,8 @@
           "action": "sell",
           "from": 0.1875,
           "to": 0.0938,
-          "price": 80882.0
+          "price": 80882.0,
+          "edge_1d": 0.79
         },
         {
           "time": "2026-10-23T04:36+00:00",
@@ -3193,7 +3225,7 @@
         "narrative": "Tourism",
         "market_cap": 29275860,
         "change_7d": 5.5077,
-        "bitget_volume": 430533.86,
+        "bitget_volume": 425324.39,
         "trend": 100.0,
         "age_days": 300,
         "safety": [
@@ -3230,7 +3262,7 @@
           {
             "name": "Volatility under control",
             "ok": true,
-            "detail": "moves 7.6% per 4h candle on average"
+            "detail": "moves 7.1% per 4h candle on average"
           },
           {
             "name": "Spread across many holders",
@@ -3253,7 +3285,7 @@
         "risk_notes": [
           "very small market cap (under $50M)",
           "thin Bitget volume (under $2M a day)",
-          "volatile (7.6% per 4h candle)",
+          "volatile (7.1% per 4h candle)",
           "over 90% below its all-time high",
           "team can mint more tokens",
           "transfers can be paused"
@@ -3261,56 +3293,54 @@
         "potential": 71.4,
         "potential_notes": [
           "Up 6% this week and +57% over 30 days",
-          "Trading volume has risen steadily to 3.8\u00d7 normal over the past day",
+          "Trading volume has risen steadily to 3.7\u00d7 normal over the past day",
           "Its sector (Tourism) is rising today (+5.1%)",
           "Price is 6% of the way from its all-time low (0.01219) to its high (6.45)"
         ],
         "plan": {
-          "price": 0.3997,
-          "rsi": 51.0,
+          "price": 0.3937,
+          "rsi": 49.4,
           "risk_pct": 0.25,
-          "notional": 15.600426837588378,
+          "notional": 16.215234488396607,
           "max_loss": 2.5,
           "status": "Enter zone",
           "action": "Uptrend confirmed and not overextended. A good time to position, at today's price.",
-          "entry": 0.3997,
-          "stop": 0.33564726539197237,
+          "entry": 0.3937,
+          "stop": 0.3330009086174908,
           "tp1": 0.4945,
-          "tp2": 0.6559109384321105,
+          "tp2": 0.6364963655300366,
           "why": {
             "entry": "today's price, close to its 20-period average, so not chasing",
-            "stop": "below the recent swing low, and at least one normal day's swing away (about 16%)",
+            "stop": "below the recent swing low, and at least one normal day's swing away (about 15%)",
             "tp1": "this week's high",
             "tp2": "a multiple of the risk (no chart level above; treat as a stretch)"
           },
-          "exit_rule": "Sell half at target 1 and move the stop to 0.39970 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
+          "exit_rule": "Sell half at target 1 and move the stop to 0.39370 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
         },
         "scenarios": [
           {
             "case": "Bear",
-            "price": 0.33564726539197237,
-            "pct": -16.025202553922348,
-            "mcap": 24584344.13559727,
+            "price": 0.3330009086174908,
+            "pct": -15.417600046357427,
+            "mcap": 24762224.995068464,
             "note": "stop-loss hit"
           },
           {
             "case": "Base",
             "price": 0.4945,
-            "pct": 23.71778834125593,
-            "mcap": 36219446.50988241,
+            "pct": 25.60325120650242,
+            "mcap": 36771431.97866396,
             "note": "first target, if the setup works"
           },
           {
             "case": "Stretch",
-            "price": 0.6559109384321105,
-            "pct": 64.10081021568939,
-            "mcap": 48041923.45761092,
+            "price": 0.6364963655300366,
+            "pct": 61.670400185429685,
+            "mcap": 47330400.01972613,
             "note": "second target, if the trend runs"
           }
         ],
         "spark": [
-          0.3585,
-          0.3694,
           0.411,
           0.4138,
           0.4294,
@@ -3350,202 +3380,24 @@
           0.4122,
           0.4253,
           0.4048,
-          0.3997
+          0.4015,
+          0.3935,
+          0.3937
         ],
         "features": {
           "potential": 71.4,
           "risk_score": 80,
           "trend": 100.0,
-          "atr_pct": 7.62925437388251,
+          "atr_pct": 7.091317637444791,
           "change_7d": 5.5077,
           "change_30d": 56.932,
           "market_cap": 29275860,
           "watchers": 27655,
           "age_days": 300,
-          "volume_surge": 3.8465160031789742,
+          "volume_surge": 3.747222887312689,
           "mentions": 0,
           "narrative_change": 5.144156390265684,
-          "rsi": 51.0,
-          "unknown_checks": 0
-        }
-      },
-      {
-        "symbol": "ORDER",
-        "name": "Orderly",
-        "narrative": "Smart Contract Platform",
-        "market_cap": 21601126,
-        "change_7d": 78.0528,
-        "bitget_volume": 1351609.4,
-        "trend": 100.0,
-        "age_days": 300,
-        "safety": [
-          {
-            "name": "Real trading volume",
-            "ok": false,
-            "detail": "$1.4M a day on Bitget, 1016% of its value traded daily"
-          },
-          {
-            "name": "Most supply unlocked",
-            "ok": true,
-            "detail": "41% of supply in circulation"
-          },
-          {
-            "name": "Fair valuation",
-            "ok": true,
-            "detail": "fully diluted value 2.4\u00d7 market cap"
-          },
-          {
-            "name": "Contract safe",
-            "ok": true,
-            "detail": "contract scanned clean on ethereum"
-          },
-          {
-            "name": "Not a pump-and-dump",
-            "ok": true,
-            "detail": "-40% today, +78% this week"
-          },
-          {
-            "name": "Enough trading history",
-            "ok": true,
-            "detail": "trading on Bitget for 300 days+"
-          },
-          {
-            "name": "Volatility under control",
-            "ok": false,
-            "detail": "moves 18.9% per 4h candle on average"
-          },
-          {
-            "name": "Spread across many holders",
-            "ok": false,
-            "detail": "top 10 private wallets hold 89% of supply"
-          },
-          {
-            "name": "Real product",
-            "ok": true,
-            "detail": "has a website"
-          }
-        ],
-        "safe": false,
-        "failed_checks": [
-          "Real trading volume",
-          "Volatility under control",
-          "Spread across many holders"
-        ],
-        "unknown_checks": [],
-        "risk_score": 95,
-        "risk_rating": "Very high",
-        "risk_notes": [
-          "very small market cap (under $50M)",
-          "thin Bitget volume (under $2M a day)",
-          "very volatile (18.9% per 4h candle)",
-          "only 41% of supply unlocked (future selling pressure)"
-        ],
-        "potential": 69.0,
-        "potential_notes": [
-          "Up 78% this week and +31% over 30 days",
-          "Price is 5% of the way from its all-time low (0.02689) to its high (0.49154)"
-        ],
-        "plan": {
-          "price": 0.04586,
-          "rsi": 51.5,
-          "risk_pct": 0.25,
-          "notional": 12.965306848219937,
-          "max_loss": 2.5,
-          "status": "Enter zone",
-          "action": "Uptrend confirmed and not overextended. A good time to position, at today's price.",
-          "entry": 0.04586,
-          "stop": 0.03701717033602326,
-          "tp1": 0.105,
-          "tp2": 0.11384282966397674,
-          "why": {
-            "entry": "today's price, close to its 20-period average, so not chasing",
-            "stop": "below the recent swing low, and at least one normal day's swing away (about 19%)",
-            "tp1": "this week's high",
-            "tp2": "a multiple of the risk (no chart level above; treat as a stretch)"
-          },
-          "exit_rule": "Sell half at target 1 and move the stop to 0.04586 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
-        },
-        "scenarios": [
-          {
-            "case": "Bear",
-            "price": 0.03701717033602326,
-            "pct": -19.282227788872085,
-            "mcap": 17435947.679718725,
-            "note": "stop-loss hit"
-          },
-          {
-            "case": "Base",
-            "price": 0.105,
-            "pct": 128.9576973397296,
-            "mcap": 49457440.68905364,
-            "note": "first target, if the setup works"
-          },
-          {
-            "case": "Stretch",
-            "price": 0.11384282966397674,
-            "pct": 148.23992512860173,
-            "mcap": 53622619.00933492,
-            "note": "second target, if the trend runs"
-          }
-        ],
-        "spark": [
-          0.03031,
-          0.03045,
-          0.02994,
-          0.03007,
-          0.03015,
-          0.03034,
-          0.03061,
-          0.0303,
-          0.0304,
-          0.03128,
-          0.0312,
-          0.03138,
-          0.03197,
-          0.03202,
-          0.03224,
-          0.03294,
-          0.03281,
-          0.03244,
-          0.0317,
-          0.03112,
-          0.03124,
-          0.03084,
-          0.03076,
-          0.03074,
-          0.0311,
-          0.03121,
-          0.03203,
-          0.03277,
-          0.03268,
-          0.03304,
-          0.03457,
-          0.03981,
-          0.06902,
-          0.0709,
-          0.06205,
-          0.07226,
-          0.05689,
-          0.05126,
-          0.04759,
-          0.04786,
-          0.04783,
-          0.04586
-        ],
-        "features": {
-          "potential": 69.0,
-          "risk_score": 95,
-          "trend": 100.0,
-          "atr_pct": 18.916580275120147,
-          "change_7d": 78.0528,
-          "change_30d": 31.4603,
-          "market_cap": 21601126,
-          "watchers": 12256,
-          "age_days": 300,
-          "volume_surge": 1.4271936642865712,
-          "mentions": 0,
-          "narrative_change": -0.29374637126406467,
-          "rsi": 51.5,
+          "rsi": 49.4,
           "unknown_checks": 0
         }
       },
@@ -3555,14 +3407,14 @@
         "narrative": "Artificial Intelligence (AI)",
         "market_cap": 50601636,
         "change_7d": 31.5708,
-        "bitget_volume": 2114573.98,
+        "bitget_volume": 2780699.62,
         "trend": 100.0,
         "age_days": 77,
         "safety": [
           {
             "name": "Real trading volume",
             "ok": true,
-            "detail": "$2.1M a day on Bitget, 50% of its value traded daily"
+            "detail": "$2.8M a day on Bitget, 50% of its value traded daily"
           },
           {
             "name": "Most supply unlocked",
@@ -3592,7 +3444,7 @@
           {
             "name": "Volatility under control",
             "ok": true,
-            "detail": "moves 7.5% per 4h candle on average"
+            "detail": "moves 7.0% per 4h candle on average"
           },
           {
             "name": "Spread across many holders",
@@ -3617,10 +3469,10 @@
         "risk_notes": [
           "small market cap (under $200M)",
           "moderate Bitget volume",
-          "volatile (7.5% per 4h candle)",
+          "volatile (7.0% per 4h candle)",
           "only 20% of supply unlocked (future selling pressure)"
         ],
-        "potential": 68.9,
+        "potential": 69.6,
         "potential_notes": [
           "Up 32% this week and +10% over 30 days",
           "Possibly still early: 831 CoinGecko watchers and no big run yet (a hint, not proof)",
@@ -3628,51 +3480,49 @@
           "New listing: on Bitget for only 77 days"
         ],
         "plan": {
-          "price": 0.2624,
-          "rsi": 61.0,
+          "price": 0.2785,
+          "rsi": 66.3,
           "risk_pct": 0.5,
-          "notional": 29.075939874589803,
+          "notional": 25.669643183451345,
           "max_loss": 5.0,
-          "status": "Enter zone",
-          "action": "Uptrend confirmed and not overextended. A good time to position, at today's price.",
-          "entry": 0.2624,
-          "stop": 0.2172767810891441,
+          "status": "Wait for pullback",
+          "action": "Uptrend, but price is stretched. Set a buy around 0.25021 (its 20-period average) instead of chasing.",
+          "entry": 0.25021466216187005,
+          "stop": 0.20147719815162274,
           "tp1": 0.3078,
           "tp2": 0.7789,
           "why": {
-            "entry": "today's price, close to its 20-period average, so not chasing",
-            "stop": "below the recent swing low, and at least one normal day's swing away (about 17%)",
+            "entry": "its 20-period average, where pullbacks in this uptrend have been bought",
+            "stop": "2.5\u00d7 the average 4h move below entry, and at least one normal day's swing away (about 17%)",
             "tp1": "this week's high",
             "tp2": "this month's high"
           },
-          "exit_rule": "Sell half at target 1 and move the stop to 0.26240 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
+          "exit_rule": "Sell half at target 1 and move the stop to 0.25021 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
         },
         "scenarios": [
           {
             "case": "Bear",
-            "price": 0.2172767810891441,
-            "pct": -17.19634867029569,
-            "mcap": 41900002.24056613,
+            "price": 0.20147719815162274,
+            "pct": -19.478260621960608,
+            "mcap": 36607094.589473195,
             "note": "stop-loss hit"
           },
           {
             "case": "Base",
             "price": 0.3078,
-            "pct": 17.30182926829269,
-            "mcap": 59356644.66768292,
+            "pct": 23.014373874252247,
+            "mcap": 55925255.15547576,
             "note": "first target, if the setup works"
           },
           {
             "case": "Stretch",
             "price": 0.7789,
-            "pct": 196.83689024390242,
-            "mcap": 150204322.71493903,
+            "pct": 211.29270893650124,
+            "mcap": 141521056.6621185,
             "note": "second target, if the trend runs"
           }
         ],
         "spark": [
-          0.1849,
-          0.1852,
           0.1832,
           0.1825,
           0.1874,
@@ -3712,22 +3562,24 @@
           0.256,
           0.2632,
           0.2632,
-          0.2624
+          0.2632,
+          0.2768,
+          0.2785
         ],
         "features": {
-          "potential": 68.9,
+          "potential": 69.6,
           "risk_score": 62,
           "trend": 100.0,
-          "atr_pct": 7.489233883348508,
+          "atr_pct": 6.999994830915232,
           "change_7d": 31.5708,
           "change_30d": 9.8516,
           "market_cap": 50601636,
           "watchers": 831,
           "age_days": 77,
-          "volume_surge": 0.6101575836846311,
+          "volume_surge": 0.7178201559770053,
           "mentions": 0,
           "narrative_change": -1.7461512972518163,
-          "rsi": 61.0,
+          "rsi": 66.3,
           "unknown_checks": 0
         }
       },
@@ -3737,14 +3589,14 @@
         "narrative": "Analytics",
         "market_cap": 23648771,
         "change_7d": 92.9383,
-        "bitget_volume": 578376.88,
+        "bitget_volume": 854570.96,
         "trend": 100.0,
         "age_days": 300,
         "safety": [
           {
             "name": "Real trading volume",
             "ok": false,
-            "detail": "$0.6M a day on Bitget, 597% of its value traded daily"
+            "detail": "$0.9M a day on Bitget, 597% of its value traded daily"
           },
           {
             "name": "Most supply unlocked",
@@ -3774,7 +3626,7 @@
           {
             "name": "Volatility under control",
             "ok": false,
-            "detail": "moves 14.5% per 4h candle on average"
+            "detail": "moves 14.1% per 4h candle on average"
           },
           {
             "name": "Spread across many holders",
@@ -3799,60 +3651,59 @@
         "risk_notes": [
           "very small market cap (under $50M)",
           "thin Bitget volume (under $2M a day)",
-          "very volatile (14.5% per 4h candle)",
+          "very volatile (14.1% per 4h candle)",
           "over 90% below its all-time high"
         ],
-        "potential": 62.5,
+        "potential": 68.3,
         "potential_notes": [
           "Up 93% this week and +59% over 30 days",
+          "Possibly still early: 4,152 CoinGecko watchers and no big run yet (a hint, not proof)",
           "Price is 7% of the way from its all-time low (0.01087) to its high (0.31734)"
         ],
         "plan": {
-          "price": 0.03292,
-          "rsi": 56.3,
+          "price": 0.03348,
+          "rsi": 57.0,
           "risk_pct": 0.25,
-          "notional": 15.953707327968473,
+          "notional": 15.715595176256253,
           "max_loss": 2.5,
           "status": "Enter zone",
           "action": "Uptrend confirmed and not overextended. A good time to position, at today's price.",
-          "entry": 0.03292,
-          "stop": 0.027761324445276757,
+          "entry": 0.03348,
+          "stop": 0.02815408016933032,
           "tp1": 0.05265,
-          "tp2": 0.05780867555472324,
+          "tp2": 0.05797591983066969,
           "why": {
             "entry": "today's price, close to its 20-period average, so not chasing",
             "stop": "below the recent swing low, and at least one normal day's swing away (about 16%)",
             "tp1": "this week's high",
             "tp2": "a multiple of the risk (no chart level above; treat as a stretch)"
           },
-          "exit_rule": "Sell half at target 1 and move the stop to 0.03292 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
+          "exit_rule": "Sell half at target 1 and move the stop to 0.03348 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
         },
         "scenarios": [
           {
             "case": "Bear",
-            "price": 0.027761324445276757,
-            "pct": -15.670338866109478,
-            "mcap": 19942928.446629774,
+            "price": 0.02815408016933032,
+            "pct": -15.907765324580891,
+            "mcap": 19886780.007172458,
             "note": "stop-loss hit"
           },
           {
             "case": "Base",
             "price": 0.05265,
-            "pct": 59.933171324422865,
-            "mcap": 37822229.43955043,
+            "pct": 57.258064516129025,
+            "mcap": 37189599.55645161,
             "note": "first target, if the setup works"
           },
           {
             "case": "Stretch",
-            "price": 0.05780867555472324,
-            "pct": 75.60351019053235,
-            "mcap": 41528071.99292066,
+            "price": 0.05797591983066969,
+            "pct": 73.16582984070992,
+            "mcap": 40951590.54927915,
             "note": "second target, if the trend runs"
           }
         ],
         "spark": [
-          0.01655,
-          0.01664,
           0.01636,
           0.0167,
           0.01704,
@@ -3892,49 +3743,51 @@
           0.02989,
           0.02988,
           0.0329,
-          0.03292
+          0.03243,
+          0.03346,
+          0.03348
         ],
         "features": {
-          "potential": 62.5,
+          "potential": 68.3,
           "risk_score": 90,
           "trend": 100.0,
-          "atr_pct": 14.460818908542011,
+          "atr_pct": 14.080973933095079,
           "change_7d": 92.9383,
           "change_30d": 58.534,
           "market_cap": 23648771,
           "watchers": 4152,
           "age_days": 300,
-          "volume_surge": 0.42793191924629437,
+          "volume_surge": 0.6990018523818858,
           "mentions": 0,
           "narrative_change": -1.33885822491795,
-          "rsi": 56.3,
+          "rsi": 57.0,
           "unknown_checks": 0
         }
       },
       {
-        "symbol": "UP",
-        "name": "Superform",
-        "narrative": "Smart Contract Platform",
-        "market_cap": 17067763,
-        "change_7d": 13.341,
-        "bitget_volume": 194011.29,
-        "trend": 55.0,
-        "age_days": 160,
+        "symbol": "BREV",
+        "name": "Brevis",
+        "narrative": "Infrastructure",
+        "market_cap": 19520316,
+        "change_7d": 6.9685,
+        "bitget_volume": 30559.42,
+        "trend": 100.0,
+        "age_days": 293,
         "safety": [
           {
             "name": "Real trading volume",
             "ok": false,
-            "detail": "$0.2M a day on Bitget, 191% of its value traded daily"
+            "detail": "$0.0M a day on Bitget, 70% of its value traded daily"
           },
           {
             "name": "Most supply unlocked",
             "ok": false,
-            "detail": "24% of supply in circulation"
+            "detail": "25% of supply in circulation"
           },
           {
             "name": "Fair valuation",
-            "ok": false,
-            "detail": "fully diluted value 4.2\u00d7 market cap"
+            "ok": true,
+            "detail": "fully diluted value 4.0\u00d7 market cap"
           },
           {
             "name": "Contract safe",
@@ -3944,22 +3797,22 @@
           {
             "name": "Not a pump-and-dump",
             "ok": true,
-            "detail": "-12% today, +13% this week"
+            "detail": "-10% today, +7% this week"
           },
           {
             "name": "Enough trading history",
             "ok": true,
-            "detail": "trading on Bitget for 160 days"
+            "detail": "trading on Bitget for 293 days"
           },
           {
             "name": "Volatility under control",
-            "ok": false,
-            "detail": "moves 23.9% per 4h candle on average"
+            "ok": true,
+            "detail": "moves 3.3% per 4h candle on average"
           },
           {
             "name": "Spread across many holders",
-            "ok": false,
-            "detail": "top 10 private wallets hold 61% of supply"
+            "ok": null,
+            "detail": "holder data not available"
           },
           {
             "name": "Real product",
@@ -3970,10 +3823,192 @@
         "safe": false,
         "failed_checks": [
           "Real trading volume",
-          "Most supply unlocked",
-          "Fair valuation",
-          "Volatility under control",
+          "Most supply unlocked"
+        ],
+        "unknown_checks": [
           "Spread across many holders"
+        ],
+        "risk_score": 75,
+        "risk_rating": "Very high",
+        "risk_notes": [
+          "very small market cap (under $50M)",
+          "thin Bitget volume (under $2M a day)",
+          "only 25% of supply unlocked (future selling pressure)",
+          "team can mint more tokens"
+        ],
+        "potential": 62.8,
+        "potential_notes": [
+          "Up 7% this week and -13% over 30 days",
+          "Possibly still early: 1,902 CoinGecko watchers and no big run yet (a hint, not proof)",
+          "Price is 3% of the way from its all-time low (0.06255) to its high (0.56006)"
+        ],
+        "plan": {
+          "price": 0.0858,
+          "rsi": 67.8,
+          "risk_pct": 0.25,
+          "notional": 28.06566123323852,
+          "max_loss": 2.5,
+          "status": "Wait for pullback",
+          "action": "Uptrend, but price is stretched. Set a buy around 0.07963 (its 20-period average) instead of chasing.",
+          "entry": 0.07962842640077052,
+          "stop": 0.0725353789807381,
+          "tp1": 0.0959,
+          "tp2": 0.1051,
+          "why": {
+            "entry": "its 20-period average, where pullbacks in this uptrend have been bought",
+            "stop": "2.5\u00d7 the average 4h move below entry, and at least one normal day's swing away (about 8%)",
+            "tp1": "this week's high",
+            "tp2": "this month's high"
+          },
+          "exit_rule": "Sell half at target 1 and move the stop to 0.07963 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
+        },
+        "scenarios": [
+          {
+            "case": "Bear",
+            "price": 0.0725353789807381,
+            "pct": -8.907682520728278,
+            "mcap": 16502488.565078855,
+            "note": "stop-loss hit"
+          },
+          {
+            "case": "Base",
+            "price": 0.0959,
+            "pct": 20.4343779410314,
+            "mcap": 21818162.055944055,
+            "note": "first target, if the setup works"
+          },
+          {
+            "case": "Stretch",
+            "price": 0.1051,
+            "pct": 31.988040892621505,
+            "mcap": 23911249.552447554,
+            "note": "second target, if the trend runs"
+          }
+        ],
+        "spark": [
+          0.072,
+          0.0722,
+          0.0724,
+          0.0732,
+          0.0743,
+          0.0738,
+          0.0727,
+          0.0743,
+          0.0747,
+          0.0753,
+          0.0755,
+          0.0765,
+          0.076,
+          0.0779,
+          0.0776,
+          0.0769,
+          0.0764,
+          0.0753,
+          0.0749,
+          0.0739,
+          0.0732,
+          0.0736,
+          0.0748,
+          0.075,
+          0.0793,
+          0.08,
+          0.0782,
+          0.0798,
+          0.0799,
+          0.0793,
+          0.0806,
+          0.0795,
+          0.0822,
+          0.0834,
+          0.0814,
+          0.0783,
+          0.0782,
+          0.0776,
+          0.0775,
+          0.078,
+          0.0844,
+          0.0858
+        ],
+        "features": {
+          "potential": 62.8,
+          "risk_score": 75,
+          "trend": 100.0,
+          "atr_pct": 3.3067820140011244,
+          "change_7d": 6.9685,
+          "change_30d": -12.6427,
+          "market_cap": 19520316,
+          "watchers": 1902,
+          "age_days": 293,
+          "volume_surge": 0.8441337709692118,
+          "mentions": 0,
+          "narrative_change": -1.5239002504374324,
+          "rsi": 67.8,
+          "unknown_checks": 1
+        }
+      },
+      {
+        "symbol": "BIRB",
+        "name": "Moonbirds",
+        "narrative": "NFT",
+        "market_cap": 23002215,
+        "change_7d": 68.9543,
+        "bitget_volume": 1485237.03,
+        "trend": 75.0,
+        "age_days": 271,
+        "safety": [
+          {
+            "name": "Real trading volume",
+            "ok": false,
+            "detail": "$1.5M a day on Bitget, 501% of its value traded daily"
+          },
+          {
+            "name": "Most supply unlocked",
+            "ok": false,
+            "detail": "28% of supply in circulation"
+          },
+          {
+            "name": "Fair valuation",
+            "ok": true,
+            "detail": "fully diluted value 3.5\u00d7 market cap"
+          },
+          {
+            "name": "Contract safe",
+            "ok": true,
+            "detail": "Solana token scanned clean (no freeze or balance-change powers)"
+          },
+          {
+            "name": "Not a pump-and-dump",
+            "ok": true,
+            "detail": "-50% today, +69% this week"
+          },
+          {
+            "name": "Enough trading history",
+            "ok": true,
+            "detail": "trading on Bitget for 271 days"
+          },
+          {
+            "name": "Volatility under control",
+            "ok": false,
+            "detail": "moves 26.2% per 4h candle on average"
+          },
+          {
+            "name": "Spread across many holders",
+            "ok": false,
+            "detail": "top 10 private wallets hold 93% of supply"
+          },
+          {
+            "name": "Real product",
+            "ok": false,
+            "detail": "meme coin: nothing behind it but attention"
+          }
+        ],
+        "safe": false,
+        "failed_checks": [
+          "Real trading volume",
+          "Most supply unlocked",
+          "Volatility under control",
+          "Spread across many holders",
+          "Real product"
         ],
         "unknown_checks": [],
         "risk_score": 95,
@@ -3981,125 +4016,115 @@
         "risk_notes": [
           "very small market cap (under $50M)",
           "thin Bitget volume (under $2M a day)",
-          "very volatile (23.9% per 4h candle)",
-          "only 24% of supply unlocked (future selling pressure)",
-          "team can mint more tokens"
+          "very volatile (26.2% per 4h candle)",
+          "only 28% of supply unlocked (future selling pressure)"
         ],
-        "potential": 58.4,
+        "potential": 57.7,
         "potential_notes": [
-          "Up 13% this week and +1% over 30 days",
-          "Possibly still early: 1,250 CoinGecko watchers and no big run yet (a hint, not proof)",
-          "Price is 17% of the way from its all-time low (0.02761) to its high (0.28772)",
-          "New listing: on Bitget for only 160 days"
+          "Up 69% this week and +18% over 30 days",
+          "Price is 8% of the way from its all-time low (0.04500) to its high (0.47695)"
         ],
         "plan": {
-          "price": 0.06603,
-          "rsi": 47.4,
+          "price": 0.06969,
+          "rsi": 45.9,
           "risk_pct": 0.25,
-          "notional": 8.231471717367878,
-          "max_loss": 2.5,
+          "notional": 9.365740867720165,
+          "max_loss": 2.4999999999999996,
           "status": "Enter zone",
           "action": "Uptrend confirmed and not overextended. A good time to position, at today's price.",
-          "entry": 0.06603,
-          "stop": 0.04597587047517854,
-          "tp1": 0.198,
-          "tp2": 0.21805412952482148,
+          "entry": 0.06969,
+          "stop": 0.05108762753841701,
+          "tp1": 0.21178,
+          "tp2": 0.230382372461583,
           "why": {
             "entry": "today's price, close to its 20-period average, so not chasing",
-            "stop": "below the recent swing low, and at least one normal day's swing away (about 30%)",
+            "stop": "below the recent swing low, and at least one normal day's swing away (about 27%)",
             "tp1": "this week's high",
             "tp2": "a multiple of the risk (no chart level above; treat as a stretch)"
           },
-          "exit_rule": "Sell half at target 1 and move the stop to 0.06603 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
+          "exit_rule": "Sell half at target 1 and move the stop to 0.06969 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
         },
         "scenarios": [
           {
             "case": "Bear",
-            "price": 0.04597587047517854,
-            "pct": -30.371239625657232,
-            "mcap": 11884071.800530737,
+            "price": 0.05108762753841701,
+            "pct": -26.69302979133734,
+            "mcap": 16862226.89738253,
             "note": "stop-loss hit"
           },
           {
             "case": "Base",
-            "price": 0.198,
-            "pct": 199.8636983189459,
-            "mcap": 51180025.35211267,
+            "price": 0.21178,
+            "pct": 203.88864973453863,
+            "mcap": 69901120.57253551,
             "note": "first target, if the setup works"
           },
           {
             "case": "Stretch",
-            "price": 0.21805412952482148,
-            "pct": 230.23493794460313,
-            "mcap": 56363716.551581934,
+            "price": 0.230382372461583,
+            "pct": 230.58167952587604,
+            "mcap": 76041108.67515297,
             "note": "second target, if the trend runs"
-          },
-          {
-            "case": "Old high",
-            "price": 0.287717,
-            "pct": 335.7367863092533,
-            "mcap": 74370521.9910798,
-            "note": "its all-time high: a reference, not a target"
           }
         ],
         "spark": [
-          0.05969,
-          0.05945,
-          0.05854,
-          0.05582,
-          0.05579,
-          0.05764,
-          0.05693,
-          0.05638,
-          0.05537,
-          0.05626,
-          0.05662,
-          0.05802,
-          0.05763,
-          0.05698,
-          0.05728,
-          0.0602,
-          0.06057,
-          0.06009,
-          0.05866,
-          0.05726,
-          0.05686,
-          0.05623,
-          0.05624,
-          0.05678,
-          0.05832,
-          0.05844,
-          0.07066,
-          0.07218,
-          0.10232,
-          0.07133,
-          0.10096,
-          0.10659,
-          0.07317,
-          0.09543,
-          0.08223,
-          0.09209,
-          0.07027,
-          0.06814,
-          0.06611,
-          0.06645,
-          0.06593,
-          0.06603
+          0.04641,
+          0.0467,
+          0.04656,
+          0.04681,
+          0.04695,
+          0.04688,
+          0.04696,
+          0.04948,
+          0.04924,
+          0.05022,
+          0.06508,
+          0.06511,
+          0.06403,
+          0.05445,
+          0.05414,
+          0.05448,
+          0.05647,
+          0.05094,
+          0.05231,
+          0.05297,
+          0.05298,
+          0.05316,
+          0.06435,
+          0.06052,
+          0.07356,
+          0.09532,
+          0.07348,
+          0.07669,
+          0.18695,
+          0.19438,
+          0.12144,
+          0.09922,
+          0.09405,
+          0.09061,
+          0.08458,
+          0.07844,
+          0.0772,
+          0.07598,
+          0.07773,
+          0.07527,
+          0.06939,
+          0.06969
         ],
         "features": {
-          "potential": 58.4,
+          "potential": 57.7,
           "risk_score": 95,
-          "trend": 55.0,
-          "atr_pct": 23.908957235836006,
-          "change_7d": 13.341,
-          "change_30d": 0.5345,
-          "market_cap": 17067763,
-          "watchers": 1250,
-          "age_days": 160,
-          "volume_surge": 1.0346467942161566,
+          "trend": 75.0,
+          "atr_pct": 26.158922377876998,
+          "change_7d": 68.9543,
+          "change_30d": 17.6371,
+          "market_cap": 23002215,
+          "watchers": 9664,
+          "age_days": 271,
+          "volume_surge": 0.6954050900155506,
           "mentions": 0,
-          "narrative_change": -0.29374637126406467,
-          "rsi": 47.4,
+          "narrative_change": -2.7674113487411676,
+          "rsi": 45.9,
           "unknown_checks": 0
         }
       },
@@ -4109,14 +4134,14 @@
         "narrative": "Artificial Intelligence (AI)",
         "market_cap": 44246983,
         "change_7d": 8.5108,
-        "bitget_volume": 252216.97,
+        "bitget_volume": 235936.01,
         "trend": 100.0,
         "age_days": 300,
         "safety": [
           {
             "name": "Real trading volume",
             "ok": false,
-            "detail": "$0.3M a day on Bitget, 51% of its value traded daily"
+            "detail": "$0.2M a day on Bitget, 51% of its value traded daily"
           },
           {
             "name": "Most supply unlocked",
@@ -4146,7 +4171,7 @@
           {
             "name": "Volatility under control",
             "ok": true,
-            "detail": "moves 4.4% per 4h candle on average"
+            "detail": "moves 4.2% per 4h candle on average"
           },
           {
             "name": "Spread across many holders",
@@ -4174,57 +4199,55 @@
           "over 90% below its all-time high",
           "upgradeable contract"
         ],
-        "potential": 57.6,
+        "potential": 56.9,
         "potential_notes": [
           "Up 9% this week and -31% over 30 days",
           "Price is 7% of the way from its all-time low (0.02739) to its high (0.89708)"
         ],
         "plan": {
-          "price": 0.08993,
-          "rsi": 62.4,
+          "price": 0.09105,
+          "rsi": 64.0,
           "risk_pct": 0.5,
-          "notional": 36.66036161889015,
+          "notional": 38.77232277337083,
           "max_loss": 5.0,
           "status": "Wait for pullback",
-          "action": "Uptrend, but price is stretched. Set a buy around 0.08528 (its 20-period average) instead of chasing.",
-          "entry": 0.08528360018803766,
-          "stop": 0.07365201822566918,
-          "tp1": 0.10854676411277461,
-          "tp2": 0.11791,
+          "action": "Uptrend, but price is stretched. Set a buy around 0.08616 (its 20-period average) instead of chasing.",
+          "entry": 0.08616397078599,
+          "stop": 0.0750524401086007,
+          "tp1": 0.10838703214076861,
+          "tp2": 0.11673,
           "why": {
             "entry": "its 20-period average, where pullbacks in this uptrend have been bought",
-            "stop": "2.5\u00d7 the average 4h move below entry, and at least one normal day's swing away (about 14%)",
+            "stop": "2.5\u00d7 the average 4h move below entry, and at least one normal day's swing away (about 13%)",
             "tp1": "2\u00d7 the risk (no chart level close enough)",
             "tp2": "this month's high"
           },
-          "exit_rule": "Sell half at target 1 and move the stop to 0.08528 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
+          "exit_rule": "Sell half at target 1 and move the stop to 0.08616 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
         },
         "scenarios": [
           {
             "case": "Bear",
-            "price": 0.07365201822566918,
-            "pct": -13.638708892122953,
-            "mcap": 36237958.39371594,
+            "price": 0.0750524401086007,
+            "pct": -12.895796904471357,
+            "mcap": 36472751.69240827,
             "note": "stop-loss hit"
           },
           {
             "case": "Base",
-            "price": 0.10854676411277461,
-            "pct": 27.277417784245905,
-            "mcap": 53406725.52432946,
+            "price": 0.10838703214076861,
+            "pct": 25.791593808942714,
+            "mcap": 52672149.02309766,
             "note": "first target, if the setup works"
           },
           {
             "case": "Stretch",
-            "price": 0.11791,
-            "pct": 38.25635847926916,
-            "mcap": 58013585.73924164,
+            "price": 0.11673,
+            "pct": 35.47425790058869,
+            "mcap": 56726527.46392091,
             "note": "second target, if the trend runs"
           }
         ],
         "spark": [
-          0.075,
-          0.0779,
           0.082,
           0.08776,
           0.08758,
@@ -4264,23 +4287,1059 @@
           0.0879,
           0.08812,
           0.08826,
-          0.08993
+          0.08975,
+          0.08929,
+          0.09105
         ],
         "features": {
-          "potential": 57.6,
+          "potential": 56.9,
           "risk_score": 70,
           "trend": 100.0,
-          "atr_pct": 4.38954001226375,
+          "atr_pct": 4.203505081809292,
           "change_7d": 8.5108,
           "change_30d": -30.6911,
           "market_cap": 44246983,
           "watchers": 8294,
           "age_days": 300,
-          "volume_surge": 0.9913557441244315,
+          "volume_surge": 0.8805847955116536,
           "mentions": 0,
           "narrative_change": -1.7461512972518163,
-          "rsi": 62.4,
+          "rsi": 64.0,
           "unknown_checks": 1
+        }
+      },
+      {
+        "symbol": "APR",
+        "name": "Capricorn",
+        "narrative": "Decentralized Finance (DeFi)",
+        "market_cap": 15643946,
+        "change_7d": 45.4941,
+        "bitget_volume": 5786274.91,
+        "trend": 45.0,
+        "age_days": 300,
+        "safety": [
+          {
+            "name": "Real trading volume",
+            "ok": false,
+            "detail": "$5.8M a day on Bitget, 183% of its value traded daily"
+          },
+          {
+            "name": "Most supply unlocked",
+            "ok": true,
+            "detail": "40% of supply in circulation"
+          },
+          {
+            "name": "Fair valuation",
+            "ok": true,
+            "detail": "fully diluted value 2.5\u00d7 market cap"
+          },
+          {
+            "name": "Contract safe",
+            "ok": true,
+            "detail": "contract scanned clean on ethereum"
+          },
+          {
+            "name": "Not a pump-and-dump",
+            "ok": true,
+            "detail": "+51% today, +45% this week"
+          },
+          {
+            "name": "Enough trading history",
+            "ok": true,
+            "detail": "trading on Bitget for 300 days+"
+          },
+          {
+            "name": "Volatility under control",
+            "ok": false,
+            "detail": "moves 16.6% per 4h candle on average"
+          },
+          {
+            "name": "Spread across many holders",
+            "ok": false,
+            "detail": "top 10 private wallets hold 92% of supply"
+          },
+          {
+            "name": "Real product",
+            "ok": true,
+            "detail": "has a website"
+          }
+        ],
+        "safe": false,
+        "failed_checks": [
+          "Real trading volume",
+          "Volatility under control",
+          "Spread across many holders"
+        ],
+        "unknown_checks": [],
+        "risk_score": 87,
+        "risk_rating": "Very high",
+        "risk_notes": [
+          "very small market cap (under $50M)",
+          "moderate Bitget volume",
+          "very volatile (16.6% per 4h candle)",
+          "only 40% of supply unlocked (future selling pressure)",
+          "over 90% below its all-time high",
+          "upgradeable contract"
+        ],
+        "potential": 56.4,
+        "potential_notes": [
+          "Up 45% this week and -75% over 30 days",
+          "Trading volume has risen steadily to 2.0\u00d7 normal over the past day",
+          "Possibly still early: 1,748 CoinGecko watchers and no big run yet (a hint, not proof)",
+          "Price is 2% of the way from its all-time low (0.02263) to its high (0.73956)"
+        ],
+        "plan": {
+          "price": 0.03561,
+          "rsi": 56.7,
+          "risk_pct": 0.25,
+          "notional": 9.275343764896808,
+          "max_loss": 2.5,
+          "status": "Watch for breakout",
+          "action": "Not trending yet. Buy only if a 4h candle closes above 0.05467 (the recent high) on rising volume.",
+          "entry": 0.054943349999999995,
+          "stop": 0.040134370572213994,
+          "tp1": 0.084561308855572,
+          "tp2": 0.14959,
+          "why": {
+            "entry": "just above the recent high; only on a 4h close above it",
+            "stop": "2.5\u00d7 the average 4h move below entry, and at least one normal day's swing away (about 26%)",
+            "tp1": "2\u00d7 the risk (no chart level close enough)",
+            "tp2": "this month's high"
+          },
+          "exit_rule": "Sell half at target 1 and move the stop to 0.05494 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
+        },
+        "scenarios": [
+          {
+            "case": "Bear",
+            "price": 0.040134370572213994,
+            "pct": -26.953178915712282,
+            "mcap": 17631562.0886185,
+            "note": "stop-loss hit"
+          },
+          {
+            "case": "Base",
+            "price": 0.084561308855572,
+            "pct": 53.906357831424565,
+            "mcap": 37148906.18999972,
+            "note": "first target, if the setup works"
+          },
+          {
+            "case": "Stretch",
+            "price": 0.14959,
+            "pct": 172.2622482975647,
+            "mcap": 65716873.971917994,
+            "note": "second target, if the trend runs"
+          }
+        ],
+        "spark": [
+          0.02484,
+          0.02625,
+          0.02938,
+          0.02932,
+          0.02818,
+          0.02838,
+          0.03072,
+          0.03217,
+          0.03493,
+          0.03183,
+          0.03036,
+          0.02985,
+          0.0293,
+          0.02742,
+          0.02817,
+          0.02733,
+          0.02695,
+          0.02694,
+          0.02741,
+          0.02617,
+          0.02622,
+          0.02632,
+          0.02621,
+          0.02658,
+          0.02611,
+          0.02591,
+          0.0235,
+          0.02488,
+          0.02567,
+          0.026,
+          0.02565,
+          0.02568,
+          0.02585,
+          0.0278,
+          0.0342,
+          0.03459,
+          0.03897,
+          0.04107,
+          0.04364,
+          0.03948,
+          0.03487,
+          0.03561
+        ],
+        "features": {
+          "potential": 56.4,
+          "risk_score": 87,
+          "trend": 45.0,
+          "atr_pct": 16.63463007895086,
+          "change_7d": 45.4941,
+          "change_30d": -74.6246,
+          "market_cap": 15643946,
+          "watchers": 1748,
+          "age_days": 300,
+          "volume_surge": 1.958201792615345,
+          "mentions": 0,
+          "narrative_change": -0.9844412923215582,
+          "rsi": 56.7,
+          "unknown_checks": 0
+        }
+      },
+      {
+        "symbol": "ARIA",
+        "name": "Aria.AI",
+        "narrative": "Gaming (GameFi)",
+        "market_cap": 13964549,
+        "change_7d": 75.9815,
+        "bitget_volume": 201058.1,
+        "trend": 100.0,
+        "age_days": 300,
+        "safety": [
+          {
+            "name": "Real trading volume",
+            "ok": false,
+            "detail": "$0.2M a day on Bitget, 68% of its value traded daily"
+          },
+          {
+            "name": "Most supply unlocked",
+            "ok": false,
+            "detail": "18% of supply in circulation"
+          },
+          {
+            "name": "Fair valuation",
+            "ok": false,
+            "detail": "fully diluted value 5.5\u00d7 market cap"
+          },
+          {
+            "name": "Contract safe",
+            "ok": true,
+            "detail": "contract scanned clean on binance smart chain"
+          },
+          {
+            "name": "Not a pump-and-dump",
+            "ok": true,
+            "detail": "+20% today, +76% this week"
+          },
+          {
+            "name": "Enough trading history",
+            "ok": true,
+            "detail": "trading on Bitget for 300 days+"
+          },
+          {
+            "name": "Volatility under control",
+            "ok": true,
+            "detail": "moves 8.3% per 4h candle on average"
+          },
+          {
+            "name": "Spread across many holders",
+            "ok": false,
+            "detail": "top 10 private wallets hold 85% of supply"
+          },
+          {
+            "name": "Real product",
+            "ok": true,
+            "detail": "has a website"
+          }
+        ],
+        "safe": false,
+        "failed_checks": [
+          "Real trading volume",
+          "Most supply unlocked",
+          "Fair valuation",
+          "Spread across many holders"
+        ],
+        "unknown_checks": [],
+        "risk_score": 100,
+        "risk_rating": "Very high",
+        "risk_notes": [
+          "very small market cap (under $50M)",
+          "thin Bitget volume (under $2M a day)",
+          "very volatile (8.3% per 4h candle)",
+          "only 18% of supply unlocked (future selling pressure)",
+          "over 90% below its all-time high"
+        ],
+        "potential": 51.2,
+        "potential_notes": [
+          "Up 76% this week and +116% over 30 days",
+          "Already up 116% in a month, so much of the move may be done",
+          "Price is 5% of the way from its all-time low (0.02203) to its high (1.20)"
+        ],
+        "plan": {
+          "price": 0.081,
+          "rsi": 69.8,
+          "risk_pct": 0.25,
+          "notional": 5.911707907368769,
+          "max_loss": 2.5,
+          "status": "Wait for pullback",
+          "action": "Up 122% in a month, so too stretched to buy now. Only buy a pullback to about 0.03996, near this week's low.",
+          "entry": 0.0399636,
+          "stop": 0.023063407777128776,
+          "tp1": 0.0868,
+          "tp2": 0.10756436889148491,
+          "why": {
+            "entry": "just above this week's low, a level that actually traded",
+            "stop": "2.5\u00d7 the average 4h move below entry, and at least one normal day's swing away (about 25%)",
+            "tp1": "this week's high",
+            "tp2": "a multiple of the risk (no chart level above; treat as a stretch)"
+          },
+          "exit_rule": "Sell half at target 1 and move the stop to 0.03996 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
+        },
+        "scenarios": [
+          {
+            "case": "Bear",
+            "price": 0.023063407777128776,
+            "pct": -42.28896351397579,
+            "mcap": 3976173.926057974,
+            "note": "stop-loss hit"
+          },
+          {
+            "case": "Base",
+            "price": 0.0868,
+            "pct": 117.19764986137386,
+            "mcap": 14964479.669135801,
+            "note": "first target, if the setup works"
+          },
+          {
+            "case": "Stretch",
+            "price": 0.10756436889148491,
+            "pct": 169.15585405590315,
+            "mcap": 18544295.062212553,
+            "note": "second target, if the trend runs"
+          }
+        ],
+        "spark": [
+          0.04454,
+          0.04406,
+          0.04351,
+          0.04272,
+          0.04115,
+          0.04003,
+          0.04107,
+          0.05524,
+          0.06055,
+          0.06024,
+          0.05988,
+          0.06295,
+          0.06242,
+          0.0566,
+          0.05924,
+          0.06369,
+          0.06245,
+          0.06033,
+          0.05969,
+          0.05891,
+          0.0595,
+          0.05976,
+          0.06024,
+          0.06475,
+          0.06505,
+          0.06513,
+          0.05991,
+          0.06637,
+          0.06733,
+          0.0626,
+          0.06429,
+          0.07287,
+          0.0733,
+          0.07071,
+          0.07249,
+          0.0728,
+          0.07367,
+          0.07325,
+          0.07919,
+          0.08185,
+          0.07978,
+          0.081
+        ],
+        "features": {
+          "potential": 51.2,
+          "risk_score": 100,
+          "trend": 100.0,
+          "atr_pct": 8.345773937220358,
+          "change_7d": 75.9815,
+          "change_30d": 115.5483,
+          "market_cap": 13964549,
+          "watchers": 1460,
+          "age_days": 300,
+          "volume_surge": 0.9472955410107627,
+          "mentions": 0,
+          "narrative_change": -3.3769677467078436,
+          "rsi": 69.8,
+          "unknown_checks": 0
+        }
+      },
+      {
+        "symbol": "MAGMA",
+        "name": "Magma Finance",
+        "narrative": "Decentralized Finance (DeFi)",
+        "market_cap": 64404071,
+        "change_7d": 35.3917,
+        "bitget_volume": 472084.6,
+        "trend": 100.0,
+        "age_days": 300,
+        "safety": [
+          {
+            "name": "Real trading volume",
+            "ok": true,
+            "detail": "$0.5M a day on Bitget, 43% of its value traded daily"
+          },
+          {
+            "name": "Most supply unlocked",
+            "ok": false,
+            "detail": "19% of supply in circulation"
+          },
+          {
+            "name": "Fair valuation",
+            "ok": false,
+            "detail": "fully diluted value 5.3\u00d7 market cap"
+          },
+          {
+            "name": "Contract safe",
+            "ok": null,
+            "detail": "contract on sui, which the free scanner doesn't cover"
+          },
+          {
+            "name": "Not a pump-and-dump",
+            "ok": true,
+            "detail": "+14% today, +35% this week"
+          },
+          {
+            "name": "Enough trading history",
+            "ok": true,
+            "detail": "trading on Bitget for 300 days+"
+          },
+          {
+            "name": "Volatility under control",
+            "ok": true,
+            "detail": "moves 11.9% per 4h candle on average"
+          },
+          {
+            "name": "Spread across many holders",
+            "ok": null,
+            "detail": "holder data not available"
+          },
+          {
+            "name": "Real product",
+            "ok": true,
+            "detail": "has a website"
+          }
+        ],
+        "safe": false,
+        "failed_checks": [
+          "Most supply unlocked",
+          "Fair valuation"
+        ],
+        "unknown_checks": [
+          "Contract safe",
+          "Spread across many holders"
+        ],
+        "risk_score": 85,
+        "risk_rating": "Very high",
+        "risk_notes": [
+          "small market cap (under $200M)",
+          "thin Bitget volume (under $2M a day)",
+          "very volatile (11.9% per 4h candle)",
+          "only 19% of supply unlocked (future selling pressure)"
+        ],
+        "potential": 67.5,
+        "potential_notes": [
+          "Up 35% this week and +40% over 30 days",
+          "Possibly still early: 1,568 CoinGecko watchers and no big run yet (a hint, not proof)",
+          "Price is 36% of the way from its all-time low (0.06971) to its high (0.80824)"
+        ],
+        "plan": {
+          "price": 0.34902,
+          "rsi": 48.1,
+          "risk_pct": 0.25,
+          "notional": 12.9907729728844,
+          "max_loss": 2.5,
+          "status": "Enter zone",
+          "action": "Uptrend confirmed and not overextended. A good time to position, at today's price.",
+          "entry": 0.34902,
+          "stop": 0.2818530960889494,
+          "tp1": 0.56,
+          "tp2": 0.6271669039110507,
+          "why": {
+            "entry": "today's price, close to its 20-period average, so not chasing",
+            "stop": "below the recent swing low, and at least one normal day's swing away (about 19%)",
+            "tp1": "this week's high",
+            "tp2": "a multiple of the risk (no chart level above; treat as a stretch)"
+          },
+          "exit_rule": "Sell half at target 1 and move the stop to 0.34902 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
+        },
+        "scenarios": [
+          {
+            "case": "Bear",
+            "price": 0.2818530960889494,
+            "pct": -19.244428374033184,
+            "mcap": 52009875.68644352,
+            "note": "stop-loss hit"
+          },
+          {
+            "case": "Base",
+            "price": 0.56,
+            "pct": 60.44925792218212,
+            "mcap": 103335853.99117531,
+            "note": "first target, if the setup works"
+          },
+          {
+            "case": "Stretch",
+            "price": 0.6271669039110507,
+            "pct": 79.69368629621532,
+            "mcap": 115730049.30473179,
+            "note": "second target, if the trend runs"
+          },
+          {
+            "case": "Old high",
+            "price": 0.808239,
+            "pct": 131.5738353102974,
+            "mcap": 149142977.31066704,
+            "note": "its all-time high: a reference, not a target"
+          }
+        ],
+        "spark": [
+          0.26741,
+          0.27626,
+          0.26817,
+          0.26138,
+          0.26177,
+          0.28092,
+          0.27491,
+          0.27589,
+          0.27797,
+          0.27895,
+          0.28477,
+          0.31521,
+          0.34131,
+          0.35803,
+          0.31963,
+          0.323,
+          0.33238,
+          0.52667,
+          0.52056,
+          0.50173,
+          0.50125,
+          0.50601,
+          0.49778,
+          0.48149,
+          0.4376,
+          0.4386,
+          0.38021,
+          0.38669,
+          0.33513,
+          0.28495,
+          0.29385,
+          0.37283,
+          0.37781,
+          0.36521,
+          0.38002,
+          0.32547,
+          0.33902,
+          0.33747,
+          0.34503,
+          0.34515,
+          0.34697,
+          0.34902
+        ],
+        "features": {
+          "potential": 67.5,
+          "risk_score": 85,
+          "trend": 100.0,
+          "atr_pct": 11.873820942031289,
+          "change_7d": 35.3917,
+          "change_30d": 40.1769,
+          "market_cap": 64404071,
+          "watchers": 1568,
+          "age_days": 300,
+          "volume_surge": 0.1646282058399151,
+          "mentions": 0,
+          "narrative_change": -0.9844412923215582,
+          "rsi": 48.1,
+          "unknown_checks": 2
+        }
+      },
+      {
+        "symbol": "INIT",
+        "name": "Initia",
+        "narrative": "Infrastructure",
+        "market_cap": 31531561,
+        "change_7d": 20.797,
+        "bitget_volume": 100867.06,
+        "trend": 100.0,
+        "age_days": 300,
+        "safety": [
+          {
+            "name": "Real trading volume",
+            "ok": false,
+            "detail": "$0.1M a day on Bitget, 51% of its value traded daily"
+          },
+          {
+            "name": "Most supply unlocked",
+            "ok": false,
+            "detail": "21% of supply in circulation"
+          },
+          {
+            "name": "Fair valuation",
+            "ok": false,
+            "detail": "fully diluted value 4.7\u00d7 market cap"
+          },
+          {
+            "name": "Contract safe",
+            "ok": null,
+            "detail": "contract on initia, which the free scanner doesn't cover"
+          },
+          {
+            "name": "Not a pump-and-dump",
+            "ok": true,
+            "detail": "+3% today, +21% this week"
+          },
+          {
+            "name": "Enough trading history",
+            "ok": true,
+            "detail": "trading on Bitget for 300 days+"
+          },
+          {
+            "name": "Volatility under control",
+            "ok": true,
+            "detail": "moves 6.8% per 4h candle on average"
+          },
+          {
+            "name": "Spread across many holders",
+            "ok": null,
+            "detail": "holder data not available"
+          },
+          {
+            "name": "Real product",
+            "ok": true,
+            "detail": "has a website"
+          }
+        ],
+        "safe": false,
+        "failed_checks": [
+          "Real trading volume",
+          "Most supply unlocked",
+          "Fair valuation"
+        ],
+        "unknown_checks": [
+          "Contract safe",
+          "Spread across many holders"
+        ],
+        "risk_score": 85,
+        "risk_rating": "Very high",
+        "risk_notes": [
+          "very small market cap (under $50M)",
+          "thin Bitget volume (under $2M a day)",
+          "volatile (6.8% per 4h candle)",
+          "only 21% of supply unlocked (future selling pressure)"
+        ],
+        "potential": 66.4,
+        "potential_notes": [
+          "Up 21% this week and +53% over 30 days",
+          "Possibly still early: 4,777 CoinGecko watchers and no big run yet (a hint, not proof)",
+          "Price is 7% of the way from its all-time low (0.04739) to its high (1.42)"
+        ],
+        "plan": {
+          "price": 0.1442,
+          "rsi": 50.4,
+          "risk_pct": 0.25,
+          "notional": 25.550825865387402,
+          "max_loss": 2.5,
+          "status": "Enter zone",
+          "action": "Uptrend confirmed and not overextended. A good time to position, at today's price.",
+          "entry": 0.1442,
+          "stop": 0.13009086701544337,
+          "tp1": 0.16773,
+          "tp2": 0.2006365319382265,
+          "why": {
+            "entry": "today's price, close to its 20-period average, so not chasing",
+            "stop": "below the recent swing low, and at least one normal day's swing away (about 10%)",
+            "tp1": "this week's high",
+            "tp2": "a multiple of the risk (no chart level above; treat as a stretch)"
+          },
+          "exit_rule": "Sell half at target 1 and move the stop to 0.14420 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
+        },
+        "scenarios": [
+          {
+            "case": "Bear",
+            "price": 0.13009086701544337,
+            "pct": -9.784419545462297,
+            "mcap": 28446380.78252663,
+            "note": "stop-loss hit"
+          },
+          {
+            "case": "Base",
+            "price": 0.16773,
+            "pct": 16.317614424410532,
+            "mcap": 36676759.54597781,
+            "note": "first target, if the setup works"
+          },
+          {
+            "case": "Stretch",
+            "price": 0.2006365319382265,
+            "pct": 39.13767818184917,
+            "mcap": 43872281.86989347,
+            "note": "second target, if the trend runs"
+          }
+        ],
+        "spark": [
+          0.12458,
+          0.12404,
+          0.12485,
+          0.12381,
+          0.12377,
+          0.12348,
+          0.12458,
+          0.12977,
+          0.12718,
+          0.12741,
+          0.12678,
+          0.12573,
+          0.12306,
+          0.12644,
+          0.12452,
+          0.12756,
+          0.12931,
+          0.12633,
+          0.12588,
+          0.13001,
+          0.13142,
+          0.12997,
+          0.1328,
+          0.13352,
+          0.13345,
+          0.12615,
+          0.15044,
+          0.15008,
+          0.13329,
+          0.14421,
+          0.14692,
+          0.14715,
+          0.14783,
+          0.1594,
+          0.15962,
+          0.15514,
+          0.15014,
+          0.15577,
+          0.16353,
+          0.15086,
+          0.14261,
+          0.1442
+        ],
+        "features": {
+          "potential": 66.4,
+          "risk_score": 85,
+          "trend": 100.0,
+          "atr_pct": 6.774520491118209,
+          "change_7d": 20.797,
+          "change_30d": 53.2955,
+          "market_cap": 31531561,
+          "watchers": 4777,
+          "age_days": 300,
+          "volume_surge": 0.5017456388544399,
+          "mentions": 0,
+          "narrative_change": -1.5239002504374324,
+          "rsi": 50.4,
+          "unknown_checks": 2
+        }
+      },
+      {
+        "symbol": "ORDER",
+        "name": "Orderly",
+        "narrative": "Smart Contract Platform",
+        "market_cap": 21601126,
+        "change_7d": 78.0528,
+        "bitget_volume": 667603.6,
+        "trend": 100.0,
+        "age_days": 300,
+        "safety": [
+          {
+            "name": "Real trading volume",
+            "ok": false,
+            "detail": "$0.7M a day on Bitget, 1016% of its value traded daily"
+          },
+          {
+            "name": "Most supply unlocked",
+            "ok": true,
+            "detail": "41% of supply in circulation"
+          },
+          {
+            "name": "Fair valuation",
+            "ok": true,
+            "detail": "fully diluted value 2.4\u00d7 market cap"
+          },
+          {
+            "name": "Contract safe",
+            "ok": true,
+            "detail": "contract scanned clean on ethereum"
+          },
+          {
+            "name": "Not a pump-and-dump",
+            "ok": true,
+            "detail": "-40% today, +78% this week"
+          },
+          {
+            "name": "Enough trading history",
+            "ok": true,
+            "detail": "trading on Bitget for 300 days+"
+          },
+          {
+            "name": "Volatility under control",
+            "ok": false,
+            "detail": "moves 19.2% per 4h candle on average"
+          },
+          {
+            "name": "Spread across many holders",
+            "ok": false,
+            "detail": "top 10 private wallets hold 89% of supply"
+          },
+          {
+            "name": "Real product",
+            "ok": true,
+            "detail": "has a website"
+          }
+        ],
+        "safe": false,
+        "failed_checks": [
+          "Real trading volume",
+          "Volatility under control",
+          "Spread across many holders"
+        ],
+        "unknown_checks": [],
+        "risk_score": 95,
+        "risk_rating": "Very high",
+        "risk_notes": [
+          "very small market cap (under $50M)",
+          "thin Bitget volume (under $2M a day)",
+          "very volatile (19.2% per 4h candle)",
+          "only 41% of supply unlocked (future selling pressure)"
+        ],
+        "potential": 63.9,
+        "potential_notes": [
+          "Up 78% this week and +31% over 30 days",
+          "Price is 5% of the way from its all-time low (0.02689) to its high (0.49154)"
+        ],
+        "plan": {
+          "price": 0.04143,
+          "rsi": 47.2,
+          "status": "Exit signal",
+          "action": "Uptrend is breaking: price closed below 0.04571 (20-period average) and momentum is fading. If you hold it, this is the time to leave."
+        },
+        "scenarios": [],
+        "spark": [
+          0.02994,
+          0.03007,
+          0.03015,
+          0.03034,
+          0.03061,
+          0.0303,
+          0.0304,
+          0.03128,
+          0.0312,
+          0.03138,
+          0.03197,
+          0.03202,
+          0.03224,
+          0.03294,
+          0.03281,
+          0.03244,
+          0.0317,
+          0.03112,
+          0.03124,
+          0.03084,
+          0.03076,
+          0.03074,
+          0.0311,
+          0.03121,
+          0.03203,
+          0.03277,
+          0.03268,
+          0.03304,
+          0.03457,
+          0.03981,
+          0.06902,
+          0.0709,
+          0.06205,
+          0.07226,
+          0.05689,
+          0.05126,
+          0.04759,
+          0.04786,
+          0.04783,
+          0.04619,
+          0.04179,
+          0.04143
+        ],
+        "features": {
+          "potential": 63.9,
+          "risk_score": 95,
+          "trend": 100.0,
+          "atr_pct": 19.18381241696109,
+          "change_7d": 78.0528,
+          "change_30d": 31.4603,
+          "market_cap": 21601126,
+          "watchers": 12256,
+          "age_days": 300,
+          "volume_surge": 0.6516499433757457,
+          "mentions": 0,
+          "narrative_change": -0.29374637126406467,
+          "rsi": 47.2,
+          "unknown_checks": 0
+        }
+      },
+      {
+        "symbol": "UP",
+        "name": "Superform",
+        "narrative": "Smart Contract Platform",
+        "market_cap": 17067763,
+        "change_7d": 13.341,
+        "bitget_volume": 46857.97,
+        "trend": 25.0,
+        "age_days": 160,
+        "safety": [
+          {
+            "name": "Real trading volume",
+            "ok": false,
+            "detail": "$0.0M a day on Bitget, 191% of its value traded daily"
+          },
+          {
+            "name": "Most supply unlocked",
+            "ok": false,
+            "detail": "24% of supply in circulation"
+          },
+          {
+            "name": "Fair valuation",
+            "ok": false,
+            "detail": "fully diluted value 4.2\u00d7 market cap"
+          },
+          {
+            "name": "Contract safe",
+            "ok": true,
+            "detail": "contract scanned clean on ethereum"
+          },
+          {
+            "name": "Not a pump-and-dump",
+            "ok": true,
+            "detail": "-12% today, +13% this week"
+          },
+          {
+            "name": "Enough trading history",
+            "ok": true,
+            "detail": "trading on Bitget for 160 days"
+          },
+          {
+            "name": "Volatility under control",
+            "ok": false,
+            "detail": "moves 23.5% per 4h candle on average"
+          },
+          {
+            "name": "Spread across many holders",
+            "ok": false,
+            "detail": "top 10 private wallets hold 61% of supply"
+          },
+          {
+            "name": "Real product",
+            "ok": true,
+            "detail": "has a website"
+          }
+        ],
+        "safe": false,
+        "failed_checks": [
+          "Real trading volume",
+          "Most supply unlocked",
+          "Fair valuation",
+          "Volatility under control",
+          "Spread across many holders"
+        ],
+        "unknown_checks": [],
+        "risk_score": 95,
+        "risk_rating": "Very high",
+        "risk_notes": [
+          "very small market cap (under $50M)",
+          "thin Bitget volume (under $2M a day)",
+          "very volatile (23.5% per 4h candle)",
+          "only 24% of supply unlocked (future selling pressure)",
+          "team can mint more tokens"
+        ],
+        "potential": 47.3,
+        "potential_notes": [
+          "Up 13% this week and +1% over 30 days",
+          "Possibly still early: 1,250 CoinGecko watchers and no big run yet (a hint, not proof)",
+          "Price is 17% of the way from its all-time low (0.02761) to its high (0.28772)",
+          "New listing: on Bitget for only 160 days"
+        ],
+        "plan": {
+          "price": 0.06029,
+          "rsi": 45.0,
+          "status": "Avoid",
+          "action": "In a downtrend. Wait until a 4h candle closes above 0.06824 (its 50-period average) before considering it."
+        },
+        "scenarios": [],
+        "spark": [
+          0.05854,
+          0.05582,
+          0.05579,
+          0.05764,
+          0.05693,
+          0.05638,
+          0.05537,
+          0.05626,
+          0.05662,
+          0.05802,
+          0.05763,
+          0.05698,
+          0.05728,
+          0.0602,
+          0.06057,
+          0.06009,
+          0.05866,
+          0.05726,
+          0.05686,
+          0.05623,
+          0.05624,
+          0.05678,
+          0.05832,
+          0.05844,
+          0.07066,
+          0.07218,
+          0.10232,
+          0.07133,
+          0.10096,
+          0.10659,
+          0.07317,
+          0.09543,
+          0.08223,
+          0.09209,
+          0.07027,
+          0.06814,
+          0.06611,
+          0.06645,
+          0.06593,
+          0.06701,
+          0.06059,
+          0.06029
+        ],
+        "features": {
+          "potential": 47.3,
+          "risk_score": 95,
+          "trend": 25.0,
+          "atr_pct": 23.52055593552052,
+          "change_7d": 13.341,
+          "change_30d": 0.5345,
+          "market_cap": 17067763,
+          "watchers": 1250,
+          "age_days": 160,
+          "volume_surge": 0.22187960521170774,
+          "mentions": 0,
+          "narrative_change": -0.29374637126406467,
+          "rsi": 45.0,
+          "unknown_checks": 0
         }
       },
       {
@@ -4289,14 +5348,14 @@
         "narrative": "Artificial Intelligence (AI)",
         "market_cap": 26185219,
         "change_7d": -1.431,
-        "bitget_volume": 685023.81,
-        "trend": 45.0,
+        "bitget_volume": 522396.02,
+        "trend": 20.0,
         "age_days": 49,
         "safety": [
           {
             "name": "Real trading volume",
             "ok": true,
-            "detail": "$0.7M a day on Bitget, 50% of its value traded daily"
+            "detail": "$0.5M a day on Bitget, 50% of its value traded daily"
           },
           {
             "name": "Most supply unlocked",
@@ -4354,66 +5413,20 @@
           "only 47% of supply unlocked (future selling pressure)",
           "team can mint more tokens"
         ],
-        "potential": 54.2,
+        "potential": 43.9,
         "potential_notes": [
-          "Trading volume has risen steadily to 1.5\u00d7 normal over the past day",
           "Possibly still early: 419 CoinGecko watchers and no big run yet (a hint, not proof)",
           "Price is 14% of the way from its all-time low (0.15681) to its high (0.66859)",
           "New listing: on Bitget for only 49 days"
         ],
         "plan": {
-          "price": 0.24182,
-          "rsi": 56.0,
-          "risk_pct": 0.25,
-          "notional": 16.64219210598092,
-          "max_loss": 2.5,
-          "status": "Watch for breakout",
-          "action": "Not trending yet. Buy only if a 4h candle closes above 0.26865 (the recent high) on rising volume.",
-          "entry": 0.26999324999999996,
-          "stop": 0.22943470334331148,
-          "tp1": 0.3511103433133769,
-          "tp2": 0.44935,
-          "why": {
-            "entry": "just above the recent high; only on a 4h close above it",
-            "stop": "2.5\u00d7 the average 4h move below entry, and at least one normal day's swing away (about 15%)",
-            "tp1": "2\u00d7 the risk (no chart level close enough)",
-            "tp2": "this month's high"
-          },
-          "exit_rule": "Sell half at target 1 and move the stop to 0.26999 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
+          "price": 0.23096,
+          "rsi": 49.4,
+          "status": "Avoid",
+          "action": "In a downtrend. Wait until a 4h candle closes above 0.23540 (its 50-period average) before considering it."
         },
-        "scenarios": [
-          {
-            "case": "Bear",
-            "price": 0.22943470334331148,
-            "pct": -15.022059498409124,
-            "mcap": 24844090.45258723,
-            "note": "stop-loss hit"
-          },
-          {
-            "case": "Base",
-            "price": 0.3511103433133769,
-            "pct": 30.04411899681825,
-            "mcap": 38019606.454494916,
-            "note": "first target, if the setup works"
-          },
-          {
-            "case": "Stretch",
-            "price": 0.44935,
-            "pct": 66.43008667809292,
-            "mcap": 48657382.17537838,
-            "note": "second target, if the trend runs"
-          },
-          {
-            "case": "Old high",
-            "price": 0.668589,
-            "pct": 147.63174634921432,
-            "mcap": 72397441.84100157,
-            "note": "its all-time high: a reference, not a target"
-          }
-        ],
+        "scenarios": [],
         "spark": [
-          0.23195,
-          0.23025,
           0.2256,
           0.22391,
           0.22317,
@@ -4453,1084 +5466,24 @@
           0.23703,
           0.24567,
           0.24834,
-          0.24182
+          0.23779,
+          0.23164,
+          0.23096
         ],
         "features": {
-          "potential": 54.2,
+          "potential": 43.9,
           "risk_score": 85,
-          "trend": 45.0,
-          "atr_pct": 6.140010826133061,
+          "trend": 20.0,
+          "atr_pct": 6.055652679039957,
           "change_7d": -1.431,
           "change_30d": -41.9097,
           "market_cap": 26185219,
           "watchers": 419,
           "age_days": 49,
-          "volume_surge": 1.5407506903060317,
+          "volume_surge": 0.9402068479848203,
           "mentions": 0,
           "narrative_change": -1.7461512972518163,
-          "rsi": 56.0,
-          "unknown_checks": 0
-        }
-      },
-      {
-        "symbol": "BREV",
-        "name": "Brevis",
-        "narrative": "Infrastructure",
-        "market_cap": 19520316,
-        "change_7d": 6.9685,
-        "bitget_volume": 8096.63,
-        "trend": 70.0,
-        "age_days": 293,
-        "safety": [
-          {
-            "name": "Real trading volume",
-            "ok": false,
-            "detail": "$0.0M a day on Bitget, 70% of its value traded daily"
-          },
-          {
-            "name": "Most supply unlocked",
-            "ok": false,
-            "detail": "25% of supply in circulation"
-          },
-          {
-            "name": "Fair valuation",
-            "ok": true,
-            "detail": "fully diluted value 4.0\u00d7 market cap"
-          },
-          {
-            "name": "Contract safe",
-            "ok": true,
-            "detail": "contract scanned clean on ethereum"
-          },
-          {
-            "name": "Not a pump-and-dump",
-            "ok": true,
-            "detail": "-10% today, +7% this week"
-          },
-          {
-            "name": "Enough trading history",
-            "ok": true,
-            "detail": "trading on Bitget for 293 days"
-          },
-          {
-            "name": "Volatility under control",
-            "ok": true,
-            "detail": "moves 3.0% per 4h candle on average"
-          },
-          {
-            "name": "Spread across many holders",
-            "ok": null,
-            "detail": "holder data not available"
-          },
-          {
-            "name": "Real product",
-            "ok": true,
-            "detail": "has a website"
-          }
-        ],
-        "safe": false,
-        "failed_checks": [
-          "Real trading volume",
-          "Most supply unlocked"
-        ],
-        "unknown_checks": [
-          "Spread across many holders"
-        ],
-        "risk_score": 75,
-        "risk_rating": "Very high",
-        "risk_notes": [
-          "very small market cap (under $50M)",
-          "thin Bitget volume (under $2M a day)",
-          "only 25% of supply unlocked (future selling pressure)",
-          "team can mint more tokens"
-        ],
-        "potential": 53.0,
-        "potential_notes": [
-          "Up 7% this week and -13% over 30 days",
-          "Possibly still early: 1,902 CoinGecko watchers and no big run yet (a hint, not proof)",
-          "Price is 3% of the way from its all-time low (0.06255) to its high (0.56006)"
-        ],
-        "plan": {
-          "price": 0.0783,
-          "rsi": 50.8,
-          "risk_pct": 0.25,
-          "notional": 30.796535651597413,
-          "max_loss": 2.5,
-          "status": "Enter zone",
-          "action": "Uptrend confirmed and not overextended. A good time to position, at today's price.",
-          "entry": 0.0783,
-          "stop": 0.07194376557757896,
-          "tp1": 0.0959,
-          "tp2": 0.1051,
-          "why": {
-            "entry": "today's price, close to its 20-period average, so not chasing",
-            "stop": "below the recent swing low, and at least one normal day's swing away (about 8%)",
-            "tp1": "this week's high",
-            "tp2": "this month's high"
-          },
-          "exit_rule": "Sell half at target 1 and move the stop to 0.07830 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
-        },
-        "scenarios": [
-          {
-            "case": "Bear",
-            "price": 0.07194376557757896,
-            "pct": -8.117796197217153,
-            "mcap": 17935696.530067228,
-            "note": "stop-loss hit"
-          },
-          {
-            "case": "Base",
-            "price": 0.0959,
-            "pct": 22.477650063856956,
-            "mcap": 23908024.321839083,
-            "note": "first target, if the setup works"
-          },
-          {
-            "case": "Stretch",
-            "price": 0.1051,
-            "pct": 34.22733077905493,
-            "mcap": 26201599.126436785,
-            "note": "second target, if the trend runs"
-          }
-        ],
-        "spark": [
-          0.0728,
-          0.0737,
-          0.072,
-          0.0722,
-          0.0724,
-          0.0732,
-          0.0743,
-          0.0738,
-          0.0727,
-          0.0743,
-          0.0747,
-          0.0753,
-          0.0755,
-          0.0765,
-          0.076,
-          0.0779,
-          0.0776,
-          0.0769,
-          0.0764,
-          0.0753,
-          0.0749,
-          0.0739,
-          0.0732,
-          0.0736,
-          0.0748,
-          0.075,
-          0.0793,
-          0.08,
-          0.0782,
-          0.0798,
-          0.0799,
-          0.0793,
-          0.0806,
-          0.0795,
-          0.0822,
-          0.0834,
-          0.0814,
-          0.0783,
-          0.0782,
-          0.0776,
-          0.0775,
-          0.0783
-        ],
-        "features": {
-          "potential": 53.0,
-          "risk_score": 75,
-          "trend": 70.0,
-          "atr_pct": 3.030333327999062,
-          "change_7d": 6.9685,
-          "change_30d": -12.6427,
-          "market_cap": 19520316,
-          "watchers": 1902,
-          "age_days": 293,
-          "volume_surge": 0.22409171092612779,
-          "mentions": 0,
-          "narrative_change": -1.5239002504374324,
-          "rsi": 50.8,
-          "unknown_checks": 1
-        }
-      },
-      {
-        "symbol": "ARIA",
-        "name": "Aria.AI",
-        "narrative": "Gaming (GameFi)",
-        "market_cap": 13964549,
-        "change_7d": 75.9815,
-        "bitget_volume": 163891.7,
-        "trend": 100.0,
-        "age_days": 300,
-        "safety": [
-          {
-            "name": "Real trading volume",
-            "ok": false,
-            "detail": "$0.2M a day on Bitget, 68% of its value traded daily"
-          },
-          {
-            "name": "Most supply unlocked",
-            "ok": false,
-            "detail": "18% of supply in circulation"
-          },
-          {
-            "name": "Fair valuation",
-            "ok": false,
-            "detail": "fully diluted value 5.5\u00d7 market cap"
-          },
-          {
-            "name": "Contract safe",
-            "ok": true,
-            "detail": "contract scanned clean on binance smart chain"
-          },
-          {
-            "name": "Not a pump-and-dump",
-            "ok": true,
-            "detail": "+20% today, +76% this week"
-          },
-          {
-            "name": "Enough trading history",
-            "ok": true,
-            "detail": "trading on Bitget for 300 days+"
-          },
-          {
-            "name": "Volatility under control",
-            "ok": true,
-            "detail": "moves 8.4% per 4h candle on average"
-          },
-          {
-            "name": "Spread across many holders",
-            "ok": false,
-            "detail": "top 10 private wallets hold 85% of supply"
-          },
-          {
-            "name": "Real product",
-            "ok": true,
-            "detail": "has a website"
-          }
-        ],
-        "safe": false,
-        "failed_checks": [
-          "Real trading volume",
-          "Most supply unlocked",
-          "Fair valuation",
-          "Spread across many holders"
-        ],
-        "unknown_checks": [],
-        "risk_score": 100,
-        "risk_rating": "Very high",
-        "risk_notes": [
-          "very small market cap (under $50M)",
-          "thin Bitget volume (under $2M a day)",
-          "very volatile (8.4% per 4h candle)",
-          "only 18% of supply unlocked (future selling pressure)",
-          "over 90% below its all-time high"
-        ],
-        "potential": 50.1,
-        "potential_notes": [
-          "Up 76% this week and +116% over 30 days",
-          "Already up 116% in a month, so much of the move may be done",
-          "Price is 5% of the way from its all-time low (0.02203) to its high (1.20)"
-        ],
-        "plan": {
-          "price": 0.08316,
-          "rsi": 74.0,
-          "risk_pct": 0.25,
-          "notional": 5.720327918217565,
-          "max_loss": 2.5,
-          "status": "Wait for pullback",
-          "action": "Up 125% in a month, so too stretched to buy now. Only buy a pullback to about 0.03996, near this week's low.",
-          "entry": 0.0399636,
-          "stop": 0.02249799288299904,
-          "tp1": 0.0868,
-          "tp2": 0.10982602846800385,
-          "why": {
-            "entry": "just above this week's low, a level that actually traded",
-            "stop": "2.5\u00d7 the average 4h move below entry, and at least one normal day's swing away (about 25%)",
-            "tp1": "this week's high",
-            "tp2": "a multiple of the risk (no chart level above; treat as a stretch)"
-          },
-          "exit_rule": "Sell half at target 1 and move the stop to 0.03996 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
-        },
-        "scenarios": [
-          {
-            "case": "Bear",
-            "price": 0.02249799288299904,
-            "pct": -43.70378823980062,
-            "mcap": 3777950.024245928,
-            "note": "stop-loss hit"
-          },
-          {
-            "case": "Base",
-            "price": 0.0868,
-            "pct": 117.19764986137386,
-            "mcap": 14575791.885521887,
-            "note": "first target, if the setup works"
-          },
-          {
-            "case": "Stretch",
-            "price": 0.10982602846800385,
-            "pct": 174.8151529592025,
-            "mcap": 18442411.688514125,
-            "note": "second target, if the trend runs"
-          }
-        ],
-        "spark": [
-          0.05119,
-          0.04951,
-          0.04454,
-          0.04406,
-          0.04351,
-          0.04272,
-          0.04115,
-          0.04003,
-          0.04107,
-          0.05524,
-          0.06055,
-          0.06024,
-          0.05988,
-          0.06295,
-          0.06242,
-          0.0566,
-          0.05924,
-          0.06369,
-          0.06245,
-          0.06033,
-          0.05969,
-          0.05891,
-          0.0595,
-          0.05976,
-          0.06024,
-          0.06475,
-          0.06505,
-          0.06513,
-          0.05991,
-          0.06637,
-          0.06733,
-          0.0626,
-          0.06429,
-          0.07287,
-          0.0733,
-          0.07071,
-          0.07249,
-          0.0728,
-          0.07367,
-          0.07325,
-          0.07919,
-          0.08316
-        ],
-        "features": {
-          "potential": 50.1,
-          "risk_score": 100,
-          "trend": 100.0,
-          "atr_pct": 8.400965424242887,
-          "change_7d": 75.9815,
-          "change_30d": 115.5483,
-          "market_cap": 13964549,
-          "watchers": 1460,
-          "age_days": 300,
-          "volume_surge": 0.7792830905633519,
-          "mentions": 0,
-          "narrative_change": -3.3769677467078436,
-          "rsi": 74.0,
-          "unknown_checks": 0
-        }
-      },
-      {
-        "symbol": "APR",
-        "name": "Capricorn",
-        "narrative": "Decentralized Finance (DeFi)",
-        "market_cap": 15643946,
-        "change_7d": 45.4941,
-        "bitget_volume": 6192557.18,
-        "trend": 45.0,
-        "age_days": 300,
-        "safety": [
-          {
-            "name": "Real trading volume",
-            "ok": false,
-            "detail": "$6.2M a day on Bitget, 183% of its value traded daily"
-          },
-          {
-            "name": "Most supply unlocked",
-            "ok": true,
-            "detail": "40% of supply in circulation"
-          },
-          {
-            "name": "Fair valuation",
-            "ok": true,
-            "detail": "fully diluted value 2.5\u00d7 market cap"
-          },
-          {
-            "name": "Contract safe",
-            "ok": true,
-            "detail": "contract scanned clean on ethereum"
-          },
-          {
-            "name": "Not a pump-and-dump",
-            "ok": true,
-            "detail": "+51% today, +45% this week"
-          },
-          {
-            "name": "Enough trading history",
-            "ok": true,
-            "detail": "trading on Bitget for 300 days+"
-          },
-          {
-            "name": "Volatility under control",
-            "ok": false,
-            "detail": "moves 13.9% per 4h candle on average"
-          },
-          {
-            "name": "Spread across many holders",
-            "ok": false,
-            "detail": "top 10 private wallets hold 92% of supply"
-          },
-          {
-            "name": "Real product",
-            "ok": true,
-            "detail": "has a website"
-          }
-        ],
-        "safe": false,
-        "failed_checks": [
-          "Real trading volume",
-          "Volatility under control",
-          "Spread across many holders"
-        ],
-        "unknown_checks": [],
-        "risk_score": 87,
-        "risk_rating": "Very high",
-        "risk_notes": [
-          "very small market cap (under $50M)",
-          "moderate Bitget volume",
-          "very volatile (13.9% per 4h candle)",
-          "only 40% of supply unlocked (future selling pressure)",
-          "over 90% below its all-time high",
-          "upgradeable contract"
-        ],
-        "potential": 28.1,
-        "potential_notes": [
-          "Up 45% this week and -75% over 30 days",
-          "Today is a spike (+51% in 24h, volume 5\u00d7 normal), not steady buying. Spikes often give part of it back",
-          "Price is 2% of the way from its all-time low (0.02263) to its high (0.73956)"
-        ],
-        "plan": {
-          "price": 0.042,
-          "rsi": 74.1,
-          "risk_pct": 0.25,
-          "notional": 9.340773696353244,
-          "max_loss": 2.5,
-          "status": "Watch for breakout",
-          "action": "Not trending yet. Buy only if a 4h candle closes above 0.05467 (the recent high) on rising volume.",
-          "entry": 0.054943349999999995,
-          "stop": 0.04023810400376882,
-          "tp1": 0.08435384199246235,
-          "tp2": 0.15257,
-          "why": {
-            "entry": "just above the recent high; only on a 4h close above it",
-            "stop": "2.5\u00d7 the average 4h move below entry, and at least one normal day's swing away (about 27%)",
-            "tp1": "2\u00d7 the risk (no chart level close enough)",
-            "tp2": "this month's high"
-          },
-          "exit_rule": "Sell half at target 1 and move the stop to 0.05494 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
-        },
-        "scenarios": [
-          {
-            "case": "Bear",
-            "price": 0.04023810400376882,
-            "pct": -26.764378211796647,
-            "mcap": 14987683.95660341,
-            "note": "stop-loss hit"
-          },
-          {
-            "case": "Base",
-            "price": 0.08435384199246235,
-            "pct": 53.528756423593315,
-            "mcap": 31419689.262443177,
-            "note": "first target, if the setup works"
-          },
-          {
-            "case": "Stretch",
-            "price": 0.15257,
-            "pct": 177.68601659709503,
-            "mcap": 56828496.21952381,
-            "note": "second target, if the trend runs"
-          }
-        ],
-        "spark": [
-          0.02888,
-          0.02783,
-          0.02484,
-          0.02625,
-          0.02938,
-          0.02932,
-          0.02818,
-          0.02838,
-          0.03072,
-          0.03217,
-          0.03493,
-          0.03183,
-          0.03036,
-          0.02985,
-          0.0293,
-          0.02742,
-          0.02817,
-          0.02733,
-          0.02695,
-          0.02694,
-          0.02741,
-          0.02617,
-          0.02622,
-          0.02632,
-          0.02621,
-          0.02658,
-          0.02611,
-          0.02591,
-          0.0235,
-          0.02488,
-          0.02567,
-          0.026,
-          0.02565,
-          0.02568,
-          0.02585,
-          0.0278,
-          0.0342,
-          0.03459,
-          0.03897,
-          0.04107,
-          0.04364,
-          0.042
-        ],
-        "features": {
-          "potential": 28.1,
-          "risk_score": 87,
-          "trend": 45.0,
-          "atr_pct": 13.89764226807307,
-          "change_7d": 45.4941,
-          "change_30d": -74.6246,
-          "market_cap": 15643946,
-          "watchers": 1748,
-          "age_days": 300,
-          "volume_surge": 5.0583841912772085,
-          "mentions": 0,
-          "narrative_change": -0.9844412923215582,
-          "rsi": 74.1,
-          "unknown_checks": 0
-        }
-      },
-      {
-        "symbol": "INIT",
-        "name": "Initia",
-        "narrative": "Infrastructure",
-        "market_cap": 31531561,
-        "change_7d": 20.797,
-        "bitget_volume": 95227.53,
-        "trend": 100.0,
-        "age_days": 300,
-        "safety": [
-          {
-            "name": "Real trading volume",
-            "ok": false,
-            "detail": "$0.1M a day on Bitget, 51% of its value traded daily"
-          },
-          {
-            "name": "Most supply unlocked",
-            "ok": false,
-            "detail": "21% of supply in circulation"
-          },
-          {
-            "name": "Fair valuation",
-            "ok": false,
-            "detail": "fully diluted value 4.7\u00d7 market cap"
-          },
-          {
-            "name": "Contract safe",
-            "ok": null,
-            "detail": "contract on initia, which the free scanner doesn't cover"
-          },
-          {
-            "name": "Not a pump-and-dump",
-            "ok": true,
-            "detail": "+3% today, +21% this week"
-          },
-          {
-            "name": "Enough trading history",
-            "ok": true,
-            "detail": "trading on Bitget for 300 days+"
-          },
-          {
-            "name": "Volatility under control",
-            "ok": true,
-            "detail": "moves 6.4% per 4h candle on average"
-          },
-          {
-            "name": "Spread across many holders",
-            "ok": null,
-            "detail": "holder data not available"
-          },
-          {
-            "name": "Real product",
-            "ok": true,
-            "detail": "has a website"
-          }
-        ],
-        "safe": false,
-        "failed_checks": [
-          "Real trading volume",
-          "Most supply unlocked",
-          "Fair valuation"
-        ],
-        "unknown_checks": [
-          "Contract safe",
-          "Spread across many holders"
-        ],
-        "risk_score": 85,
-        "risk_rating": "Very high",
-        "risk_notes": [
-          "very small market cap (under $50M)",
-          "thin Bitget volume (under $2M a day)",
-          "volatile (6.4% per 4h candle)",
-          "only 21% of supply unlocked (future selling pressure)"
-        ],
-        "potential": 67.8,
-        "potential_notes": [
-          "Up 21% this week and +53% over 30 days",
-          "Possibly still early: 4,777 CoinGecko watchers and no big run yet (a hint, not proof)",
-          "Price is 7% of the way from its all-time low (0.04739) to its high (1.42)"
-        ],
-        "plan": {
-          "price": 0.1544,
-          "rsi": 58.0,
-          "risk_pct": 0.25,
-          "notional": 26.79872991141965,
-          "max_loss": 2.5,
-          "status": "Enter zone",
-          "action": "Uptrend confirmed and not overextended. A good time to position, at today's price.",
-          "entry": 0.1544,
-          "stop": 0.13999633231590147,
-          "tp1": 0.18320733536819708,
-          "tp2": 0.21201467073639416,
-          "why": {
-            "entry": "today's price, close to its 20-period average, so not chasing",
-            "stop": "below the recent swing low, and at least one normal day's swing away (about 9%)",
-            "tp1": "2\u00d7 the risk (no chart level close enough)",
-            "tp2": "a multiple of the risk (no chart level above; treat as a stretch)"
-          },
-          "exit_rule": "Sell half at target 1 and move the stop to 0.15440 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
-        },
-        "scenarios": [
-          {
-            "case": "Bear",
-            "price": 0.13999633231590147,
-            "pct": -9.328800313535323,
-            "mcap": 28590044.63856942,
-            "note": "stop-loss hit"
-          },
-          {
-            "case": "Base",
-            "price": 0.18320733536819708,
-            "pct": 18.657600627070646,
-            "mcap": 37414593.72286116,
-            "note": "first target, if the setup works"
-          },
-          {
-            "case": "Stretch",
-            "price": 0.21201467073639416,
-            "pct": 37.31520125414129,
-            "mcap": 43297626.44572233,
-            "note": "second target, if the trend runs"
-          }
-        ],
-        "spark": [
-          0.1264,
-          0.12568,
-          0.12458,
-          0.12404,
-          0.12485,
-          0.12381,
-          0.12377,
-          0.12348,
-          0.12458,
-          0.12977,
-          0.12718,
-          0.12741,
-          0.12678,
-          0.12573,
-          0.12306,
-          0.12644,
-          0.12452,
-          0.12756,
-          0.12931,
-          0.12633,
-          0.12588,
-          0.13001,
-          0.13142,
-          0.12997,
-          0.1328,
-          0.13352,
-          0.13345,
-          0.12615,
-          0.15044,
-          0.15008,
-          0.13329,
-          0.14421,
-          0.14692,
-          0.14715,
-          0.14783,
-          0.1594,
-          0.15962,
-          0.15514,
-          0.15014,
-          0.15577,
-          0.16353,
-          0.1544
-        ],
-        "features": {
-          "potential": 67.8,
-          "risk_score": 85,
-          "trend": 100.0,
-          "atr_pct": 6.354644576899066,
-          "change_7d": 20.797,
-          "change_30d": 53.2955,
-          "market_cap": 31531561,
-          "watchers": 4777,
-          "age_days": 300,
-          "volume_surge": 0.7083350934582893,
-          "mentions": 0,
-          "narrative_change": -1.5239002504374324,
-          "rsi": 58.0,
-          "unknown_checks": 2
-        }
-      },
-      {
-        "symbol": "MAGMA",
-        "name": "Magma Finance",
-        "narrative": "Decentralized Finance (DeFi)",
-        "market_cap": 64404071,
-        "change_7d": 35.3917,
-        "bitget_volume": 504884.4,
-        "trend": 100.0,
-        "age_days": 300,
-        "safety": [
-          {
-            "name": "Real trading volume",
-            "ok": true,
-            "detail": "$0.5M a day on Bitget, 43% of its value traded daily"
-          },
-          {
-            "name": "Most supply unlocked",
-            "ok": false,
-            "detail": "19% of supply in circulation"
-          },
-          {
-            "name": "Fair valuation",
-            "ok": false,
-            "detail": "fully diluted value 5.3\u00d7 market cap"
-          },
-          {
-            "name": "Contract safe",
-            "ok": null,
-            "detail": "contract on sui, which the free scanner doesn't cover"
-          },
-          {
-            "name": "Not a pump-and-dump",
-            "ok": true,
-            "detail": "+14% today, +35% this week"
-          },
-          {
-            "name": "Enough trading history",
-            "ok": true,
-            "detail": "trading on Bitget for 300 days+"
-          },
-          {
-            "name": "Volatility under control",
-            "ok": false,
-            "detail": "moves 13.3% per 4h candle on average"
-          },
-          {
-            "name": "Spread across many holders",
-            "ok": null,
-            "detail": "holder data not available"
-          },
-          {
-            "name": "Real product",
-            "ok": true,
-            "detail": "has a website"
-          }
-        ],
-        "safe": false,
-        "failed_checks": [
-          "Most supply unlocked",
-          "Fair valuation",
-          "Volatility under control"
-        ],
-        "unknown_checks": [
-          "Contract safe",
-          "Spread across many holders"
-        ],
-        "risk_score": 85,
-        "risk_rating": "Very high",
-        "risk_notes": [
-          "small market cap (under $200M)",
-          "thin Bitget volume (under $2M a day)",
-          "very volatile (13.3% per 4h candle)",
-          "only 19% of supply unlocked (future selling pressure)"
-        ],
-        "potential": 67.5,
-        "potential_notes": [
-          "Up 35% this week and +40% over 30 days",
-          "Possibly still early: 1,568 CoinGecko watchers and no big run yet (a hint, not proof)",
-          "Price is 36% of the way from its all-time low (0.06971) to its high (0.80824)"
-        ],
-        "plan": {
-          "price": 0.34631,
-          "rsi": 47.5,
-          "risk_pct": 0.25,
-          "notional": 7.536383113587095,
-          "max_loss": 2.5,
-          "status": "Enter zone",
-          "action": "Uptrend confirmed and not overextended. A good time to position, at today's price.",
-          "entry": 0.34631,
-          "stop": 0.23143062259160857,
-          "tp1": 0.56,
-          "tp2": 0.8058275096335658,
-          "why": {
-            "entry": "today's price, close to its 20-period average, so not chasing",
-            "stop": "below the recent swing low, and at least one normal day's swing away (about 20%)",
-            "tp1": "this week's high",
-            "tp2": "a multiple of the risk (no chart level above; treat as a stretch)"
-          },
-          "exit_rule": "Sell half at target 1 and move the stop to 0.34631 (breakeven). Exit the rest at target 2, on a 4h close below the 20-period average, or after 10 days if it hasn't moved."
-        },
-        "scenarios": [
-          {
-            "case": "Bear",
-            "price": 0.23143062259160857,
-            "pct": -33.17241125245919,
-            "mcap": 43039687.70455419,
-            "note": "stop-loss hit"
-          },
-          {
-            "case": "Base",
-            "price": 0.56,
-            "pct": 61.704830931824105,
-            "mcap": 104144494.12376197,
-            "note": "first target, if the setup works"
-          },
-          {
-            "case": "Stretch",
-            "price": 0.8058275096335658,
-            "pct": 132.68964500983677,
-            "mcap": 149861604.18178323,
-            "note": "second target, if the trend runs"
-          }
-        ],
-        "spark": [
-          0.26575,
-          0.27207,
-          0.26741,
-          0.27626,
-          0.26817,
-          0.26138,
-          0.26177,
-          0.28092,
-          0.27491,
-          0.27589,
-          0.27797,
-          0.27895,
-          0.28477,
-          0.31521,
-          0.34131,
-          0.35803,
-          0.31963,
-          0.323,
-          0.33238,
-          0.52667,
-          0.52056,
-          0.50173,
-          0.50125,
-          0.50601,
-          0.49778,
-          0.48149,
-          0.4376,
-          0.4386,
-          0.38021,
-          0.38669,
-          0.33513,
-          0.28495,
-          0.29385,
-          0.37283,
-          0.37781,
-          0.36521,
-          0.38002,
-          0.32547,
-          0.33902,
-          0.33747,
-          0.34503,
-          0.34631
-        ],
-        "features": {
-          "potential": 67.5,
-          "risk_score": 85,
-          "trend": 100.0,
-          "atr_pct": 13.268964500983676,
-          "change_7d": 35.3917,
-          "change_30d": 40.1769,
-          "market_cap": 64404071,
-          "watchers": 1568,
-          "age_days": 300,
-          "volume_surge": 0.3227327284952421,
-          "mentions": 0,
-          "narrative_change": -0.9844412923215582,
-          "rsi": 47.5,
-          "unknown_checks": 2
-        }
-      },
-      {
-        "symbol": "BIRB",
-        "name": "Moonbirds",
-        "narrative": "NFT",
-        "market_cap": 23002215,
-        "change_7d": 68.9543,
-        "bitget_volume": 1766582.64,
-        "trend": 100.0,
-        "age_days": 271,
-        "safety": [
-          {
-            "name": "Real trading volume",
-            "ok": false,
-            "detail": "$1.8M a day on Bitget, 501% of its value traded daily"
-          },
-          {
-            "name": "Most supply unlocked",
-            "ok": false,
-            "detail": "28% of supply in circulation"
-          },
-          {
-            "name": "Fair valuation",
-            "ok": true,
-            "detail": "fully diluted value 3.5\u00d7 market cap"
-          },
-          {
-            "name": "Contract safe",
-            "ok": true,
-            "detail": "Solana token scanned clean (no freeze or balance-change powers)"
-          },
-          {
-            "name": "Not a pump-and-dump",
-            "ok": true,
-            "detail": "-50% today, +69% this week"
-          },
-          {
-            "name": "Enough trading history",
-            "ok": true,
-            "detail": "trading on Bitget for 271 days"
-          },
-          {
-            "name": "Volatility under control",
-            "ok": false,
-            "detail": "moves 26.7% per 4h candle on average"
-          },
-          {
-            "name": "Spread across many holders",
-            "ok": false,
-            "detail": "top 10 private wallets hold 93% of supply"
-          },
-          {
-            "name": "Real product",
-            "ok": false,
-            "detail": "meme coin: nothing behind it but attention"
-          }
-        ],
-        "safe": false,
-        "failed_checks": [
-          "Real trading volume",
-          "Most supply unlocked",
-          "Volatility under control",
-          "Spread across many holders",
-          "Real product"
-        ],
-        "unknown_checks": [],
-        "risk_score": 95,
-        "risk_rating": "Very high",
-        "risk_notes": [
-          "very small market cap (under $50M)",
-          "thin Bitget volume (under $2M a day)",
-          "very volatile (26.7% per 4h candle)",
-          "only 28% of supply unlocked (future selling pressure)"
-        ],
-        "potential": 66.4,
-        "potential_notes": [
-          "Up 69% this week and +18% over 30 days",
-          "Price is 8% of the way from its all-time low (0.04500) to its high (0.47695)"
-        ],
-        "plan": {
-          "price": 0.07658,
-          "rsi": 48.1,
-          "status": "Exit signal",
-          "action": "Uptrend is breaking: price closed below 0.08503 (20-period average) and momentum is fading. If you hold it, this is the time to leave."
-        },
-        "scenarios": [],
-        "spark": [
-          0.04726,
-          0.04728,
-          0.04641,
-          0.0467,
-          0.04656,
-          0.04681,
-          0.04695,
-          0.04688,
-          0.04696,
-          0.04948,
-          0.04924,
-          0.05022,
-          0.06508,
-          0.06511,
-          0.06403,
-          0.05445,
-          0.05414,
-          0.05448,
-          0.05647,
-          0.05094,
-          0.05231,
-          0.05297,
-          0.05298,
-          0.05316,
-          0.06435,
-          0.06052,
-          0.07356,
-          0.09532,
-          0.07348,
-          0.07669,
-          0.18695,
-          0.19438,
-          0.12144,
-          0.09922,
-          0.09405,
-          0.09061,
-          0.08458,
-          0.07844,
-          0.0772,
-          0.07598,
-          0.07773,
-          0.07658
-        ],
-        "features": {
-          "potential": 66.4,
-          "risk_score": 95,
-          "trend": 100.0,
-          "atr_pct": 26.66785629757679,
-          "change_7d": 68.9543,
-          "change_30d": 17.6371,
-          "market_cap": 23002215,
-          "watchers": 9664,
-          "age_days": 271,
-          "volume_surge": 1.078310535312758,
-          "mentions": 0,
-          "narrative_change": -2.7674113487411676,
-          "rsi": 48.1,
+          "rsi": 49.4,
           "unknown_checks": 0
         }
       },
@@ -5540,14 +5493,14 @@
         "narrative": "Artificial Intelligence (AI)",
         "market_cap": 10069738,
         "change_7d": 10.0989,
-        "bitget_volume": 1150921.1,
+        "bitget_volume": 693549.2,
         "trend": 25.0,
         "age_days": 300,
         "safety": [
           {
             "name": "Real trading volume",
             "ok": true,
-            "detail": "$1.2M a day on Bitget, 126% of its value traded daily"
+            "detail": "$0.7M a day on Bitget, 126% of its value traded daily"
           },
           {
             "name": "Most supply unlocked",
@@ -5577,7 +5530,7 @@
           {
             "name": "Volatility under control",
             "ok": false,
-            "detail": "moves 12.9% per 4h candle on average"
+            "detail": "moves 12.1% per 4h candle on average"
           },
           {
             "name": "Spread across many holders",
@@ -5602,27 +5555,25 @@
         "risk_notes": [
           "very small market cap (under $50M)",
           "thin Bitget volume (under $2M a day)",
-          "very volatile (12.9% per 4h candle)",
+          "very volatile (12.1% per 4h candle)",
           "only 35% of supply unlocked (future selling pressure)",
           "over 90% below its all-time high",
           "upgradeable contract"
         ],
-        "potential": 46.9,
+        "potential": 43.1,
         "potential_notes": [
           "Up 10% this week and -19% over 30 days",
           "Possibly still early: 1,239 CoinGecko watchers and no big run yet (a hint, not proof)",
           "Price is 1% of the way from its all-time low (0.02574) to its high (0.31746)"
         ],
         "plan": {
-          "price": 0.02856,
-          "rsi": 45.6,
+          "price": 0.02738,
+          "rsi": 43.5,
           "status": "Avoid",
-          "action": "In a downtrend. Wait until a 4h candle closes above 0.03018 (its 50-period average) before considering it."
+          "action": "In a downtrend. Wait until a 4h candle closes above 0.02995 (its 50-period average) before considering it."
         },
         "scenarios": [],
         "spark": [
-          0.0264,
-          0.02664,
           0.02631,
           0.02638,
           0.02664,
@@ -5662,312 +5613,24 @@
           0.02801,
           0.02837,
           0.02879,
-          0.02856
+          0.02805,
+          0.02744,
+          0.02738
         ],
         "features": {
-          "potential": 46.9,
+          "potential": 43.1,
           "risk_score": 100,
           "trend": 25.0,
-          "atr_pct": 12.938170911253746,
+          "atr_pct": 12.120614522940564,
           "change_7d": 10.0989,
           "change_30d": -18.8399,
           "market_cap": 10069738,
           "watchers": 1239,
           "age_days": 300,
-          "volume_surge": 1.2661207229145288,
+          "volume_surge": 0.6944338875044184,
           "mentions": 0,
           "narrative_change": -1.7461512972518163,
-          "rsi": 45.6,
-          "unknown_checks": 0
-        }
-      },
-      {
-        "symbol": "KERNEL",
-        "name": "KernelDAO",
-        "narrative": "Decentralized Finance (DeFi)",
-        "market_cap": 13921859,
-        "change_7d": 17.8093,
-        "bitget_volume": 28375.19,
-        "trend": 75.0,
-        "age_days": 300,
-        "safety": [
-          {
-            "name": "Real trading volume",
-            "ok": false,
-            "detail": "$0.0M a day on Bitget, 62% of its value traded daily"
-          },
-          {
-            "name": "Most supply unlocked",
-            "ok": false,
-            "detail": "29% of supply in circulation"
-          },
-          {
-            "name": "Fair valuation",
-            "ok": true,
-            "detail": "fully diluted value 3.5\u00d7 market cap"
-          },
-          {
-            "name": "Contract safe",
-            "ok": true,
-            "detail": "contract scanned clean on ethereum"
-          },
-          {
-            "name": "Not a pump-and-dump",
-            "ok": true,
-            "detail": "-11% today, +18% this week"
-          },
-          {
-            "name": "Enough trading history",
-            "ok": true,
-            "detail": "trading on Bitget for 300 days+"
-          },
-          {
-            "name": "Volatility under control",
-            "ok": true,
-            "detail": "moves 4.4% per 4h candle on average"
-          },
-          {
-            "name": "Spread across many holders",
-            "ok": false,
-            "detail": "top 10 private wallets hold 90% of supply"
-          },
-          {
-            "name": "Real product",
-            "ok": true,
-            "detail": "has a website"
-          }
-        ],
-        "safe": false,
-        "failed_checks": [
-          "Real trading volume",
-          "Most supply unlocked",
-          "Spread across many holders"
-        ],
-        "unknown_checks": [],
-        "risk_score": 75,
-        "risk_rating": "Very high",
-        "risk_notes": [
-          "very small market cap (under $50M)",
-          "thin Bitget volume (under $2M a day)",
-          "only 29% of supply unlocked (future selling pressure)"
-        ],
-        "potential": 45.7,
-        "potential_notes": [
-          "Up 18% this week and -10% over 30 days",
-          "Price is 4% of the way from its all-time low (0.03046) to its high (0.47320)"
-        ],
-        "plan": {
-          "price": 0.04745,
-          "rsi": 44.5,
-          "status": "Exit signal",
-          "action": "Uptrend is breaking: price closed below 0.04899 (20-period average) and momentum is fading. If you hold it, this is the time to leave."
-        },
-        "scenarios": [],
-        "spark": [
-          0.04003,
-          0.04034,
-          0.04031,
-          0.04147,
-          0.04215,
-          0.04247,
-          0.04309,
-          0.0429,
-          0.04337,
-          0.04776,
-          0.04639,
-          0.04654,
-          0.04565,
-          0.0458,
-          0.0461,
-          0.04639,
-          0.04752,
-          0.04738,
-          0.0467,
-          0.04637,
-          0.04713,
-          0.04869,
-          0.05007,
-          0.04915,
-          0.05063,
-          0.04953,
-          0.04979,
-          0.05055,
-          0.05058,
-          0.05171,
-          0.0515,
-          0.05171,
-          0.05256,
-          0.04948,
-          0.05188,
-          0.05175,
-          0.05015,
-          0.049,
-          0.04766,
-          0.04757,
-          0.04768,
-          0.04745
-        ],
-        "features": {
-          "potential": 45.7,
-          "risk_score": 75,
-          "trend": 75.0,
-          "atr_pct": 4.374480939265865,
-          "change_7d": 17.8093,
-          "change_30d": -10.0665,
-          "market_cap": 13921859,
-          "watchers": 58467,
-          "age_days": 300,
-          "volume_surge": 0.3494418056471828,
-          "mentions": 0,
-          "narrative_change": -0.9844412923215582,
-          "rsi": 44.5,
-          "unknown_checks": 0
-        }
-      },
-      {
-        "symbol": "ZBT",
-        "name": "ZEROBASE",
-        "narrative": "Smart Contract Platform",
-        "market_cap": 21936116,
-        "change_7d": -4.3613,
-        "bitget_volume": 48298.53,
-        "trend": 0.0,
-        "age_days": 300,
-        "safety": [
-          {
-            "name": "Real trading volume",
-            "ok": false,
-            "detail": "$0.0M a day on Bitget, 58% of its value traded daily"
-          },
-          {
-            "name": "Most supply unlocked",
-            "ok": false,
-            "detail": "33% of supply in circulation"
-          },
-          {
-            "name": "Fair valuation",
-            "ok": true,
-            "detail": "fully diluted value 3.1\u00d7 market cap"
-          },
-          {
-            "name": "Contract safe",
-            "ok": false,
-            "detail": "contract scan failed: hidden owner"
-          },
-          {
-            "name": "Not a pump-and-dump",
-            "ok": true,
-            "detail": "-8% today, -4% this week"
-          },
-          {
-            "name": "Enough trading history",
-            "ok": true,
-            "detail": "trading on Bitget for 300 days+"
-          },
-          {
-            "name": "Volatility under control",
-            "ok": true,
-            "detail": "moves 3.6% per 4h candle on average"
-          },
-          {
-            "name": "Spread across many holders",
-            "ok": false,
-            "detail": "top 10 private wallets hold 98% of supply"
-          },
-          {
-            "name": "Real product",
-            "ok": true,
-            "detail": "has a website"
-          }
-        ],
-        "safe": false,
-        "failed_checks": [
-          "Real trading volume",
-          "Most supply unlocked",
-          "Contract safe",
-          "Spread across many holders"
-        ],
-        "unknown_checks": [],
-        "risk_score": 80,
-        "risk_rating": "Very high",
-        "risk_notes": [
-          "very small market cap (under $50M)",
-          "thin Bitget volume (under $2M a day)",
-          "only 33% of supply unlocked (future selling pressure)",
-          "over 90% below its all-time high",
-          "team can mint more tokens"
-        ],
-        "potential": 42.8,
-        "potential_notes": [
-          "Trading volume has risen steadily to 2.0\u00d7 normal over the past day",
-          "Possibly still early: 2,963 CoinGecko watchers and no big run yet (a hint, not proof)",
-          "Price is 1% of the way from its all-time low (0.05827) to its high (1.02)"
-        ],
-        "plan": {
-          "price": 0.06903,
-          "rsi": 46.5,
-          "status": "Avoid",
-          "action": "In a downtrend. Wait until a 4h candle closes above 0.07072 (its 50-period average) before considering it."
-        },
-        "scenarios": [],
-        "spark": [
-          0.06919,
-          0.06955,
-          0.06788,
-          0.0669,
-          0.06697,
-          0.06792,
-          0.06847,
-          0.06835,
-          0.06745,
-          0.06907,
-          0.06845,
-          0.06993,
-          0.07053,
-          0.07063,
-          0.07096,
-          0.07256,
-          0.07195,
-          0.07133,
-          0.06976,
-          0.06954,
-          0.06908,
-          0.06801,
-          0.06723,
-          0.06795,
-          0.06921,
-          0.0695,
-          0.07097,
-          0.07098,
-          0.07052,
-          0.07096,
-          0.07269,
-          0.07158,
-          0.07264,
-          0.07451,
-          0.07251,
-          0.07122,
-          0.0688,
-          0.06692,
-          0.0673,
-          0.06834,
-          0.06928,
-          0.06903
-        ],
-        "features": {
-          "potential": 42.8,
-          "risk_score": 80,
-          "trend": 0.0,
-          "atr_pct": 3.5773550007791535,
-          "change_7d": -4.3613,
-          "change_30d": -25.4258,
-          "market_cap": 21936116,
-          "watchers": 2963,
-          "age_days": 300,
-          "volume_surge": 2.0373600039069317,
-          "mentions": 0,
-          "narrative_change": -0.29374637126406467,
-          "rsi": 46.5,
+          "rsi": 43.5,
           "unknown_checks": 0
         }
       },
@@ -5977,14 +5640,14 @@
         "narrative": "Smart Contract Platform",
         "market_cap": 13591453,
         "change_7d": 2.6295,
-        "bitget_volume": 124688.51,
-        "trend": 25.0,
+        "bitget_volume": 40818.94,
+        "trend": 0.0,
         "age_days": 222,
         "safety": [
           {
             "name": "Real trading volume",
             "ok": false,
-            "detail": "$0.1M a day on Bitget, 199% of its value traded daily"
+            "detail": "$0.0M a day on Bitget, 199% of its value traded daily"
           },
           {
             "name": "Most supply unlocked",
@@ -6014,7 +5677,7 @@
           {
             "name": "Volatility under control",
             "ok": true,
-            "detail": "moves 7.1% per 4h candle on average"
+            "detail": "moves 6.3% per 4h candle on average"
           },
           {
             "name": "Spread across many holders",
@@ -6039,25 +5702,23 @@
         "risk_notes": [
           "very small market cap (under $50M)",
           "thin Bitget volume (under $2M a day)",
-          "volatile (7.1% per 4h candle)",
+          "volatile (6.3% per 4h candle)",
           "only 34% of supply unlocked (future selling pressure)",
           "upgradeable contract"
         ],
-        "potential": 42.5,
+        "potential": 34.9,
         "potential_notes": [
           "Possibly still early: 2,129 CoinGecko watchers and no big run yet (a hint, not proof)",
           "Price is 2% of the way from its all-time low (0.003652) to its high (0.02947)"
         ],
         "plan": {
-          "price": 0.003938,
-          "rsi": 43.0,
+          "price": 0.004016,
+          "rsi": 46.0,
           "status": "Avoid",
-          "action": "In a downtrend. Wait until a 4h candle closes above 0.004142 (its 50-period average) before considering it."
+          "action": "In a downtrend. Wait until a 4h candle closes above 0.004131 (its 50-period average) before considering it."
         },
         "scenarios": [],
         "spark": [
-          0.003873,
-          0.003973,
           0.00412,
           0.003975,
           0.003998,
@@ -6097,22 +5758,460 @@
           0.003949,
           0.004048,
           0.003982,
-          0.003938
+          0.003937,
+          0.003974,
+          0.004016
         ],
         "features": {
-          "potential": 42.5,
+          "potential": 34.9,
           "risk_score": 85,
-          "trend": 25.0,
-          "atr_pct": 7.0640895184697685,
+          "trend": 0.0,
+          "atr_pct": 6.315481311082976,
           "change_7d": 2.6295,
           "change_30d": -19.4739,
           "market_cap": 13591453,
           "watchers": 2129,
           "age_days": 222,
-          "volume_surge": 0.6996630678171274,
+          "volume_surge": 0.16757940277576644,
           "mentions": 0,
           "narrative_change": -0.29374637126406467,
-          "rsi": 43.0,
+          "rsi": 46.0,
+          "unknown_checks": 0
+        }
+      },
+      {
+        "symbol": "KERNEL",
+        "name": "KernelDAO",
+        "narrative": "Decentralized Finance (DeFi)",
+        "market_cap": 13921859,
+        "change_7d": 17.8093,
+        "bitget_volume": 19333.8,
+        "trend": 25.0,
+        "age_days": 300,
+        "safety": [
+          {
+            "name": "Real trading volume",
+            "ok": false,
+            "detail": "$0.0M a day on Bitget, 62% of its value traded daily"
+          },
+          {
+            "name": "Most supply unlocked",
+            "ok": false,
+            "detail": "29% of supply in circulation"
+          },
+          {
+            "name": "Fair valuation",
+            "ok": true,
+            "detail": "fully diluted value 3.5\u00d7 market cap"
+          },
+          {
+            "name": "Contract safe",
+            "ok": true,
+            "detail": "contract scanned clean on ethereum"
+          },
+          {
+            "name": "Not a pump-and-dump",
+            "ok": true,
+            "detail": "-11% today, +18% this week"
+          },
+          {
+            "name": "Enough trading history",
+            "ok": true,
+            "detail": "trading on Bitget for 300 days+"
+          },
+          {
+            "name": "Volatility under control",
+            "ok": true,
+            "detail": "moves 4.1% per 4h candle on average"
+          },
+          {
+            "name": "Spread across many holders",
+            "ok": false,
+            "detail": "top 10 private wallets hold 90% of supply"
+          },
+          {
+            "name": "Real product",
+            "ok": true,
+            "detail": "has a website"
+          }
+        ],
+        "safe": false,
+        "failed_checks": [
+          "Real trading volume",
+          "Most supply unlocked",
+          "Spread across many holders"
+        ],
+        "unknown_checks": [],
+        "risk_score": 75,
+        "risk_rating": "Very high",
+        "risk_notes": [
+          "very small market cap (under $50M)",
+          "thin Bitget volume (under $2M a day)",
+          "only 29% of supply unlocked (future selling pressure)"
+        ],
+        "potential": 33.2,
+        "potential_notes": [
+          "Up 18% this week and -10% over 30 days",
+          "Price is 4% of the way from its all-time low (0.03046) to its high (0.47320)"
+        ],
+        "plan": {
+          "price": 0.04654,
+          "rsi": 41.4,
+          "status": "Avoid",
+          "action": "In a downtrend. Wait until a 4h candle closes above 0.04765 (its 50-period average) before considering it."
+        },
+        "scenarios": [],
+        "spark": [
+          0.04031,
+          0.04147,
+          0.04215,
+          0.04247,
+          0.04309,
+          0.0429,
+          0.04337,
+          0.04776,
+          0.04639,
+          0.04654,
+          0.04565,
+          0.0458,
+          0.0461,
+          0.04639,
+          0.04752,
+          0.04738,
+          0.0467,
+          0.04637,
+          0.04713,
+          0.04869,
+          0.05007,
+          0.04915,
+          0.05063,
+          0.04953,
+          0.04979,
+          0.05055,
+          0.05058,
+          0.05171,
+          0.0515,
+          0.05171,
+          0.05256,
+          0.04948,
+          0.05188,
+          0.05175,
+          0.05015,
+          0.049,
+          0.04766,
+          0.04757,
+          0.04768,
+          0.04737,
+          0.04638,
+          0.04654
+        ],
+        "features": {
+          "potential": 33.2,
+          "risk_score": 75,
+          "trend": 25.0,
+          "atr_pct": 4.0972885731335,
+          "change_7d": 17.8093,
+          "change_30d": -10.0665,
+          "market_cap": 13921859,
+          "watchers": 58467,
+          "age_days": 300,
+          "volume_surge": 0.22100018590551693,
+          "mentions": 0,
+          "narrative_change": -0.9844412923215582,
+          "rsi": 41.4,
+          "unknown_checks": 0
+        }
+      },
+      {
+        "symbol": "ZBT",
+        "name": "ZEROBASE",
+        "narrative": "Smart Contract Platform",
+        "market_cap": 21936116,
+        "change_7d": -4.3613,
+        "bitget_volume": 16612.4,
+        "trend": 0.0,
+        "age_days": 300,
+        "safety": [
+          {
+            "name": "Real trading volume",
+            "ok": false,
+            "detail": "$0.0M a day on Bitget, 58% of its value traded daily"
+          },
+          {
+            "name": "Most supply unlocked",
+            "ok": false,
+            "detail": "33% of supply in circulation"
+          },
+          {
+            "name": "Fair valuation",
+            "ok": true,
+            "detail": "fully diluted value 3.1\u00d7 market cap"
+          },
+          {
+            "name": "Contract safe",
+            "ok": false,
+            "detail": "contract scan failed: hidden owner"
+          },
+          {
+            "name": "Not a pump-and-dump",
+            "ok": true,
+            "detail": "-8% today, -4% this week"
+          },
+          {
+            "name": "Enough trading history",
+            "ok": true,
+            "detail": "trading on Bitget for 300 days+"
+          },
+          {
+            "name": "Volatility under control",
+            "ok": true,
+            "detail": "moves 3.4% per 4h candle on average"
+          },
+          {
+            "name": "Spread across many holders",
+            "ok": false,
+            "detail": "top 10 private wallets hold 98% of supply"
+          },
+          {
+            "name": "Real product",
+            "ok": true,
+            "detail": "has a website"
+          }
+        ],
+        "safe": false,
+        "failed_checks": [
+          "Real trading volume",
+          "Most supply unlocked",
+          "Contract safe",
+          "Spread across many holders"
+        ],
+        "unknown_checks": [],
+        "risk_score": 80,
+        "risk_rating": "Very high",
+        "risk_notes": [
+          "very small market cap (under $50M)",
+          "thin Bitget volume (under $2M a day)",
+          "only 33% of supply unlocked (future selling pressure)",
+          "over 90% below its all-time high",
+          "team can mint more tokens"
+        ],
+        "potential": 32.9,
+        "potential_notes": [
+          "Possibly still early: 2,963 CoinGecko watchers and no big run yet (a hint, not proof)",
+          "Price is 1% of the way from its all-time low (0.05827) to its high (1.02)"
+        ],
+        "plan": {
+          "price": 0.06825,
+          "rsi": 44.3,
+          "status": "Avoid",
+          "action": "In a downtrend. Wait until a 4h candle closes above 0.07051 (its 50-period average) before considering it."
+        },
+        "scenarios": [],
+        "spark": [
+          0.06788,
+          0.0669,
+          0.06697,
+          0.06792,
+          0.06847,
+          0.06835,
+          0.06745,
+          0.06907,
+          0.06845,
+          0.06993,
+          0.07053,
+          0.07063,
+          0.07096,
+          0.07256,
+          0.07195,
+          0.07133,
+          0.06976,
+          0.06954,
+          0.06908,
+          0.06801,
+          0.06723,
+          0.06795,
+          0.06921,
+          0.0695,
+          0.07097,
+          0.07098,
+          0.07052,
+          0.07096,
+          0.07269,
+          0.07158,
+          0.07264,
+          0.07451,
+          0.07251,
+          0.07122,
+          0.0688,
+          0.06692,
+          0.0673,
+          0.06834,
+          0.06928,
+          0.06848,
+          0.06808,
+          0.06825
+        ],
+        "features": {
+          "potential": 32.9,
+          "risk_score": 80,
+          "trend": 0.0,
+          "atr_pct": 3.3985168932202594,
+          "change_7d": -4.3613,
+          "change_30d": -25.4258,
+          "market_cap": 21936116,
+          "watchers": 2963,
+          "age_days": 300,
+          "volume_surge": 0.5097643065249498,
+          "mentions": 0,
+          "narrative_change": -0.29374637126406467,
+          "rsi": 44.3,
+          "unknown_checks": 0
+        }
+      },
+      {
+        "symbol": "DNA",
+        "name": "NeoSoul",
+        "narrative": "Other",
+        "market_cap": 27335096,
+        "change_7d": -27.3368,
+        "bitget_volume": 542718.62,
+        "trend": 0.0,
+        "age_days": 10,
+        "safety": [
+          {
+            "name": "Real trading volume",
+            "ok": false,
+            "detail": "$0.5M a day on Bitget, 185% of its value traded daily"
+          },
+          {
+            "name": "Most supply unlocked",
+            "ok": false,
+            "detail": "13% of supply in circulation"
+          },
+          {
+            "name": "Fair valuation",
+            "ok": false,
+            "detail": "fully diluted value 7.7\u00d7 market cap"
+          },
+          {
+            "name": "Contract safe",
+            "ok": true,
+            "detail": "contract scanned clean on binance smart chain"
+          },
+          {
+            "name": "Not a pump-and-dump",
+            "ok": true,
+            "detail": "+11% today, -27% this week"
+          },
+          {
+            "name": "Enough trading history",
+            "ok": false,
+            "detail": "trading on Bitget for 10 days"
+          },
+          {
+            "name": "Volatility under control",
+            "ok": true,
+            "detail": "moves 8.8% per 4h candle on average"
+          },
+          {
+            "name": "Spread across many holders",
+            "ok": false,
+            "detail": "top 10 private wallets hold 100% of supply"
+          },
+          {
+            "name": "Real product",
+            "ok": true,
+            "detail": "has a website"
+          }
+        ],
+        "safe": false,
+        "failed_checks": [
+          "Real trading volume",
+          "Most supply unlocked",
+          "Fair valuation",
+          "Enough trading history",
+          "Spread across many holders"
+        ],
+        "unknown_checks": [],
+        "risk_score": 95,
+        "risk_rating": "Very high",
+        "risk_notes": [
+          "very small market cap (under $50M)",
+          "thin Bitget volume (under $2M a day)",
+          "very volatile (8.8% per 4h candle)",
+          "only 13% of supply unlocked (future selling pressure)"
+        ],
+        "potential": 30.2,
+        "potential_notes": [
+          "Possibly still early: 279 CoinGecko watchers and no big run yet (a hint, not proof)",
+          "Price is 56% of the way from its all-time low (0.07326) to its high (0.31823)",
+          "New listing: on Bitget for only 10 days"
+        ],
+        "plan": {
+          "price": 0.18874,
+          "rsi": 43.3,
+          "status": "Avoid",
+          "action": "In a downtrend. Wait until a 4h candle closes above 0.22065 (its 50-period average) before considering it."
+        },
+        "scenarios": [],
+        "spark": [
+          0.23249,
+          0.23382,
+          0.23435,
+          0.23347,
+          0.22741,
+          0.21581,
+          0.217,
+          0.23073,
+          0.22604,
+          0.23399,
+          0.2409,
+          0.22565,
+          0.21299,
+          0.20595,
+          0.19774,
+          0.19658,
+          0.19898,
+          0.19734,
+          0.20002,
+          0.17246,
+          0.19885,
+          0.20338,
+          0.19748,
+          0.22976,
+          0.2093,
+          0.19689,
+          0.18361,
+          0.19115,
+          0.18245,
+          0.18894,
+          0.18972,
+          0.1949,
+          0.19803,
+          0.20694,
+          0.21387,
+          0.208,
+          0.20803,
+          0.20071,
+          0.19359,
+          0.19327,
+          0.19334,
+          0.18874
+        ],
+        "features": {
+          "potential": 30.2,
+          "risk_score": 95,
+          "trend": 0.0,
+          "atr_pct": 8.834389696021466,
+          "change_7d": -27.3368,
+          "change_30d": null,
+          "market_cap": 27335096,
+          "watchers": 279,
+          "age_days": 10,
+          "volume_surge": 0.07976598594902097,
+          "mentions": 0,
+          "narrative_change": null,
+          "rsi": 43.3,
           "unknown_checks": 0
         }
       },
@@ -6122,7 +6221,7 @@
         "narrative": "Artificial Intelligence (AI)",
         "market_cap": 59898368,
         "change_7d": -15.7366,
-        "bitget_volume": 1073519.2,
+        "bitget_volume": 1076886.7,
         "trend": 0.0,
         "age_days": 300,
         "safety": [
@@ -6159,7 +6258,7 @@
           {
             "name": "Volatility under control",
             "ok": true,
-            "detail": "moves 4.1% per 4h candle on average"
+            "detail": "moves 3.6% per 4h candle on average"
           },
           {
             "name": "Spread across many holders",
@@ -6183,21 +6282,19 @@
           "small market cap (under $200M)",
           "thin Bitget volume (under $2M a day)"
         ],
-        "potential": 29.2,
+        "potential": 29.0,
         "potential_notes": [
           "Trading volume has risen steadily to 2.0\u00d7 normal over the past day",
           "Price is 17% of the way from its all-time low (0.004287) to its high (0.22418)"
         ],
         "plan": {
-          "price": 0.04138,
-          "rsi": 31.8,
+          "price": 0.04147,
+          "rsi": 32.5,
           "status": "Avoid",
-          "action": "In a downtrend. Wait until a 4h candle closes above 0.04735 (its 50-period average) before considering it."
+          "action": "In a downtrend. Wait until a 4h candle closes above 0.04691 (its 50-period average) before considering it."
         },
         "scenarios": [],
         "spark": [
-          0.04978,
-          0.05035,
           0.04998,
           0.05049,
           0.05012,
@@ -6237,22 +6334,24 @@
           0.04254,
           0.04169,
           0.04147,
-          0.04138
+          0.04164,
+          0.04148,
+          0.04147
         ],
         "features": {
-          "potential": 29.2,
+          "potential": 29.0,
           "risk_score": 55,
           "trend": 0.0,
-          "atr_pct": 4.055587807005327,
+          "atr_pct": 3.6106369879148574,
           "change_7d": -15.7366,
           "change_30d": -18.6706,
           "market_cap": 59898368,
           "watchers": 31289,
           "age_days": 300,
-          "volume_surge": 1.9908264934765905,
+          "volume_surge": 1.9557617843729158,
           "mentions": 0,
           "narrative_change": -1.7461512972518163,
-          "rsi": 31.8,
+          "rsi": 32.5,
           "unknown_checks": 0
         }
       }
