@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-11-01T09:51:12.136127+00:00",
-  "coins": 126,
+  "generated_at": "2026-11-08T09:38:50.933954+00:00",
+  "coins": 124,
   "days": 365,
   "test_days": 90,
-  "candles": 137654,
+  "candles": 134716,
   "default": {
     "params": {
       "trend_min": 55,
@@ -16,33 +16,33 @@
       "btc_filter": false
     },
     "train": {
-      "trades": 3433,
-      "win_rate": 25,
-      "avg_r": -0.077,
-      "total_r": -265.5,
-      "profit_factor": 0.63,
-      "max_drawdown_r": 281.4,
+      "trades": 3296,
+      "win_rate": 24,
+      "avg_r": -0.1,
+      "total_r": -331.1,
+      "profit_factor": 0.56,
+      "max_drawdown_r": 338.8,
       "target1_rate": 6,
       "avg_days": 0.7
     },
     "test": {
-      "trades": 2938,
-      "win_rate": 26,
-      "avg_r": -0.051,
-      "total_r": -150.1,
-      "profit_factor": 0.74,
-      "max_drawdown_r": 160.2,
+      "trades": 2757,
+      "win_rate": 25,
+      "avg_r": -0.078,
+      "total_r": -213.9,
+      "profit_factor": 0.64,
+      "max_drawdown_r": 214.7,
       "target1_rate": 7,
       "avg_days": 0.7
     },
     "small_coins": {
-      "trades": 5014,
+      "trades": 4656,
       "win_rate": 25,
-      "avg_r": -0.064,
-      "total_r": -318.9,
-      "profit_factor": 0.67,
-      "max_drawdown_r": 320.6,
-      "target1_rate": 6,
+      "avg_r": -0.088,
+      "total_r": -408.8,
+      "profit_factor": 0.6,
+      "max_drawdown_r": 408.8,
+      "target1_rate": 7,
       "avg_days": 0.7
     }
   },
@@ -59,202 +59,202 @@
         "btc_filter": false
       },
       "train": {
-        "trades": 554,
-        "win_rate": 47,
-        "avg_r": 0.07,
-        "total_r": 38.8,
-        "profit_factor": 1.14,
-        "max_drawdown_r": 29.4,
-        "target1_rate": 41,
-        "avg_days": 5.4
-      },
-      "test": {
-        "trades": 506,
-        "win_rate": 43,
-        "avg_r": -0.0,
-        "total_r": -0.0,
-        "profit_factor": 1.0,
-        "max_drawdown_r": 42.1,
-        "target1_rate": 35,
-        "avg_days": 5.5
-      },
-      "small_coins": {
-        "trades": 822,
-        "win_rate": 46,
-        "avg_r": 0.048,
-        "total_r": 39.8,
-        "profit_factor": 1.09,
-        "max_drawdown_r": 28.3,
+        "trades": 553,
+        "win_rate": 44,
+        "avg_r": -0.028,
+        "total_r": -15.6,
+        "profit_factor": 0.95,
+        "max_drawdown_r": 62.5,
         "target1_rate": 38,
         "avg_days": 5.5
-      }
-    },
-    {
-      "params": {
-        "trend_min": 75,
-        "rsi_max": 70,
-        "stretch_atr": 1.0,
-        "stop_atr": 3.5,
-        "tp1_r": 1.5,
-        "tp2_r": 3.0,
-        "exit_on_ema20": false,
-        "btc_filter": false
-      },
-      "train": {
-        "trades": 554,
-        "win_rate": 47,
-        "avg_r": 0.07,
-        "total_r": 38.8,
-        "profit_factor": 1.14,
-        "max_drawdown_r": 29.4,
-        "target1_rate": 41,
-        "avg_days": 5.4
       },
       "test": {
-        "trades": 507,
-        "win_rate": 44,
-        "avg_r": 0.005,
-        "total_r": 2.6,
-        "profit_factor": 1.01,
-        "max_drawdown_r": 42.7,
-        "target1_rate": 35,
-        "avg_days": 5.5
-      },
-      "small_coins": {
-        "trades": 823,
-        "win_rate": 46,
-        "avg_r": 0.052,
-        "total_r": 42.4,
-        "profit_factor": 1.1,
-        "max_drawdown_r": 28.9,
-        "target1_rate": 39,
-        "avg_days": 5.5
-      }
-    },
-    {
-      "params": {
-        "trend_min": 75,
-        "rsi_max": 65,
-        "stretch_atr": 1.0,
-        "stop_atr": 3.5,
-        "tp1_r": 2.0,
-        "tp2_r": 4.0,
-        "exit_on_ema20": false,
-        "btc_filter": false
-      },
-      "train": {
-        "trades": 542,
-        "win_rate": 44,
-        "avg_r": 0.051,
-        "total_r": 27.8,
-        "profit_factor": 1.1,
-        "max_drawdown_r": 29.3,
-        "target1_rate": 35,
-        "avg_days": 5.6
-      },
-      "test": {
-        "trades": 493,
-        "win_rate": 40,
-        "avg_r": 0.001,
-        "total_r": 0.6,
-        "profit_factor": 1.0,
-        "max_drawdown_r": 44.5,
-        "target1_rate": 30,
-        "avg_days": 5.7
-      },
-      "small_coins": {
-        "trades": 800,
-        "win_rate": 44,
-        "avg_r": 0.054,
-        "total_r": 43.6,
-        "profit_factor": 1.1,
-        "max_drawdown_r": 27.5,
-        "target1_rate": 33,
-        "avg_days": 5.7
-      }
-    },
-    {
-      "params": {
-        "trend_min": 75,
-        "rsi_max": 70,
-        "stretch_atr": 1.0,
-        "stop_atr": 3.5,
-        "tp1_r": 2.0,
-        "tp2_r": 4.0,
-        "exit_on_ema20": false,
-        "btc_filter": false
-      },
-      "train": {
-        "trades": 542,
-        "win_rate": 44,
-        "avg_r": 0.051,
-        "total_r": 27.8,
-        "profit_factor": 1.1,
-        "max_drawdown_r": 29.3,
-        "target1_rate": 35,
-        "avg_days": 5.6
-      },
-      "test": {
-        "trades": 493,
-        "win_rate": 40,
-        "avg_r": 0.001,
-        "total_r": 0.6,
-        "profit_factor": 1.0,
-        "max_drawdown_r": 44.5,
-        "target1_rate": 30,
-        "avg_days": 5.7
-      },
-      "small_coins": {
-        "trades": 800,
-        "win_rate": 44,
-        "avg_r": 0.054,
-        "total_r": 43.6,
-        "profit_factor": 1.1,
-        "max_drawdown_r": 27.5,
-        "target1_rate": 33,
-        "avg_days": 5.7
-      }
-    },
-    {
-      "params": {
-        "trend_min": 75,
-        "rsi_max": 65,
-        "stretch_atr": 1.0,
-        "stop_atr": 2.5,
-        "tp1_r": 1.5,
-        "tp2_r": 3.0,
-        "exit_on_ema20": false,
-        "btc_filter": false
-      },
-      "train": {
-        "trades": 584,
-        "win_rate": 46,
-        "avg_r": 0.044,
-        "total_r": 26.0,
-        "profit_factor": 1.08,
-        "max_drawdown_r": 32.6,
-        "target1_rate": 42,
-        "avg_days": 4.7
-      },
-      "test": {
-        "trades": 539,
-        "win_rate": 44,
-        "avg_r": 0.01,
-        "total_r": 5.2,
-        "profit_factor": 1.02,
-        "max_drawdown_r": 37.8,
-        "target1_rate": 38,
+        "trades": 515,
+        "win_rate": 41,
+        "avg_r": -0.075,
+        "total_r": -38.6,
+        "profit_factor": 0.88,
+        "max_drawdown_r": 45.5,
+        "target1_rate": 34,
         "avg_days": 5.0
       },
       "small_coins": {
-        "trades": 871,
-        "win_rate": 46,
-        "avg_r": 0.047,
-        "total_r": 41.3,
-        "profit_factor": 1.09,
-        "max_drawdown_r": 25.9,
-        "target1_rate": 41,
-        "avg_days": 4.9
+        "trades": 816,
+        "win_rate": 42,
+        "avg_r": -0.05,
+        "total_r": -40.8,
+        "profit_factor": 0.92,
+        "max_drawdown_r": 55.5,
+        "target1_rate": 37,
+        "avg_days": 5.2
+      }
+    },
+    {
+      "params": {
+        "trend_min": 75,
+        "rsi_max": 70,
+        "stretch_atr": 1.0,
+        "stop_atr": 3.5,
+        "tp1_r": 1.5,
+        "tp2_r": 3.0,
+        "exit_on_ema20": false,
+        "btc_filter": false
+      },
+      "train": {
+        "trades": 553,
+        "win_rate": 44,
+        "avg_r": -0.028,
+        "total_r": -15.6,
+        "profit_factor": 0.95,
+        "max_drawdown_r": 62.5,
+        "target1_rate": 38,
+        "avg_days": 5.5
+      },
+      "test": {
+        "trades": 515,
+        "win_rate": 41,
+        "avg_r": -0.075,
+        "total_r": -38.6,
+        "profit_factor": 0.88,
+        "max_drawdown_r": 45.5,
+        "target1_rate": 34,
+        "avg_days": 5.0
+      },
+      "small_coins": {
+        "trades": 816,
+        "win_rate": 42,
+        "avg_r": -0.05,
+        "total_r": -40.8,
+        "profit_factor": 0.92,
+        "max_drawdown_r": 55.5,
+        "target1_rate": 37,
+        "avg_days": 5.2
+      }
+    },
+    {
+      "params": {
+        "trend_min": 75,
+        "rsi_max": 65,
+        "stretch_atr": 1.0,
+        "stop_atr": 3.5,
+        "tp1_r": 2.0,
+        "tp2_r": 4.0,
+        "exit_on_ema20": false,
+        "btc_filter": false
+      },
+      "train": {
+        "trades": 530,
+        "win_rate": 41,
+        "avg_r": -0.047,
+        "total_r": -24.9,
+        "profit_factor": 0.92,
+        "max_drawdown_r": 71.7,
+        "target1_rate": 31,
+        "avg_days": 5.8
+      },
+      "test": {
+        "trades": 497,
+        "win_rate": 38,
+        "avg_r": -0.089,
+        "total_r": -44.4,
+        "profit_factor": 0.86,
+        "max_drawdown_r": 53.9,
+        "target1_rate": 29,
+        "avg_days": 5.3
+      },
+      "small_coins": {
+        "trades": 780,
+        "win_rate": 39,
+        "avg_r": -0.067,
+        "total_r": -51.9,
+        "profit_factor": 0.89,
+        "max_drawdown_r": 63.3,
+        "target1_rate": 30,
+        "avg_days": 5.5
+      }
+    },
+    {
+      "params": {
+        "trend_min": 75,
+        "rsi_max": 70,
+        "stretch_atr": 1.0,
+        "stop_atr": 3.5,
+        "tp1_r": 2.0,
+        "tp2_r": 4.0,
+        "exit_on_ema20": false,
+        "btc_filter": false
+      },
+      "train": {
+        "trades": 530,
+        "win_rate": 41,
+        "avg_r": -0.047,
+        "total_r": -24.9,
+        "profit_factor": 0.92,
+        "max_drawdown_r": 71.7,
+        "target1_rate": 31,
+        "avg_days": 5.8
+      },
+      "test": {
+        "trades": 497,
+        "win_rate": 38,
+        "avg_r": -0.089,
+        "total_r": -44.4,
+        "profit_factor": 0.86,
+        "max_drawdown_r": 53.9,
+        "target1_rate": 29,
+        "avg_days": 5.3
+      },
+      "small_coins": {
+        "trades": 780,
+        "win_rate": 39,
+        "avg_r": -0.067,
+        "total_r": -51.9,
+        "profit_factor": 0.89,
+        "max_drawdown_r": 63.3,
+        "target1_rate": 30,
+        "avg_days": 5.5
+      }
+    },
+    {
+      "params": {
+        "trend_min": 75,
+        "rsi_max": 65,
+        "stretch_atr": 1.0,
+        "stop_atr": 3.5,
+        "tp1_r": 3.0,
+        "tp2_r": 6.0,
+        "exit_on_ema20": false,
+        "btc_filter": false
+      },
+      "train": {
+        "trades": 521,
+        "win_rate": 39,
+        "avg_r": -0.049,
+        "total_r": -25.3,
+        "profit_factor": 0.92,
+        "max_drawdown_r": 69.3,
+        "target1_rate": 23,
+        "avg_days": 5.9
+      },
+      "test": {
+        "trades": 491,
+        "win_rate": 35,
+        "avg_r": -0.139,
+        "total_r": -68.2,
+        "profit_factor": 0.8,
+        "max_drawdown_r": 83.6,
+        "target1_rate": 21,
+        "avg_days": 5.4
+      },
+      "small_coins": {
+        "trades": 771,
+        "win_rate": 37,
+        "avg_r": -0.088,
+        "total_r": -68.0,
+        "profit_factor": 0.86,
+        "max_drawdown_r": 68.0,
+        "target1_rate": 22,
+        "avg_days": 5.7
       }
     }
   ],
@@ -283,36 +283,36 @@
         "btc_filter": false
       },
       "train": {
-        "trades": 554,
-        "win_rate": 47,
-        "avg_r": 0.07,
-        "total_r": 38.8,
-        "profit_factor": 1.14,
-        "max_drawdown_r": 29.4,
-        "target1_rate": 41,
-        "avg_days": 5.4
-      },
-      "test": {
-        "trades": 506,
-        "win_rate": 43,
-        "avg_r": -0.0,
-        "total_r": -0.0,
-        "profit_factor": 1.0,
-        "max_drawdown_r": 42.1,
-        "target1_rate": 35,
-        "avg_days": 5.5
-      },
-      "small_coins": {
-        "trades": 822,
-        "win_rate": 46,
-        "avg_r": 0.048,
-        "total_r": 39.8,
-        "profit_factor": 1.09,
-        "max_drawdown_r": 28.3,
+        "trades": 553,
+        "win_rate": 44,
+        "avg_r": -0.028,
+        "total_r": -15.6,
+        "profit_factor": 0.95,
+        "max_drawdown_r": 62.5,
         "target1_rate": 38,
         "avg_days": 5.5
+      },
+      "test": {
+        "trades": 515,
+        "win_rate": 41,
+        "avg_r": -0.075,
+        "total_r": -38.6,
+        "profit_factor": 0.88,
+        "max_drawdown_r": 45.5,
+        "target1_rate": 34,
+        "avg_days": 5.0
+      },
+      "small_coins": {
+        "trades": 816,
+        "win_rate": 42,
+        "avg_r": -0.05,
+        "total_r": -40.8,
+        "profit_factor": 0.92,
+        "max_drawdown_r": 55.5,
+        "target1_rate": 37,
+        "avg_days": 5.2
       }
     }
   },
-  "seconds": 147
+  "seconds": 126
 }
